@@ -1,0 +1,9 @@
+export const LOGIN_PATH = "/dang-nhap";
+export const SIGNUP_PATH = "/dang-ky";
+export const FORGET_PASSWORD_PATH = "/quen-mat-khau";
+export const FIND_TUTOR_PATH = "/tim-gia-su";
+export const WAITING_CLASS_PATH = "/lop-cho-gia-su";
+export const NEWS_PATH = "/tin-tuc";
+export const HOME_PATH = "/";
+export const TUTOR_LIST_PATH = "/danh-sach-gia-su";
+export const FAQ_PATH = "/hoi-dap"; 

@@ -1,0 +1,106 @@
+.info__validation {
+  height: 100%;
+}
+
+.info__validation__input {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.info__validation__input__label {
+  text-align: right;
+  font-size: 14px;
+  margin-bottom: 5px;
+  width: 120px;
+  float: right;
+}
+
+.info__validation__input__label span {
+  color: #ff4444;
+}
+
+.info__validation__input input, .info__validation__input select {
+  width: 60%;
+  height: 40px;
+  padding: 0px 10px;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid silver;
+}
+
+.info__validation__input input:focus, .info__validation__input select:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 8px 1px rgba(0, 116, 224, 0.5);
+          box-shadow: 0 0 8px 1px rgba(0, 116, 224, 0.5);
+}
+
+.info__validation__input select {
+  width: 63.5%;
+}
+
+.info__validation__input select option {
+  padding: 0 20px;
+  color: #424242;
+}
+
+.info__validation__terms {
+  font-size: 14px;
+}
+
+.info__validation__terms span {
+  color: #0077d8;
+}
+
+.signup__form__nav {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 50px;
+  height: 45px;
+  margin: 40px 0px 25px 130px;
+}
+
+.signup__form__nav__back {
+  cursor: pointer;
+  color: gray;
+}
+
+.signup__form__nav__back i {
+  margin-right: 10px;
+}
+
+.signup__form__nav__back:hover {
+  color: black;
+}
+
+.signup__form__nav button {
+  cursor: pointer;
+  height: 100%;
+  width: 140px;
+  color: white;
+  border-radius: 5px;
+  font-size: 17px;
+  -webkit-transition: opacity 0.2s;
+  transition: opacity 0.2s;
+  background-color: #0036c9;
+}
+
+.signup__form__nav button:hover {
+  opacity: 0.9;
+}
+/*# sourceMappingURL=infoValidation.css.map */

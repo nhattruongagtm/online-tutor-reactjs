@@ -1,0 +1,69 @@
+.forgot__password {
+    width: 40%;
+    padding: 30px 0;
+    height: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between  ;
+    // background-color: cyan;
+  .forgot__title {
+
+    div {
+      font-size: 28px;
+      font-weight: 200;
+      color: black;
+    }
+  }
+
+  .forgot__status {
+    width: 100%;
+
+    .signup__status__item{
+        width: 160px;
+        // background-color: aquamarine;
+    }
+
+  }
+  .forgot__email{
+      width: 100%;
+    //   background-color: antiquewhite;
+    span{
+        width: 60%;
+        color: rgb(158, 158, 158);
+        font-style: italic;
+        font-size: 15px;
+    }
+  }
+  .forgot__nav{
+    //   background-color: blue;
+
+    &__back{
+        width: 90px;
+        margin: 0;
+    }
+    &__btn{
+      cursor: pointer;
+      height: 100%;
+      width: 140px;
+      color: white;
+      border-radius: 5px;
+      font-size: 17px;
+      transition: opacity 0.2s;
+      background-color: rgb(0, 54, 201);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+.signup__form__item__label{
+    text-align: right;
+    
+}
+
+.forgot__success{
+    margin: auto;
+    margin-top: 20px;
+}
+
+

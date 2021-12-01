@@ -1,0 +1,86 @@
+.info__validation {
+  height: 100%;
+
+  &__input {
+      display: flex;
+      align-items:center;
+      gap: 15px;
+      margin-bottom: 15px;
+    &__label {
+        text-align: right;
+      font-size: 14px;
+      margin-bottom: 5px;
+      width: 120px;
+      float: right;
+    //   background-color: rgb(65, 127, 180);
+
+      span {
+        color: rgb(255, 68, 68);
+      }
+    }
+
+    input, select {
+      width: 60%;
+      height: 40px;
+      padding: 0px 10px;
+      border-radius: 5px;
+      outline: none;
+      border: 1px solid rgb(192, 192, 192);
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 8px 1px rgba(0, 116, 224, 0.5);
+      }
+    }
+
+    select{
+        width: 63.5%;
+
+        option{
+            padding: 0 20px;
+            color: rgb(66, 66, 66);
+        }
+    }
+
+  }
+  &__terms{
+    font-size: 14px;
+    span{
+        color: rgb(0, 119, 216);
+    }
+  }
+}
+
+.signup__form__nav {
+    display: flex;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    height: 45px;
+    margin: 40px 0px 25px 130px;
+    &__back {
+      cursor: pointer;
+      color: gray;
+
+      i {
+        margin-right: 10px;
+      }
+    }
+    &__back:hover {
+      color: black;
+    }
+    button {
+      cursor: pointer;
+      height: 100%;
+      width: 140px;
+      color: white;
+      border-radius: 5px;
+      font-size: 17px;
+      transition: opacity 0.2s;
+      background-color: rgb(0, 54, 201);
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+  }

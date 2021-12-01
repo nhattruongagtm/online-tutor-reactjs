@@ -1,0 +1,41 @@
+.carousel_recommend {
+  width: calc(100%);
+  height: fit-content;
+  // background-color: aqua;
+  margin-bottom: 100px;
+  overflow: hidden;
+  margin-left: 0px !important;
+  position: relative;
+
+  .slick-slide {
+    width: fit-content !important;
+  }
+
+  .slick-prev,
+  .slick-next {
+    //   display: none !important;
+   
+  }
+  .slick-prev {
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+  }
+  .slick-next {
+    // position: absolute;
+    // top: 50%;
+    // right: -20px;
+  }
+
+  .slick-dots {
+    display: none !important;
+  }
+
+  .slick-track {
+    background-color: white !important;
+    // margin: auto!important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

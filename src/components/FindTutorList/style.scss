@@ -1,0 +1,205 @@
+.tutor__list {
+  width: 100%;
+  min-height: 100vh;
+  padding: 50px 0px;
+
+  &__container {
+    width: calc(70% - 60px);
+    background-color: rgb(255, 255, 255);
+    margin: auto;
+    min-height: 100vh;
+    border-radius: 10px;
+    box-shadow: 0 0 50px 10px rgba(114, 114, 114, 0.11);
+    padding: 30px;
+
+    .tutors__title {
+      width: calc(100%);
+      // background-color: antiquewhite;
+      font-size: 24px;
+      font-weight: bold;
+      margin-left: -30px;
+      padding: 0 30px 20px 30px;
+      border-bottom: 1px solid rgb(223, 223, 223);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 17px;
+      margin: 25px 0 30px 0;
+      text-transform: uppercase;
+    }
+    .tutors__notify {
+      width: calc(100% - 40px);
+      height: calc(20px);
+      border-radius: 6px;
+      background-color: #fff4de;
+      color: #ffa800;
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      font-size: 15px;
+      i {
+        margin-right: 10px;
+      }
+    }
+
+    .tutors__input {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+
+      &__label {
+        width: 200px;
+        font-size: 14px;
+        span {
+          color: rgb(230, 0, 0);
+        }
+      }
+
+      input,
+      textarea,
+      select {
+        width: 60%;
+        height: 40px;
+        padding: 0px 10px;
+        border-radius: 5px;
+        outline: none;
+        border: 1px solid rgb(192, 192, 192);
+
+        &:focus {
+          outline: none;
+          box-shadow: 0 0 8px 1px rgba(0, 116, 224, 0.5);
+        }
+      }
+      textarea {
+        resize: none;
+        padding-top: 10px;
+        height: 80px;
+      }
+      select {
+        width: 62.5%;
+      }
+
+      &__value {
+        width: 62.3%;
+        overflow: hidden;
+        display: flex;
+        border-radius: 5px;
+        border: 1px solid rgb(199, 199, 199);
+        
+        input{
+            width: 90%;
+            border: 0;
+            border-radius: 0px;
+        }
+
+        &__label{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            border-left: 1px solid rgb(199, 199, 199);
+            background-color: #ececec;
+            font-size: 13px;
+            
+        }
+      }
+    }
+    .tutors__additional{
+        overflow: hidden;
+        
+        // animation: animations 2s linear forwards;
+        
+
+    }
+    @keyframes animations {
+        from{
+            height: 0px;
+        }
+        to{ 
+            height: fit-content;
+        }
+    }
+    .tutors__note {
+      margin-top: -15px;
+      font-size: 14px;
+      color: #666666;
+      div:last-child {
+      }
+    }
+    .tutors__checkbox {
+      width: 200px;
+      display: block;
+      margin-left: 195px;
+      cursor: pointer;
+      input {
+        margin-right: 5px;
+      }
+    }
+    .tutors__btn {
+      outline: none;
+      background-color: aquamarine;
+      border-radius: 5px;
+      padding: 10px 20px;
+      margin: 20px 0 0 200px;
+      cursor: pointer;
+      border: 1px solid rgb(0, 199, 133);
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+    .tutors__input__time {
+      align-self: flex-start;
+
+      .tutors__input__items {
+        width: 62.5%;
+        // background-color:cyan;
+        display: grid;
+        align-items: flex-start;
+        grid-template-columns: 1fr 1fr 0.5fr;
+        gap: 10px;
+      }
+      .tutors__input__item {
+        width: 100%;
+        // background-color: blue;
+
+        select {
+          width: 100%;
+        }
+
+        i {
+          float: right;
+          font-size: 20px;
+          cursor: pointer;
+          color: gray;
+        }
+      }
+    }
+    .tutors__input__add {
+      width: calc(62.5% + 200px);
+      height: 30px;
+      display: flex;
+      justify-content: right;
+      margin-top: -10px;
+
+      button {
+        width: 60px;
+        border: 1px solid rgb(0, 199, 133);
+        background-color: aquamarine;
+        cursor: pointer;
+        border-radius: 5px;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+  .btn__post {
+    width: calc(100% + 60px);
+    margin-top: 20px;
+    margin-left: -30px;
+    border-top: 1px solid rgb(223, 223, 223);
+  }
+}
