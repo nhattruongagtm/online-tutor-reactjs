@@ -1,0 +1,53 @@
+.me{
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    position: relative;
+
+    &__nav{
+        // background-color: blue;
+        padding: 20px;
+        &__body{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            a{
+                text-decoration: none;
+                color: black;
+            }
+            .me__nav__item{
+                
+                padding: 12px;
+                display: flex;
+                align-items: center;
+                background-color: rgb(238, 238, 238);
+                border-radius: 10px;
+                cursor: pointer;
+
+                i{
+                    margin-right: 10px;
+                }
+
+                &:hover{
+                    box-shadow: 0 3px 5px 2px rgba(114, 114, 114, 0.267);
+                }
+
+            }
+        }
+        &__footer{
+
+        }
+    }
+    &__main{
+        background-color: rgb(233, 233, 233);
+        padding: 20px;
+
+        & > div{
+            background-color: white;
+            height: calc(100% - 40px);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 4px 5px rgba(192, 192, 192, 0.267);
+        }
+    }
+}

@@ -1,12 +1,13 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
+import { CART_PATH, FAQ_PATH, FIND_TUTOR_PATH, HOME_PATH, ME_PATH, NEWS_PATH, PROFILE_PATH, TUTOR_LIST_PATH, WAITING_CLASS_PATH } from '../../constants/path';
 import "../Header/header.scss";
-import {FAQ_PATH, FIND_TUTOR_PATH, HOME_PATH, LOGIN_PATH, NEWS_PATH, TUTOR_LIST_PATH, WAITING_CLASS_PATH} from '../../constants/path';
 interface IRoutes {
   path: string;
   title: string;
 }
 export default function Header() {
+  const history = useHistory();
   const routes: IRoutes[] = [
     {
       path: `${HOME_PATH}`,
@@ -52,11 +53,13 @@ export default function Header() {
         })}
       </ul>
       <div className="header__auth">
-        <div className="header__auth__cart">
+        <div className="header__auth__cart" onClick={()=>history.push(CART_PATH)}>
           <i className="fas fa-shopping-cart"></i>
           <div className="header__auth__cart__number">2</div>
         </div>
-        {/* <div className="header__auth__user">
+        <div className="header__auth__user" onClick={()=>{
+          history.push(`${ME_PATH}${PROFILE_PATH}`)
+        }}>
           <div className="header__auth__user__img">
             <img
               src="https://i.pinimg.com/originals/5f/12/21/5f12212ed4d94b0dafe0f18a8e55832b.jpg"
@@ -64,8 +67,8 @@ export default function Header() {
             />
           </div>
           <div className="header__auth__user__name">Nhật Trường</div>
-        </div> */}
-        <Link to={LOGIN_PATH} className="header__auth__btn" >Đăng nhập</Link>
+        </div>
+        {/* <Link to={LOGIN_PATH} className="header__auth__btn" >Đăng nhập</Link> */}
       </div>
     </div>
   );

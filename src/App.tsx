@@ -13,12 +13,16 @@ import Footer from "./components/Footer/Footer";
 import Login from "./components/Auth/Login/Login";
 import SignUp from "./components/Auth/SignUp/SignUp";
 import {
+  CART_PATH,
+  COURSE_PATH,
   FAQ_PATH,
   FIND_TUTOR_PATH,
   FORGET_PASSWORD_PATH,
   HOME_PATH,
   LOGIN_PATH,
+  ME_PATH,
   NEWS_PATH,
+  NOT_FOUND_PATH,
   SIGNUP_PATH,
   TUTOR_LIST_PATH,
   WAITING_CLASS_PATH,
@@ -26,21 +30,23 @@ import {
 import { useDispatch } from "react-redux";
 import { updateStatus, updateStatusForgotPassword } from "./actions/signup";
 import ForgotPassword from "./components/Auth/ForgotPassword/ForgotPassword";
+import DetailCourse from "./pages/DetailCourse/DetailCourse";
+import Me from "./pages/Me/Me";
+import Cart from "./pages/Cart/Cart";
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  const stateList = [`${SIGNUP_PATH}`,`${FORGET_PASSWORD_PATH}`];
+  const stateList = [`${SIGNUP_PATH}`, `${FORGET_PASSWORD_PATH}`];
 
-  useEffect(()=>{ 
-    if(stateList.includes(location.pathname)){
+  useEffect(() => {
+    if (stateList.includes(location.pathname)) {
       dispatch(updateStatusForgotPassword(0));
       dispatch(updateStatus(0));
     }
-  },[location]);
+  }, [location]);
 
-
-  const path = [`${LOGIN_PATH}`, `${SIGNUP_PATH}`,`${FORGET_PASSWORD_PATH}`];  
+  const path = [`${LOGIN_PATH}`, `${SIGNUP_PATH}`, `${FORGET_PASSWORD_PATH}`];
   const isAuth = () => {
     if (path.includes(location.pathname)) {
       return true;
@@ -73,8 +79,18 @@ function App() {
               <Route path={FAQ_PATH}>
                 <FAQ />
               </Route>
+              <Route path={COURSE_PATH}>
+                <DetailCourse />
+              </Route>
+              <Route path={CART_PATH}>
+                <Cart />
+              </Route>
             </Switch>
           </div>
+          <Route path={ME_PATH}>
+            <Me />
+          </Route>
+
           <Footer />
         </>
       ) : (
@@ -94,7 +110,7 @@ function App() {
               <SignUp />
             </Route>
             <Route path={FORGET_PASSWORD_PATH}>
-              <ForgotPassword />  
+              <ForgotPassword />
             </Route>
           </Switch>
         </div>

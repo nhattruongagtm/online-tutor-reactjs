@@ -15,7 +15,7 @@ const ContactMain = styled.div`
   position: relative;
 
   img {
-    width: calc(100% + 400px);
+    width: calc(100% + 385px);
     /* height: 100%; */
     position: absolute;
     top: 0px;

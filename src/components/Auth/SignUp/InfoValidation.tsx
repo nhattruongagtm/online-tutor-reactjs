@@ -1,88 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "../SignUp/infoValidation.scss";
-import {updateStatus} from '../../../actions/signup'
+import { updateStatus } from "../../../actions/signup";
+import useAddress from "../../../hooks/useAddress";
 
-interface District {
+export interface District {
   name_with_type: string;
   parent_code: string;
   slug: string;
 }
-interface City {
+export interface City {
   name_with_type: string;
   code: string;
   slug: string;
 }
 export default function InfoValidation() {
-  const [districts, setDistricts] = useState<District[]>([]);
-  const [citys, setCitys] = useState<City[]>([]);
+  const [district, city] = useAddress();
+  const [districts, setDistricts] = useState<District[]>(district);
+  const [citys, setCitys] = useState<City[]>(city);
   const [chooseCity, setChooseCity] = useState<string>("");
   const [chooseDistrict, setChooseDistrict] = useState<string>("");
   const dispatch = useDispatch();
-
   const [getDistrictsByID, setGetDistrictsByID] = useState<District[]>([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const districtByID: District[] = districts.filter(
-        (item) => item.parent_code === chooseCity
-      );
-      setGetDistrictsByID(districtByID);
+      (item) => item.parent_code === chooseCity
+    );
+    setGetDistrictsByID(districtByID);
+  }, [chooseCity]);
 
-  },[chooseCity]);
-
-
-  // get citys data
   useEffect(() => {
-    fetch(
-      "https://raw.githubusercontent.com/madnh/hanhchinhvn/master/dist/tinh_tp.json"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        let list: City[] = [];
-        Object.keys(data).map((item) => {
-          const name = data[item].name_with_type;
-          const code = data[item].code;
-          const slug = data[item].slug;
+    setCitys(city);
+    setDistricts(district);
+  }, [city, district]);
 
-          const newCity = { name_with_type: name, code: code, slug: slug };
-
-          list.push(newCity);
-        });
-        setCitys(list);
-      })
-      .catch((e) => console.log(e));
-  }, []);
-
-  // get districts data
-  useEffect(() => {
-    fetch(
-      "https://raw.githubusercontent.com/madnh/hanhchinhvn/master/dist/quan_huyen.json"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        let list: District[] = [];
-        Object.keys(data).map((item) => {
-          const name = data[item].name_with_type;
-          const code = data[item].parent_code;
-          const slug = data[item].slug;
-
-          const newDistrict = {
-            name_with_type: name,
-            parent_code: code,
-            slug: slug,
-          };
-
-          list.push(newDistrict);
-        });
-        setDistricts(list);
-      })
-      .catch((e) => console.log(e));
-  }, []);
-
-  const handleSignUp = (e : React.FormEvent<HTMLFormElement>) => {
+  const handleSignUp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateStatus(3)); 
-  }
+    dispatch(updateStatus(3));
+  };
 
   return (
     <form className="info__validation" onSubmit={handleSignUp}>
@@ -134,7 +90,11 @@ export default function InfoValidation() {
             Quận/Huyện: <span>*</span>
           </div>
         </div>
-        <select name="district" id="" onChange={(e)=> setChooseDistrict(e.target.value)}>
+        <select
+          name="district"
+          id=""
+          onChange={(e) => setChooseDistrict(e.target.value)}
+        >
           <option value="">Chọn Quận/Huyện</option>
           {getDistrictsByID.length > 0 &&
             getDistrictsByID.map((district, index) => {

@@ -1,11 +1,14 @@
 body {
-  font-family: "PT Sans", sans-serif;
+  // font-family: "PT Sans", sans-serif;
   /* background-color: #eaebee; */
   background-color: white;
+
+  font-family: "PT Sans", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 .container {
-  width: 1340px;
+  width: 90%;
   padding-top: 80px;
   margin: auto;
 }
@@ -46,7 +49,6 @@ textarea {
       height: 100%;
       object-fit: cover;
       // display: none;
-      
     }
   }
 }
@@ -58,6 +60,6 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
