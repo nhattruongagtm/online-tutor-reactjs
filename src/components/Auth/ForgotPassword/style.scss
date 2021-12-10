@@ -1,13 +1,12 @@
 .forgot__password {
-    width: 40%;
-    padding: 30px 0;
-    height: calc(100% - 60px);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between  ;
-    // background-color: cyan;
+  width: 40%;
+  padding: 30px 0;
+  height: calc(100% - 60px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  // background-color: cyan;
   .forgot__title {
-
     div {
       font-size: 28px;
       font-weight: 200;
@@ -18,30 +17,29 @@
   .forgot__status {
     width: 100%;
 
-    .signup__status__item{
-        width: 160px;
-        // background-color: aquamarine;
+    .signup__status__item {
+      width: 160px;
+      // background-color: aquamarine;
     }
-
   }
-  .forgot__email{
-      width: 100%;
+  .forgot__email {
+    width: 100%;
     //   background-color: antiquewhite;
-    span{
-        width: 60%;
-        color: rgb(158, 158, 158);
-        font-style: italic;
-        font-size: 15px;
+    span {
+      width: 60%;
+      color: rgb(158, 158, 158);
+      font-style: italic;
+      font-size: 15px;
     }
   }
-  .forgot__nav{
+  .forgot__nav {
     //   background-color: blue;
 
-    &__back{
-        width: 90px;
-        margin: 0;
+    &__back {
+      width: 90px;
+      margin: 0;
     }
-    &__btn{
+    &__btn {
       cursor: pointer;
       height: 100%;
       width: 140px;
@@ -56,14 +54,138 @@
     }
   }
 }
-.signup__form__item__label{
-    text-align: right;
-    
+.signup__form__item__label {
+  text-align: right;
 }
 
-.forgot__success{
-    margin: auto;
-    margin-top: 20px;
+.forgot__success {
+  margin: auto;
+  margin-top: 20px;
 }
+@media screen and (max-width: 768px) {
+  .signup {
+    &__main {
+      &__wrap {
+        width: 100% !important;
+        padding-right: 20px !important;
+        &__title {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          div {
+            font-size: 22px !important;
+            font-weight: bold;
+          }
+          div:first-child{
+            margin-bottom: 0px!important;
+          }
+          div:last-child {
+            font-size: 18px !important;
+          }
+        }
+        &__status {
+          display: none !important;
+        }
+        &__api {
+          margin-left: 0 !important;
+          width: unset !important;
+        }
+        &__element {
+          height: unset !important;
+          margin-bottom: 20px!important;
+        }
+        &__login {
+          // height: 300px!important;
+          align-items: flex-end;
+          display: flex;
+        }
+      }
+    }
+    &__form {
+      &__nav {
+        margin: 25px 0px 15px 0px !important;
+        gap: 36px !important;
+      }
+      &__validate {
+        // margin-top: 10px!important;
+        &__item {
+        }
+      }
+      &__item {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 5px !important;
+        gap: 0px !important;
+        input {
+          width: calc(100% - 20px) !important;
+        }
+        span {
+          width: 100% !important;
+        }
 
+        &--validate {
+          margin-top: -7px !important;
+          margin-bottom: 10px !important;
+        }
+      }
+      &__validate {
+        margin: 10px 0px 20px 0px !important;
+      }
+    }
+  }
+  .signup__form__item__label {
+    width: 100% !important;
+    text-align: left;
+  }
+  .forgot__nav__back {
+    width: fit-content !important;
+  }
+  .password__validation {
+    margin-top: 10px !important;
+  }
+  .ggTaep {
+    margin-bottom: 10px !important;
+    font-size: 14px !important;
+  }
+  .fLASKa {
+    flex-direction: column;
+    align-items: flex-start !important;
+    input {
+      width: calc(100% - 20px) !important;
+    }
+  }
+  .GcnDy {
+    margin-bottom: 15px !important;
+  }
+  .info__validation__input {
+    grid-gap: 0px !important;
+    flex-direction: column;
+    margin-bottom: 10px !important;
 
+    &__label {
+      width: 100% !important;
+      div {
+        text-align: left;
+      }
+    }
+
+    select,
+    input {
+      width: 100% !important;
+      background-color: white;
+    }
+    input {
+      width: calc(100% - 20px) !important;
+    }
+  }
+  .signup__success__notify{
+    margin-bottom: 0px!important;
+    div:last-child{
+      font-size: 15px!important;
+      margin-bottom: 10px!important;    
+    }
+    div:first-child{
+      font-size: 18px!important;
+    }
+  }
+}

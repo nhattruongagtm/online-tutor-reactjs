@@ -1,10 +1,20 @@
-import React, { useState } from "react";
+import { watch } from "fs";
+import React, { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { updateStatusForgotPassword } from "../../../actions/signup";
-
+import  {CircularProgress} from "@material-ui/core";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import Button from "@mui/material/Button";
+import { Typography } from "@mui/material";
 interface Validation {
   title: string;
   status: boolean;
+}
+interface FormInput {
+  password: string;
+  repassword: string;
 }
 const validationList: Validation[] = [
   {
@@ -26,22 +36,60 @@ const validationList: Validation[] = [
 ];
 
 export default function NewPassword() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // validation forms
+  const validationSchema = yup.object().shape({
+    password: yup
+      .string()
+      .required("Vui lòng nhập mật khẩu!")
+      .min(8, "Mật khẩu phải chứa ít nhất 8 ký tự!"),
+    repassword: yup
+      .string()
+      .required("Vui lòng xác nhận mật khẩu!")
+      .oneOf([yup.ref("password")], "Mật khẩu không khớp!"),
+  });
+  const formOptions = { resolver: yupResolver(validationSchema) };
+
+  // use React Hook Form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<FormInput>(formOptions);
+
   const [checkValidation, setCheckValidation] = useState(validationList);
   const dispatch = useDispatch();
 
-  const handleChangePassword = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleChangePassword = (data: FormInput) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      dispatch(updateStatusForgotPassword(2));
+      setIsLoading(false);
 
-    dispatch(updateStatusForgotPassword(2));
-  }
+    }, 3000);
+  };
 
   return (
-    <form className="signup__main__wrap__form" onSubmit={handleChangePassword}>
+    <form
+      className="signup__main__wrap__form"
+      onSubmit={handleSubmit(handleChangePassword)}
+    >
       <div className="signup__form__item">
         <div className="signup__form__item__label ">Mật khẩu mới:</div>
-        <input type="password" placeholder="Nhập mật khẩu mới" />
+        <input
+          type="password"
+          placeholder="Nhập mật khẩu mới"
+          className={errors.password && "login__error"}
+          {...register("password")}
+        />
       </div>
+      <div className="signup__form__item signup__form__item--validate">
+        <div className="signup__form__item__label "></div>
 
+        <span>{errors.password?.message}</span>
+      </div>
       <div className="signup__form__validate password__validation">
         {checkValidation.map((item, index) => {
           return (
@@ -61,11 +109,25 @@ export default function NewPassword() {
       </div>
       <div className="signup__form__item">
         <div className="signup__form__item__label ">Xác nhận mật khẩu: </div>
-        <input type="password" placeholder="Xác nhận mật khẩu" />
+        <input
+          type="password"
+          placeholder="Xác nhận mật khẩu"
+          className={errors.repassword && "login__error"}
+          {...register("repassword")}
+        />
+      </div>
+      <div className="signup__form__item signup__form__item--validate">
+        <div className="signup__form__item__label "></div>
+        <span>{errors.repassword?.message}</span>
       </div>
       <div className="signup__form__nav forgot__nav">
         <div className="signup__form__nav__back forgot__nav__back"></div>
-        <button type="submit">Đồng ý</button>
+        <Button variant="contained" type="submit">  
+          <Typography sx={{ mr: 1 }}>Đồng ý</Typography>
+          {isLoading && (
+            <CircularProgress size={20} className="cirlce__progress" />
+          )}
+        </Button>
       </div>
     </form>
   );

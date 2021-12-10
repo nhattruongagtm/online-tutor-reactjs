@@ -102,10 +102,19 @@
 
             &:focus {
               outline: none;
-              box-shadow: 0 0 8px 1px rgba(0, 116, 224, 0.5);
+              // box-shadow: 0 0 8px 1px rgba(0, 116, 224, 0.5);
             }
           }
+          &--validate{
+            margin-top: -15px;
+            span{
+              font-size: 13px;
+              color: red;
+            }
+
+          }
         }
+        
         .signup__form__validate {
           font-size: 14px;
           color: rgb(179, 179, 179);
@@ -153,6 +162,10 @@
           button:hover {
             opacity: 0.9;
           }
+        }
+        .login__error {
+          box-shadow: 0 0 3px 1px rgb(255 59 0);
+          border: 1px solid red;
         }
       }
 
@@ -249,5 +262,21 @@
         opacity: 0.8;
       }
     }
+  }
+}
+.cirlce__progress{
+  color: white!important;
+}
+
+@media screen and (width: 768px){
+  .signup{
+    &__form{
+      &__item{
+        
+      }
+    }
+  }
+  .signup__form__item__labe{
+    width: 40px;
   }
 }

@@ -241,3 +241,27 @@ $galaxy: #e9fff8;
     }
   }
 }
+@media screen and (max-width: 1215px){
+  .waiting__class__main{
+
+    .class__list__tutor{
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+}
+@media screen and (max-width: 868px){
+  .waiting__class__main{
+
+    .class__list__tutor{
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}
+@media screen and (max-width: 480px){
+  .waiting__class__main{
+
+    .class__list__tutor{
+      grid-template-columns: 1fr;
+    }
+  }
+}

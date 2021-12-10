@@ -1,0 +1,125 @@
+$main-color: rgb(240, 240, 240);
+.tutor__info {
+  padding: 20px;
+
+  &__general {
+      margin-bottom: 20px;
+    & > div {
+      padding: 20px;
+    }
+    border-radius: 10px;
+    background-color: $main-color;
+    .tutor__general__cv {
+      display: flex;
+      gap: 20px;
+      border-bottom: 1px solid rgb(224, 224, 224);
+      img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+      }
+      &__main {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 120px;
+        .tutor__general__name {
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .tutor__general__identify {
+          display: flex;
+          gap: 15px;
+          font-size: 15px;
+          & > span {
+            span:first-child {
+            }
+            span:last-child {
+            }
+          }
+          i {
+          }
+        }
+        .tutor__general__education {
+          font-size: 14px;
+          color: rgb(4, 163, 30);
+        }
+        .tutor__general__fee {
+          color: red;
+        }
+      }
+    }
+    .tutor__info__follow {
+      display: flex;
+      gap: 100px;
+      &__course {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: white;
+        border: 1px solid rgb(216, 216, 216);
+        .tutor__info__course__icon {
+          font-size: 30px;
+        }
+        .tutor__info__course__content {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+
+          span:first-child {
+            font-size: 13px;
+          }
+          span:last-child {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            gap: 2px;
+            i {
+              color: rgb(255, 208, 0);
+            }
+          }
+        }
+      }
+    }
+  }
+  &__detail {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+
+    &__item {
+        background-color: $main-color;
+        border-radius: 10px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      .tutor__info__item__title {
+          font-weight: bold;
+      }
+      .tutor__info__item__content {
+          font-size: 14px;
+          line-height: 1.4;
+        & > span {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 3px;
+        }
+      }
+    }
+  }
+  &__courses {
+  }
+  &__classes {
+    &__title{
+      font-size: 18px;
+      font-weight: bold;
+    }
+      margin-top: 20px;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: $main-color;
+  }
+}

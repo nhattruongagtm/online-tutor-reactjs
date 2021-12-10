@@ -6,7 +6,7 @@ import RecommendedList from "./RecommendedList";
 export default function Home() {
   return (
     <div className="home">
-      <Banner/>
+      <Banner />
       <div className="home__intro">
         <div className="home__intro__item">
           <div className="home__intro__item__desc">
@@ -19,7 +19,6 @@ export default function Home() {
           <div className="home__intro__item__img"></div>
         </div>
         <div className="home__intro__item">
-          <div className="home__intro__item__img home__intro__item__img__pay"></div>
           <div className="home__intro__item__desc home__intro__item__desc__pay ">
             <div className="desc__title">Thanh toán an toàn, tiện lợi</div>
             <div className="desc__info">
@@ -27,6 +26,7 @@ export default function Home() {
               thanh toán một cách an toàn và tiện lợi.
             </div>
           </div>
+          <div className="home__intro__item__img home__intro__item__img__pay"></div>
         </div>
         <div className="home__intro__smooth">
           <div className="home__intro__smooth__desc">
@@ -44,7 +44,7 @@ export default function Home() {
         </div>
       </div>
       <RecommendedList />
-      <ContactForm/>
+      <ContactForm />
     </div>
   );
 }

@@ -114,7 +114,7 @@ const Avatar = styled.div`
 `;
 const RecommendTilte = styled.div`
   margin-top: 100px;
-  font-size: 35px;
+  font-size: 28px;
   text-align: center;
   font-weight: 700;
 `;
@@ -125,8 +125,8 @@ export default function RecommendedList() {
     slidesToShow: 4,
     // slidesToScroll: 1,
     autoplay: true,
-    speed: 300,
-    autoplaySpeed: 5000,
+    speed: 1000,
+    autoplaySpeed: 3000,
     cssEase: "linear",
   };
   return (

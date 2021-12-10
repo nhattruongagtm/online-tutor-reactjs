@@ -28,9 +28,8 @@ $btn: #0467b4;
         flex-direction: column;
         justify-content: space-between;
 
-        &__form{
+        &__form {
           margin-bottom: 50px;
-
         }
       }
     }
@@ -58,7 +57,7 @@ $btn: #0467b4;
         font-size: 20px;
       }
 
-      span{
+      span {
         color: #0467b4;
         font-weight: bold;
       }
@@ -67,24 +66,32 @@ $btn: #0467b4;
       width: 100%;
       //   background-color: yellow;
 
-     
       &__info {
         margin-bottom: 20px;
         &__label {
           margin-bottom: 5px;
         }
+
         input {
           outline: none;
           border: 1px solid rgb(194, 194, 194);
           width: calc(100%);
-          padding: 15px 0px;
+          padding: 12px 0px;
           padding-left: 10px;
           border-radius: 5px;
           font-size: 17px;
 
-          &:focus{
-            box-shadow: 0 0 8px 1px rgba(0, 116, 224, 0.5);
+          &:focus {
+            // box-shadow: 0 0 8px 1px rgba(0, 116, 224, 0.5);
           }
+        }
+        .login__error {
+          box-shadow: 0 0 3px 1px rgb(255 59 0);
+          border: 1px solid red;
+        }
+        .login__error + span {
+          color: red;
+          font-size: 13px;
         }
       }
       &__save {
@@ -98,15 +105,16 @@ $btn: #0467b4;
 
       button {
         width: calc(100%);
-        padding: 15px 0px;
+        // padding: 15px 0px;
         color: white;
-        font-size: 22px;
+        font-size: 18px;
         cursor: pointer;
         background-color: $btn;
         border-radius: 5px;
+        height: 45px;
       }
     }
-    a{
+    a {
       text-decoration: none;
     }
 
@@ -115,7 +123,6 @@ $btn: #0467b4;
       margin: 15px 0px;
       cursor: pointer;
       color: rgb(8, 0, 51);
-
     }
     &__forget:hover {
       color: #0467b4;
@@ -130,7 +137,7 @@ $btn: #0467b4;
       margin-bottom: 40px;
       button {
         width: 48%;
-        padding: 15px 0px;
+        padding: 10px 0px;
         border-radius: 5px;
         color: white;
         font-size: 20px;
@@ -231,6 +238,57 @@ $btn: #0467b4;
       }
       &__item:hover {
         box-shadow: 0 0 10px 2px rgba(0, 22, 148, 0.329);
+      }
+    }
+  }
+}
+@media screen and (max-width: 1024px) {
+  .user {
+    &__image {
+      width: 45%;
+    }
+  }
+}
+@media screen and (max-width: 658px) {
+  .user {
+    grid-gap: 20px;
+    &__image {
+      width: 15%;
+      // display: none;
+    }
+  }
+  .login__main__title{
+    .title__login{
+      font-size: 20px!important;
+      font-weight: bold;
+    }
+  }
+  .login__main{
+    padding-right:20px;
+    &__toporaphy{
+      margin-bottom: 15px;
+    }
+    &__form{
+      &__info{
+        input{
+          width: calc(100% - 14px);
+        }
+      }
+    }
+    &__wrap{
+      width: 100%;
+      &__options{
+        justify-content: start;
+        &__form{
+          margin-bottom: 30px;
+        }
+      }
+    }
+    .login__options{
+      height: unset;
+      &__item{
+        height: 70px;
+        padding: 0px 15px;
       }
     }
   }

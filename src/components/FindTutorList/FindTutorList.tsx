@@ -3,19 +3,54 @@ import "../FindTutorList/style.scss";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { updateDate } from "../../actions/timeList";
-import { TimeList } from "../../reducers/timeList";
+import timeListReducer, { TimeList } from "../../reducers/timeList";
 import useAddress from "../../hooks/useAddress";
 import { City, District } from "../Auth/SignUp/InfoValidation";
+import { useForm } from "react-hook-form";
+import { courseApi } from "../../api/CourseApi";
 export interface TimeItemProps {
   date: number;
   time: number;
   id: string;
   onDelete?: (id: string) => void;
 }
+interface LearningTime {
+  day: number;
+  time: number;
+}
+interface ValidateError {
+  message: string;
+}
+interface FormInput {
+  name: string;
+  phone: number;
+  title: string;
+  description: string;
+  subject: string;
+  class: string;
+  people: number;
+  formality: string;
+  city?: string;
+  district?: string;
+  address: string;
+  learningDate: Date;
+  fee: number;
+  time: LearningTime[];
+}
 export default function FindTutorList() {
+  // use React Hook Form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInput>();
+
   const [district, city] = useAddress();
   const [districts, setDistricts] = useState<District[]>(district);
   const [citys, setCitys] = useState<City[]>(city);
+  const [subjects, setSubjects] = useState<string[]>();
+  const [classes, setClasses] = useState<string[]>();
+  const [isHomeFormality, setIsHomeFormality] = useState<boolean>(true);
 
   const addtionalTimes = useSelector((state: TimeList) => state.timeList);
   console.log(addtionalTimes);
@@ -26,6 +61,41 @@ export default function FindTutorList() {
   ]);
 
   useEffect(() => {
+    courseApi.getSubjectList().then((subject) => {
+      const subjects = [
+        "Toán học",
+        "Vật Lí",
+        "Hóa học",
+        "Sinh học",
+        "Tiếng Anh",
+        "Lịch sử",
+        "Tiếng Anh giao tiếp",
+        "TOEIC",
+      ];
+      setSubjects(subjects);
+    });
+    courseApi.getClassList().then((classes) => {
+      const res = [
+        "Lớp 1",
+        "Lớp 2",
+        "Lớp 3",
+        "Lớp 4",
+        "Lớp 5",
+        "Lớp 6",
+        "Lớp 7",
+        "Lớp 8",
+        "Lớp 9",
+        "Lớp 10",
+        "Lớp 11",
+        "Lớp 12",
+        "Đại học",
+        "Đi làm",
+      ];
+      setClasses(res);
+    });
+  }, []);
+
+  useEffect(() => {
     setCitys(city);
     setDistricts(district);
   }, [city, district]);
@@ -34,6 +104,11 @@ export default function FindTutorList() {
     timeList.length > 1 &&
       setTimeList(timeList.filter((item) => item.id !== id));
   };
+
+  const handleSubmitFindTutor = (data: FormInput) => {
+    console.log(data);
+  };
+
   const TimeItem = ({ date, time, id, onDelete }: TimeItemProps) => {
     const [dateItem, setDate] = useState<number>(date);
     const [timeItem, setTime] = useState<number>(time);
@@ -102,38 +177,93 @@ export default function FindTutorList() {
       </>
     );
   };
+  const ValidateError = ({ message }: ValidateError) => {
+    return (
+      <div className="tutors__input validate__error">
+        <div className="tutors__input__label"></div>
+        <div>{message}</div>
+      </div>
+    );
+  };
   return (
     <div className="tutor__list">
-      <div className="tutor__list__container">
+      <form
+        className="tutor__list__container"
+        onSubmit={handleSubmit(handleSubmitFindTutor)}
+      >
         <div className="tutors__title">Đăng ký tìm gia sư</div>
         <div className="tutors__notify">
           <i className="fas fa-pencil-alt"></i>
           Điền đầy đủ các thông tin bên dưới để đăng ký tìm gia sư
         </div>
         <p>Đăng ký nhanh</p>
-        <div className="tutors__input">
+        <div
+          className={
+            errors.name ? "tutors__input validate__error" : "tutors__input"
+          }
+        >
           <div className="tutors__input__label">
             Họ và tên: <span>*</span>
           </div>
-          <input type="text" placeholder="Nhập họ tên" />
+          <input
+            type="text"
+            placeholder="Nhập họ tên"
+            {...register("name", { required: true, pattern: /^[a-z0-9]/i })}
+          />
         </div>
-        <div className="tutors__input">
+        {/* {errors.name?.type === "required" && <ValidateError message="Nhập họ tên!" />} */}
+
+        <div
+          className={
+            errors.phone ? "tutors__input validate__error" : "tutors__input"
+          }
+        >
           <div className="tutors__input__label">
             Số điện thoại: <span>*</span>
           </div>
-          <input type="number" placeholder="Nhập số điện thoại" />
+          <input
+            type="number"
+            placeholder="Nhập số điện thoại"
+            {...register("phone", {
+              required: true,
+              minLength: 10,
+              maxLength: 11,
+            })}
+          />
         </div>
-        <div className="tutors__input">
+        {/* <div className="tutors__input"> */}
+          {/* {errors.phone?.type==="required" && <ValidateError message="Nhập số điện thoại!" />}
+        {errors.phone?.type==="minLength" && <ValidateError message="Vui lòng nhập đúng điện thoại!" />}
+        {errors.phone?.type==="maxLength" && <ValidateError message="Vui lòng nhập đúng số điện thoại!" />} */}
+        {/* </div> */}
+        <div
+          className={
+            errors.title ? "tutors__input validate__error" : "tutors__input"
+          }
+        >
           <div className="tutors__input__label">
             Tiêu đề: <span>*</span>
           </div>
-          <input type="text" placeholder="Nhập tiêu đề" />
+          <input
+            type="text"
+            placeholder="Nhập tiêu đề"
+            {...register("title", { required: true })}
+          />
         </div>
-        <div className="tutors__input">
+        <div
+          className={
+            errors.description
+              ? "tutors__input validate__error"
+              : "tutors__input"
+          }
+        >
           <div className="tutors__input__label tutors__input__time">
             Mô tả: <span>*</span>
           </div>
-          <textarea placeholder="Nhập mô tả" />
+          <textarea
+            placeholder="Nhập mô tả"
+            {...register("description", { required: true })}
+          />
         </div>
         <div className="tutors__input tutors__note">
           <div className="tutors__input__label"></div>
@@ -157,23 +287,39 @@ export default function FindTutorList() {
             <p>Thông tin thêm</p>
             <div className="tutors__input">
               <div className="tutors__input__label">Môn học:</div>
-              <select name="subject" id="">
-                <option value="Tin học">Tin học</option>
-                <option value="Sinh học">Sinh học</option>
-                <option value="Toán">Toán</option>
+              <select id="" {...register("subject")}>
+                {subjects &&
+                  subjects.map((subject, index) => {
+                    return (
+                      <option value={subject} key={index}>
+                        {subject}
+                      </option>
+                    );
+                  })}
               </select>
             </div>
             <div className="tutors__input">
               <div className="tutors__input__label">Lớp:</div>
-              <select name="class" id="">
-                <option value="Lớp 6">Lớp 6</option>
-                <option value="Lớp 9">Lớp 9</option>
-                <option value="Lớp 12">Lớp 12</option>
+              <select id="" {...register("class")}>
+                {classes &&
+                  classes.map((clas, index) => {
+                    return (
+                      <option value={clas} key={index}>
+                        {clas}
+                      </option>
+                    );
+                  })}
               </select>
             </div>
             <div className="tutors__input">
               <div className="tutors__input__label">Số người:</div>
-              <input type="number" placeholder="" value="1" />
+              <input
+                type="number"
+                placeholder=""
+                value="1"
+                className="tutors__input__tag"
+                {...register("people")}
+              />
             </div>
             <div className="tutors__input tutors__note">
               <div className="tutors__input__label"></div>
@@ -183,45 +329,65 @@ export default function FindTutorList() {
             </div>
             <div className="tutors__input">
               <div className="tutors__input__label">Hình thức học:</div>
-              <select name="learn__method" id="">
+              <select
+                id=""
+                {...register("formality")}
+                onChange={(e) =>
+                  setIsHomeFormality(  
+                    e.target.value === "Tại nhà" ? true : false
+                  )
+                }
+              >
                 <option value="Tại nhà">Tại nhà</option>
                 <option value="Học online">Học online</option>
                 <option value="Tại trung tâm">Tại trung tâm</option>
               </select>
             </div>
-            <div className="tutors__input">
-              <div className="tutors__input__label">Tỉnh thành học:</div>
-              <select
-                name="city"
-                id=""
-                onChange={(e) => {
-                  // setGetDistrictsByID([]);
-                  // setChooseCity(e.target.value.toString());
-                }}
-              >
-                <option value="">Chọn Thành Phố</option>
+            {isHomeFormality && (
+              <>
+                <div className="tutors__input">
+                  <div className="tutors__input__label">Tỉnh thành học:</div>
+                  <select
+                    id=""
+                    {...register("city")}
+                    onChange={(e) => {
+                      // setGetDistrictsByID([]);
+                      // setChooseCity(e.target.value.toString());
+                    }}
+                  >
+                    <option value="">Chọn Thành Phố</option>
 
-                {citys.map((city) => {
-                  return (
-                    <option value={city.code} key={city.code}>
-                      {city.name_with_type}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-            <div className="tutors__input">
-              <div className="tutors__input__label">Địa chỉ học:</div>
-              <input type="text" placeholder="Nhập địa tên đường, quận/huyện" />
-            </div>
+                    {citys.map((city) => {
+                      return (
+                        <option value={city.name_with_type} key={city.code}>
+                          {city.name_with_type}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <div className="tutors__input">
+                  <div className="tutors__input__label">Địa chỉ học:</div>
+                  <input
+                    type="text"
+                    placeholder="Nhập địa tên đường, quận/huyện"
+                    {...register("address")}
+                  />
+                </div>
+              </>
+            )}
             <div className="tutors__input">
               <div className="tutors__input__label">Ngày học dự kiến:</div>
-              <input type="date" placeholder="" />
+              <input type="date" placeholder="" {...register("learningDate")} />
             </div>
             <div className="tutors__input">
               <div className="tutors__input__label">Học phí mỗi buổi:</div>
               <div className="tutors__input__value">
-                <input type="number" placeholder="100.000" />
+                <input
+                  type="number"
+                  placeholder="100.000"
+                  {...register("fee")}
+                />
                 <div className="tutors__input__value__label">VNĐ</div>
               </div>
             </div>
@@ -250,7 +416,7 @@ export default function FindTutorList() {
               </div>
             </div>
             <div className="tutors__input__add">
-              <button
+              <button type="button"
                 onClick={() => {
                   setTimeList([
                     ...timeList,
@@ -268,7 +434,7 @@ export default function FindTutorList() {
             Đăng ký
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

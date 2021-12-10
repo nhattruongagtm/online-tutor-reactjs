@@ -8,7 +8,7 @@ import SignUpForm from "./SignUpForm";
 import CodeValidation from "./CodeValidation";
 import InfoValidation from "./InfoValidation";
 import { useSelector } from "react-redux";
-import {Prompt} from 'react-router';
+import { Prompt } from "react-router";
 
 interface RootState {
   signUpStatus: {
@@ -43,13 +43,18 @@ export default function SignUp() {
             {Number(type) === 1 ? "giảng dạy" : "học"}
           </div>
         </div>
-        <button className="signup__success__login">Đăng nhập</button>
+        <button
+          className="signup__success__login"
+          onClick={() => history.push(LOGIN_PATH)}
+        >
+          Đăng nhập
+        </button>
       </div>
     );
   };
 
   return (
-    <div className="signup__main login__main"> 
+    <div className="signup__main login__main">
       {Number(type) === -1 ? (
         <div className="login__main__wrap login__main__wrap__options">
           <div className="login__main__title">
@@ -90,7 +95,7 @@ export default function SignUp() {
         </div>
       ) : (
         <div className="signup__main__wrap">
-          <Prompt when = {true} message={'Bạn có muốn thoát khỏi trang này?'}/> 
+          <Prompt when={true} message={"Bạn có muốn thoát khỏi trang này?"} />
           <div className="signup__main__wrap__title">
             <div> Đăng ký tài khoản </div>
             <div>{Number(type) === 1 ? "Gia sư" : "Học viên"}</div>

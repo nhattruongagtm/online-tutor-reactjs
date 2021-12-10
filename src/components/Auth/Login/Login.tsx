@@ -3,7 +3,10 @@ import { Link, useHistory } from "react-router-dom";
 import { FORGET_PASSWORD_PATH, SIGNUP_PATH } from "../../../constants/path";
 
 import "../Login/login.scss";
+import LoginForm from "./LoginForm";
 export default function Login() {
+
+  // 1 là gia sư, 0 là học viên, mặc định -1
   const [type, setType] = useState<-1 | 1 | 0>(-1);
   const history = useHistory();
 
@@ -57,20 +60,9 @@ export default function Login() {
             <div>Đăng nhập</div>
             <span>{Number(type) === 1 ? "Gia sư" : "Học viên"}</span>
           </div>
-          <form className="login__main__form">
-            <div className="login__main__form__info">
-              <div className="login__main__form__info__label">Email</div>
-              <input type="text" placeholder="Email" />
-            </div>
-            <div className="login__main__form__info">
-              <div className="login__main__form__info__label">Mật khẩu</div>
-              <input type="password" placeholder="Nhập mật khẩu" />
-            </div>
-            <div className="login__main__form__save">
-             <label htmlFor="save__account"> <input type="checkbox" id="save__account"/> <span>Ghi nhớ tài khoản</span></label>
-            </div>
-            <button type="submit">Đăng nhập</button>
-          </form>
+          
+          <LoginForm/>
+
           <Link to={FORGET_PASSWORD_PATH}><div className="login__main__forget">Quên mật khẩu?</div></Link>
           <div className="login__main__option">
             --------hoặc đăng nhập bằng---------

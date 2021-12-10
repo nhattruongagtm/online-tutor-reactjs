@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router";
+import { TUTOR_PATH } from "../../constants/path";
 import "../TutorList/style.scss";
 export default function TutorList() {
   const [isToogleFilter, setIsToogleFilter] = useState<boolean>(false);
+  const history = useHistory();
   return (
     <div className="waiting__class">
       <div className="waiting__class__bar">
@@ -70,7 +73,7 @@ export default function TutorList() {
                 <i className="fas fa-star star--border"></i>
               </div>
             </div>
-            <button className="tutor__detail">Xem chi tiết</button>
+            <button className="tutor__detail" onClick={()=> history.push(TUTOR_PATH)}>Xem chi tiết</button>
           </div>
           <div className="tutor__item">
             <div className="tutor__avatar">

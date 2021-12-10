@@ -6,17 +6,28 @@ $blue: #0089be;
   align-items: center;
 }
 .header {
-  width: calc(100% - 160px);
+  // width: calc(100% - 160px);
+  // width: 80%;
+  width: 100%;
   height: 80px;
   background-color: white;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  //   background-color: beige;
-  padding: 0px 80px;
+  // background-color: beige;
+  // padding: 0px 80px;
   position: fixed;
   border-bottom: 1px solid rgb(209, 209, 209);
   z-index: 10;
+  // background-color: cyan;
+
+  &__main {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: auto;
+    // background-color: cyan;
+  }
 
   &__logo {
     width: 60px;
@@ -32,6 +43,7 @@ $blue: #0089be;
     }
   }
   &__navigation {
+    // width: 100%;
     display: flex;
     height: 100%;
     gap: 10px;
@@ -39,11 +51,6 @@ $blue: #0089be;
     align-items: center;
     justify-content: center;
     height: 100%;
-
-    &__item + .active {
-      background-color: rgb(238, 238, 238);
-      color: $blue;
-    }
 
     li,
     a,
@@ -57,7 +64,7 @@ $blue: #0089be;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 20px;
+      padding: 10px 20px;
       border-radius: 5px;
       transition: all 0.3s ease;
       text-transform: uppercase;
@@ -70,6 +77,10 @@ $blue: #0089be;
       }
     }
     &--active {
+      background-color: rgb(238, 238, 238);
+      color: $blue;
+    }
+    &__item + .active {
       background-color: rgb(238, 238, 238);
       color: $blue;
     }
@@ -145,4 +156,153 @@ $blue: #0089be;
       }
     }
   }
+}
+@media screen and (min-width: 1024px) {
+  .header {
+    &__logo {
+    }
+    &__navigation {
+      li,
+      a,
+      &--active {
+        // font-size: 10px;
+        // background-color: cyan;
+      }
+    }
+    &__auth {
+      &__menu {
+        display: none;
+      }
+      &__cart {
+      }
+      &__user {
+      }
+      &__btn {
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1103px) {
+  .header {
+    &__navigation {
+      li,
+      a,  
+      &--active {
+        font-size: 12px;
+        // background-color: cyan;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .header {
+    // overflow: hidden;
+    max-height: 80px;
+    &__logo {
+    }
+    &__navigation {
+      display: none;
+
+      li,
+      a,
+      &--active {
+        // font-size: 10px;
+        // background-color: cyan;
+      }
+    }
+    #header__menu:checked ~ ul {
+      transform: translateX(0%);
+      transition: 0.3s;
+    }
+    #header__menu:checked ~ .header__menu__layer{
+      display: block;
+    }
+    &__auth {
+      &__menu {
+        font-size: 20px;
+        cursor: pointer;
+        .navigation__responsive {
+          position: fixed;
+          top: 0px;
+          left: 0;
+          background-color: rgb(6, 1, 32);
+          width: 70%;
+          height: 150vh;
+          // display: none;
+          padding: 10px;
+          margin: 0;
+          transform: translateX(-100%);
+          transition: 0.3s;
+          z-index: 2;
+
+          display: flex;
+          flex-direction: column;
+
+          li:first-child {
+            padding: 0px 0 0px 0px;
+          }
+          li{
+            padding: 0;
+            .menu__close__header {
+              width: 100%;
+              text-align: right;
+              font-size: 25px;
+              color: white;
+              // padding: 15px;
+              padding: 0px 0px 10px 0px;
+              border-bottom: 1px solid rgb(207, 207, 207);
+            }
+          }
+          a {
+            list-style: none;
+            text-decoration: none;
+            color: white;
+            padding: 10px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgb(207, 207, 207);
+            // background-color: rgb(64, 65, 65);
+            
+            .menu__hover__header {
+              opacity: 0;
+              transition: 0.3s;
+            }
+            &:hover {
+              font-weight: bold;
+            }
+
+            &:hover .menu__hover__header {
+              opacity: 1;
+              transform: translateX(5px);
+            }
+          }
+        }
+        .header__menu__layer{
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          background-color: rgba(0, 0, 0, 0.651);
+          width: 100%;
+          height: 200vh;
+          z-index: 1;
+        }
+      }
+      &__cart {
+      }
+      &__user {
+        width: fit-content;
+        &__name{
+          display:none;
+        }
+      }
+      &__btn {
+      }
+    }
+    
+  }
+}
+@media screen and (max-width: 767px) {
+  
 }

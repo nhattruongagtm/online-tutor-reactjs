@@ -1,6 +1,17 @@
 import React from "react";
-import { NavLink, useHistory } from "react-router-dom";
-import { CART_PATH, FAQ_PATH, FIND_TUTOR_PATH, HOME_PATH, ME_PATH, NEWS_PATH, PROFILE_PATH, TUTOR_LIST_PATH, WAITING_CLASS_PATH } from '../../constants/path';
+import { Link, NavLink, useHistory } from "react-router-dom";
+import {
+  CART_PATH,
+  FAQ_PATH,
+  FIND_TUTOR_PATH,
+  HOME_PATH,
+  LOGIN_PATH,
+  ME_PATH,
+  NEWS_PATH,
+  PROFILE_PATH,
+  TUTOR_LIST_PATH,
+  WAITING_CLASS_PATH,
+} from "../../constants/path";
 import "../Header/header.scss";
 interface IRoutes {
   path: string;
@@ -29,46 +40,86 @@ export default function Header() {
       path: `${NEWS_PATH}`,
       title: "tin tức",
     },
-    {
-      path: `${FAQ_PATH}`,
-      title: "Hỏi đáp",
-    },
+    // {
+    //   path: `${FAQ_PATH}`,
+    //   title: "Hỏi đáp",
+    // },
   ];
   return (
     <div className="header">
-      <div className="header__logo">
-        {/* <img
+      <div className="header__main">
+        <div className="header__logo">
+          {/* <img
           src="https://c8.alamy.com/comp/2E2PMN6/vector-logo-of-a-tutor-educational-courses-2E2PMN6.jpg"
           alt=""
         /> */}
-      </div>
-      {/* header__navigation--active */}
-      <ul className="header__navigation">
-        {routes.map((route, index) => {
-          return (
-            <NavLink to={route.path} className="header__navigation__item" key={index}>
-              {route.title}
-            </NavLink>
-          );
-        })}
-      </ul>
-      <div className="header__auth">
-        <div className="header__auth__cart" onClick={()=>history.push(CART_PATH)}>
-          <i className="fas fa-shopping-cart"></i>
-          <div className="header__auth__cart__number">2</div>
         </div>
-        <div className="header__auth__user" onClick={()=>{
-          history.push(`${ME_PATH}${PROFILE_PATH}`)
-        }}>
-          <div className="header__auth__user__img">
-            <img
-              src="https://i.pinimg.com/originals/5f/12/21/5f12212ed4d94b0dafe0f18a8e55832b.jpg"
-              alt=""
-            />
+        {/* header__navigation--active */}
+        <ul className="header__navigation">
+          {routes.map((route, index) => {
+            return (
+              <NavLink
+                to={route.path}
+                className="header__navigation__item"
+                key={index}
+              >
+                {route.title}
+              </NavLink>
+            );
+          })}
+        </ul>
+        <div className="header__auth">
+          <div
+            className="header__auth__cart"
+            onClick={() => history.push(CART_PATH)}
+          >
+            <i className="fas fa-shopping-cart"></i>
+            <div className="header__auth__cart__number">2</div>
           </div>
-          <div className="header__auth__user__name">Nhật Trường</div>
+          <div
+            className="header__auth__user"
+            onClick={() => {
+              history.push(`${ME_PATH}${PROFILE_PATH}`);
+            }}
+          >
+            <div className="header__auth__user__img">
+              <img
+                src="https://i.pinimg.com/originals/5f/12/21/5f12212ed4d94b0dafe0f18a8e55832b.jpg"
+                alt=""
+              />
+            </div>
+            <div className="header__auth__user__name">Nhật Trường</div>
+          </div>
+          {/* <Link to={LOGIN_PATH} className="header__auth__btn">
+            Đăng nhập
+          </Link> */}
+          <div className="header__auth__menu">
+            <label htmlFor="header__menu">
+              <i className="fas fa-bars"></i>
+            </label>
+            <input type="checkbox" id="header__menu" hidden />
+
+            <ul className="navigation__responsive">
+              <li>
+                <label htmlFor="header__menu">
+                  {" "}
+                  <i className="fas fa-times-circle menu__close__header"></i>
+                </label>
+              </li>
+
+              {routes.map((route, index) => {
+                return (
+                  <Link key={index} to={route.path}>
+                    <span>{route.title}</span>
+                    <i className="fas fa-arrow-right menu__hover__header"></i>
+                  </Link>
+                );
+              })}
+            </ul>
+
+            <label htmlFor="header__menu" className="header__menu__layer"></label>
+          </div>
         </div>
-        {/* <Link to={LOGIN_PATH} className="header__auth__btn" >Đăng nhập</Link> */}
       </div>
     </div>
   );

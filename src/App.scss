@@ -11,6 +11,10 @@ body {
   width: 90%;
   padding-top: 80px;
   margin: auto;
+
+  & > div {
+    min-height: 90vh;
+  }
 }
 
 textarea {
@@ -62,4 +66,15 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+.login__error {
+  box-shadow: 0 0 3px 1px rgb(255 59 0);
+  border: 1px solid red;
+}
+
+@media screen and (max-width: 768px){
+  .container{
+    width: 99.5%;
+  }
 }

@@ -8,6 +8,8 @@ import "../Login/login.scss"
 import EmailValidation from './EmailValidation';
 import NewPassword from './NewPassword';
 import { useSelector } from 'react-redux';
+import Button from "@mui/material/Button";
+import { HOME_PATH, LOGIN_PATH } from '../../../constants/path';
 interface RootState{
   forgotStatus: { status : number};
 }
@@ -35,7 +37,8 @@ export default function ForgotPassword() {
               <div>
                 Vui lòng đăng nhập để bắt đầu!
             </div>
-            <button className="signup__success__login forgot__success">Đăng nhập</button>  
+            <button className="signup__success__login forgot__success" onClick={()=>history.push(LOGIN_PATH)}>Đăng nhập</button>  
+            {/* <Button variant="contained" onClick={()=>history.push(HOME_PATH)} >Đăng nhập</Button>   */}
           </div>
           </div>
         );
@@ -43,7 +46,7 @@ export default function ForgotPassword() {
   
     return (
         <div className="signup__main__wrap forgot__password">
-        <Prompt when = {true} message={'Bạn có muốn thoát khỏi trang này?'}/> 
+        <Prompt when = {status === 1 ? true: false} message={'Bạn có muốn thoát khỏi trang này?'}/> 
         <div className="signup__main__wrap__title forgot__title">
 
           <div> Quên mật khẩu </div>
