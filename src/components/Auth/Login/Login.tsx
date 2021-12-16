@@ -1,14 +1,29 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { FORGET_PASSWORD_PATH, SIGNUP_PATH } from "../../../constants/path";
-
+import { FORGET_PASSWORD_PATH, HOME_PATH, SIGNUP_PATH } from "../../../constants/path";
 import "../Login/login.scss";
 import LoginForm from "./LoginForm";
+import { facebookProvider,googleProvider } from "../../../config/authMethods";
+import { FacebookAuthProvider, GoogleAuthProvider } from "@firebase/auth";
+import socialAuth from "../../../auth/auth";
+
+
+
 export default function Login() {
 
   // 1 là gia sư, 0 là học viên, mặc định -1
-  const [type, setType] = useState<-1 | 1 | 0>(-1);
+  const [type, setType] = useState< -1 | 1 | 0>(-1);
   const history = useHistory();
+
+
+  // đăng nhập bằng google, facebook
+  const handleLoginAPI = async (provider: FacebookAuthProvider | GoogleAuthProvider) =>{
+    const res = await socialAuth(provider);
+
+    res ? history.push(HOME_PATH) : alert("Lỗi! Vui lòng thử lại!");
+  }
+  
+
 
   return (
     <div className="login__main">
@@ -68,8 +83,11 @@ export default function Login() {
             --------hoặc đăng nhập bằng---------
           </div>
           <div className="login__main__api">
-            <button className="login__main__api--google">Google</button>
-            <button className="login__main__api--facebook">Facebook</button>
+            <button className="login__main__api--google" onClick={()=>handleLoginAPI(googleProvider)}>
+            Google
+            </button>
+           
+            <button className="login__main__api--facebook" onClick={()=>handleLoginAPI(facebookProvider)}>Facebook</button>
           </div>
           <div className="login__main__nav">
             <span>Bạn chưa có tài khoản? </span>

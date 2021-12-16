@@ -1,5 +1,6 @@
-import React from "react";
-import { Link, NavLink, useHistory } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { Link, NavLink, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import {
   CART_PATH,
   FAQ_PATH,
@@ -11,40 +12,53 @@ import {
   PROFILE_PATH,
   TUTOR_LIST_PATH,
   WAITING_CLASS_PATH,
-} from "../../constants/path";
-import "../Header/header.scss";
+} from '../../constants/path';
+import '../Header/header.scss';
+import { ACCESS_TOKEN } from '../../constants/auth';
 interface IRoutes {
   path: string;
   title: string;
 }
 export default function Header() {
   const history = useHistory();
+  const location = useLocation();
+  const pathName = location.pathname;
   const routes: IRoutes[] = [
     {
       path: `${HOME_PATH}`,
-      title: "Trang chủ",
+      title: 'Trang chủ',
     },
     {
       path: `${FIND_TUTOR_PATH}`,
-      title: "Đăng tìm gia sư",
+      title: 'Đăng tìm gia sư',
     },
     {
       path: `${WAITING_CLASS_PATH}`,
-      title: "Lớp chờ gia sư",
+      title: 'Lớp chờ gia sư',
     },
     {
       path: `${TUTOR_LIST_PATH}`,
-      title: "Danh sách gia sư",
+      title: 'Danh sách gia sư',
     },
     {
       path: `${NEWS_PATH}`,
-      title: "tin tức",
+      title: 'Tin tức',
     },
     // {
     //   path: `${FAQ_PATH}`,
     //   title: "Hỏi đáp",
     // },
   ];
+
+  useEffect(() => {
+    routes.forEach((route) => {
+      if (route.path === '/') {
+        document.title = 'Gia sư trực tuyến';
+      } else if (route.path === pathName) {
+        document.title = route.title;
+      }
+    });
+  }, [location]);
   return (
     <div className="header">
       <div className="header__main">
@@ -76,23 +90,28 @@ export default function Header() {
             <i className="fas fa-shopping-cart"></i>
             <div className="header__auth__cart__number">2</div>
           </div>
-          <div
-            className="header__auth__user"
-            onClick={() => {
-              history.push(`${ME_PATH}${PROFILE_PATH}`);
-            }}
-          >
-            <div className="header__auth__user__img">
-              <img
-                src="https://i.pinimg.com/originals/5f/12/21/5f12212ed4d94b0dafe0f18a8e55832b.jpg"
-                alt=""
-              />
+
+          {localStorage.getItem(ACCESS_TOKEN) ? (
+            <div
+              className="header__auth__user"
+              onClick={() => {
+                history.push(`${ME_PATH}${PROFILE_PATH}`);
+              }}
+            >
+              <div className="header__auth__user__img">
+                <img
+                  src="https://i.pinimg.com/originals/5f/12/21/5f12212ed4d94b0dafe0f18a8e55832b.jpg"
+                  alt=""
+                />
+              </div>
+              <div className="header__auth__user__name">Nhật Trường</div>
             </div>
-            <div className="header__auth__user__name">Nhật Trường</div>
-          </div>
-          {/* <Link to={LOGIN_PATH} className="header__auth__btn">
+          ) : (
+
+          <Link to={LOGIN_PATH} className="header__auth__btn">
             Đăng nhập
-          </Link> */}
+          </Link>
+          )}
           <div className="header__auth__menu">
             <label htmlFor="header__menu">
               <i className="fas fa-bars"></i>
@@ -102,7 +121,7 @@ export default function Header() {
             <ul className="navigation__responsive">
               <li>
                 <label htmlFor="header__menu">
-                  {" "}
+                  {' '}
                   <i className="fas fa-times-circle menu__close__header"></i>
                 </label>
               </li>
@@ -117,7 +136,10 @@ export default function Header() {
               })}
             </ul>
 
-            <label htmlFor="header__menu" className="header__menu__layer"></label>
+            <label
+              htmlFor="header__menu"
+              className="header__menu__layer"
+            ></label>
           </div>
         </div>
       </div>
