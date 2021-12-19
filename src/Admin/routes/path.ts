@@ -1,0 +1,9 @@
+export const ADMIN__USER = "/admin/users";
+export const ADMIN__USER__TUTOR = "/admin/users/tutors";
+export const ADMIN__USER__STUDENT = "/admin/users/students";
+export const ADMIN__SETTINGS = "/admin/settings";
+export const ADMIN__PROFILE = "/admin/profile";
+export const ADMIN__BLOG = "/admin/blog";
+export const ADMIN__NOTIFICATION = "/admin/notification";
+export const ADMIN__HOME = "/admin/dashboard";
+export const ADMIN__COURSE = "/admin/courses";

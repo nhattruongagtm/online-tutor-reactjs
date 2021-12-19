@@ -20,7 +20,7 @@ export default function Login() {
   const handleLoginAPI = async (provider: FacebookAuthProvider | GoogleAuthProvider) =>{
     const res = await socialAuth(provider);
 
-    res ? history.push(HOME_PATH) : alert("Lỗi! Vui lòng thử lại!");
+    res && history.push(HOME_PATH) 
   }
   
 

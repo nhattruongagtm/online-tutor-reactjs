@@ -1,20 +1,24 @@
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Route, Switch, useLocation } from "react-router";
-import { updateStatus, updateStatusForgotPassword } from "./actions/signup";
-import "./App.scss";
-import ForgotPassword from "./components/Auth/ForgotPassword/ForgotPassword";
-import Login from "./components/Auth/Login/Login";
-import SignUp from "./components/Auth/SignUp/SignUp";
-import FAQ from "./components/FAQ/FAQ";
-import FindTutorList from "./components/FindTutorList/FindTutorList";
-import Footer from "./components/Footer/Footer";
-import Header from "./components/Header/Header";
-import Home from "./components/Home/Home";
-import News from "./components/News/News";
-import TutorList from "./components/TutorList/TutorList";
-import WaitingClassList from "./components/WaitingClassList/WaitingClassList";
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Redirect, Route, Switch, useLocation } from 'react-router';
+import { updateStatus, updateStatusForgotPassword } from './actions/signup';
+import DashBoard from './Admin/pages/Dashboard';
+import { ADMIN__HOME } from './Admin/routes/path';
+import './App.scss';
+import ForgotPassword from './components/Auth/ForgotPassword/ForgotPassword';
+import Login from './components/Auth/Login/Login';
+import SignUp from './components/Auth/SignUp/SignUp';
+import FAQ from './components/FAQ/FAQ';
+import FindTutorList from './components/FindTutorList/FindTutorList';
+import Footer from './components/Footer/Footer';
+import Header from './components/Header/Header';
+import Home from './components/Home/Home';
+import News from './components/News/News';
+import TutorList from './components/TutorList/TutorList';
+import WaitingClassList from './components/WaitingClassList/WaitingClassList';
+import { ACCESS_TOKEN } from './constants/auth';
 import {
+  ADMIN_PATH,
   CART_PATH,
   COURSE_PATH,
   FAQ_PATH,
@@ -23,15 +27,16 @@ import {
   HOME_PATH,
   LOGIN_PATH,
   ME_PATH,
-  NEWS_PATH, SIGNUP_PATH,
+  NEWS_PATH,
+  SIGNUP_PATH,
   TUTOR_LIST_PATH,
   TUTOR_PATH,
-  WAITING_CLASS_PATH
-} from "./constants/path";
-import Cart from "./pages/Cart/Cart";
-import DetailCourse from "./pages/DetailCourse/DetailCourse";
-import Me from "./pages/Me/Me";
-import Tutor from "./pages/Tutor/Tutor";
+  WAITING_CLASS_PATH,
+} from './constants/path';
+import Cart from './pages/Cart/Cart';
+import DetailCourse from './pages/DetailCourse/DetailCourse';
+import Me from './pages/Me/Me';
+import Tutor from './pages/Tutor/Tutor';
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -45,7 +50,12 @@ function App() {
     }
   }, [location]);
 
-  const path = [`${LOGIN_PATH}`, `${SIGNUP_PATH}`, `${FORGET_PASSWORD_PATH}`];
+  const path = [
+    `${LOGIN_PATH}`,
+    `${SIGNUP_PATH}`,
+    `${FORGET_PASSWORD_PATH}`,
+    `${ADMIN_PATH}`,
+  ];
   const isAuth = () => {
     if (path.includes(location.pathname)) {
       return true;
@@ -53,12 +63,20 @@ function App() {
     return false;
   };
 
+  const isAdminPage = location.pathname.toString().indexOf('/admin') !== -1;
+
   return (
     <div>
-      {!isAuth() ? (
+      {isAdminPage ? (
+        <Switch>
+          <Route path="/admin">
+            <DashBoard />
+          </Route>
+        </Switch>
+      ) : !isAuth() ? (
         <>
           <Header />
-          <div className="container">
+          <div className="container__app">
             <Switch>
               <Route path={HOME_PATH} exact>
                 <Home />
@@ -95,7 +113,7 @@ function App() {
 
           <Footer />
         </>
-      ) : (
+      ) : !localStorage.getItem(ACCESS_TOKEN) ? (
         <div className="user">
           <div className="user__image">
             {/* <div></div> */}
@@ -116,7 +134,9 @@ function App() {
             </Route>
           </Switch>
         </div>
-      )}
+      ) : (
+        <Redirect to={HOME_PATH} />
+  )}
     </div>
   );
 }

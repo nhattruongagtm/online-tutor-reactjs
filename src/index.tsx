@@ -7,12 +7,23 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import ScrollToTop from "./components/ScrollToTop";
+import {Route, Switch} from 'react-router'
+import { ADMIN_PATH } from "./constants/path";
+import DashBoard from "./Admin/pages/Dashboard";
+
 ReactDOM.render(
   <React.StrictMode>
    <Provider store={store}>
    <Router>
      <ScrollToTop/>
-      <App />
+      <Switch>
+        <Route exact path={ADMIN_PATH}>
+          <DashBoard/>
+        </Route>
+        <Route path="/">
+          <App/>
+        </Route>
+      </Switch>
     </Router>
    </Provider>
   </React.StrictMode>,

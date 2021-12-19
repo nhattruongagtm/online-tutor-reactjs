@@ -15,7 +15,7 @@ const RecommendedMain = styled.div`
   /* background-color: blueviolet; */
 `;
 const RecommendedItem = styled.div`
-  width: calc(340px - 70px)!important;
+  width: calc(310px)!important;
   height: 100%;
   border-radius: 10px;
   /* border: 1px solid black; */

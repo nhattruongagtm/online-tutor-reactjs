@@ -6,11 +6,9 @@ import { ACCESS_TOKEN } from '../constants/auth';
 const socialAuth = async (
   provider: FacebookAuthProvider | GoogleAuthProvider
 ) => {
-
   const auth = getAuth(firebase);
 
   try {
-
     const result = await signInWithPopup(auth, provider);
 
     const user = result.user;
@@ -19,28 +17,24 @@ const socialAuth = async (
 
     const accessToken = credential?.accessToken;
 
-    console.log("result",user)
+    console.log('result', user);
+
+    const token = await user.getIdToken();
+    localStorage.setItem(ACCESS_TOKEN, token);
     
-    if(accessToken)  {
-        user.getIdToken().then(res=>{
-           
-            localStorage.setItem(ACCESS_TOKEN,res);
-        })
+    if(localStorage.getItem(ACCESS_TOKEN)){
+        return true;
     }
-    
-    return true;
 
     // handle login success
-
   } catch (error: any) {
+    const credential = FacebookAuthProvider.credentialFromError(error);
 
-      const credential = FacebookAuthProvider.credentialFromError(error);
+    alert(credential);
 
-      alert(credential);
+    return false;
 
-      return false;
-
-      // handle login fail
+    // handle login fail
   }
 };
 export default socialAuth;

@@ -69,7 +69,7 @@ export default function Header() {
         /> */}
         </div>
         {/* header__navigation--active */}
-        <ul className="header__navigation">
+        <div className="header__navigation">
           {routes.map((route, index) => {
             return (
               <NavLink
@@ -81,7 +81,7 @@ export default function Header() {
               </NavLink>
             );
           })}
-        </ul>
+        </div>
         <div className="header__auth">
           <div
             className="header__auth__cart"

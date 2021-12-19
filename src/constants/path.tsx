@@ -14,3 +14,4 @@ export const COURSE_INFO_PATH = "/khoa-hoc";
 export const CART_PATH = "/khoa-hoc-da-luu"; 
 export const NOT_FOUND_PATH ="/4-0-4"
 export const TUTOR_PATH ="/gia-su"
+export const ADMIN_PATH ="/admin"
