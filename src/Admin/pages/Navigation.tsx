@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Stack } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
-import { ADMIN__COURSE, ADMIN__HOME, ADMIN__PROFILE, ADMIN__SETTINGS, ADMIN__USER, ADMIN__USER__TUTOR } from '../routes/path';
+import { ADMIN__COURSE, ADMIN__HOME, ADMIN__PROFILE, ADMIN__SETTINGS, ADMIN__USER, ADMIN__USER__STUDENT, ADMIN__USER__TUTOR } from '../routes/path';
 interface Route {
   icon: string;
   title: string;
@@ -17,10 +17,10 @@ export default function Navigation() {
     {
       icon: 'fas fa-columns',
       title: 'Người dùng',
-      path: `${ADMIN__USER__TUTOR}`,
+      path: `${ADMIN__USER__TUTOR}` || `${ADMIN__USER__STUDENT}`,    
     },
     {
-      icon: 'fab fa-discourse',
+      icon: 'fab fa-discourse',  
       title: 'Khóa học',
       path: `${ADMIN__COURSE}`,
     },

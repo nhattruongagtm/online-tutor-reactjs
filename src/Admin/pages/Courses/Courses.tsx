@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Col, Row } from 'react-bootstrap';
-import { Header } from '../pages/User/Header';
-import { Profile } from '../pages/User/Profile';
+import { Header } from '../User/Header';
+import { Profile } from '../User/Profile';
 import { DetailCourse } from './DetailCourse';
 interface CoursesProps {}
 

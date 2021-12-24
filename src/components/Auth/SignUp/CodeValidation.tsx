@@ -1,7 +1,12 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import styled from "styled-components";
-import { updateStatus } from "../../../actions/signup";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
+import { updateStatus } from '../../../actions/signup';
+import { IInitialState } from '../../../reducers/signUpInfo';
+import { FieldError, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
 const ValidationMain = styled.div`
   /* background-color: grey; */
   height: 100%;
@@ -9,38 +14,38 @@ const ValidationMain = styled.div`
   padding-top: 20px;
 
   .signup__form__nav {
-          display: flex;
-          width: fit-content;
-          justify-content: center;
-          align-items: center;
-          gap: 50px;
-          height: 45px;
-          margin: 60px 0px 25px 130px;
-          &__back {
-            cursor: pointer;
-            color: gray;
+    display: flex;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    height: 45px;
+    margin: 60px 0px 25px 130px;
+    &__back {
+      cursor: pointer;
+      color: gray;
 
-            i {
-              margin-right: 10px;
-            }
-          }
-          &__back:hover {
-            color: black;
-          }
-          button {
-            cursor: pointer;
-            height: 100%;
-            width: 140px;
-            color: white;
-            border-radius: 5px;
-            font-size: 17px;
-            transition: opacity 0.2s;
-            background-color: rgb(0, 54, 201);
-          }
-          button:hover {
-            opacity: 0.9;
-          }
-        }
+      i {
+        margin-right: 10px;
+      }
+    }
+    &__back:hover {
+      color: black;
+    }
+    button {
+      cursor: pointer;
+      height: 100%;
+      width: 140px;
+      color: white;
+      border-radius: 5px;
+      font-size: 17px;
+      transition: opacity 0.2s;
+      background-color: rgb(0, 54, 201);
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+  }
 `;
 const ValidationTitle = styled.div`
   color: #a3a3a3;
@@ -82,14 +87,45 @@ const ResendCode = styled.div`
     }
   }
 `;
+interface CodeValidation {
+  code: string;
+}
 export default function CodeValidation() {
+  const validationShema = yup.object().shape({
+    code: yup
+      .string()
+      .required('Vui lòng nhập mã xác nhận!')
+      .length(6, 'Mã xác nhận gồm 6 ký tự, vui lòng thử lại!'),
+  });
+  const formOptions = { resolver: yupResolver(validationShema) };
   const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CodeValidation>(formOptions);
+  const inputs = useSelector((state: IInitialState) => state.signUpInfo);
+  const [message, setMessage] = useState<string>('');
 
-  const handleSendCode = (e: React.FormEvent<HTMLFormElement>) =>{
-    e.preventDefault();
+  useEffect(() => {
+    if (errors.code) {
+      const mess = errors.code.message;
+      setMessage(mess as string);
+    }
+  },[errors.code?.message]);
 
-    dispatch(updateStatus(2))
-  }
+  const handleSendCode = (data: CodeValidation) => {
+    console.log(data);
+    setMessage('');
+
+    
+    if(data.code === inputs.code){
+      dispatch(updateStatus(2))
+    }
+    else{
+      console.log("Mã sai, vui lòng thử lại")
+    }
+  };
 
   return (
     <ValidationMain>
@@ -97,10 +133,18 @@ export default function CodeValidation() {
         Chúng tôi đã gửi mã xác nhận vào email mà bạn đã đăng ký. Vui lòng kiểm
         tra email.
       </ValidationTitle>
-      <ValidationForm onSubmit={handleSendCode}>
+      <ValidationForm onSubmit={handleSubmit(handleSendCode)}>
         <FormInput>
           <div className="form__label">Nhập mã xác nhận: </div>
-          <input type="text" placeholder="Nhập mã xác nhận" />
+          <input
+            type="text"
+            placeholder="Nhập mã xác nhận"
+            {...register('code')}
+          />
+        </FormInput>
+        <FormInput>
+        <div className="form__label"> </div>
+          <p style={{ fontSize: '12px', color: 'red' }}>{message}</p>
         </FormInput>
         <ResendCode>
           <span>Bạn chưa nhận được mã? </span>

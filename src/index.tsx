@@ -12,7 +12,7 @@ import { ADMIN_PATH } from "./constants/path";
 import DashBoard from "./Admin/pages/Dashboard";
 
 ReactDOM.render(
-  <React.StrictMode>
+  <React.StrictMode>  
    <Provider store={store}>
    <Router>
      <ScrollToTop/>

@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { updateStatus } from "../../../actions/signup";
+import { useDispatch, useSelector } from "react-redux";
+import { fillStep1, fillStep2, updateStatus } from "../../../actions/signup";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { authApi } from "../../../api/authApi";
+import { IInitialState } from "../../../reducers/signUpInfo";
+import md5 from 'md5';
 interface Validation {
   title: string;
   status: boolean;
@@ -13,10 +16,14 @@ interface FormInput {
   password: string;
   repassword: string;
 }
-export default function SignUpForm() {
+interface SignUpFormProps{
+  type: number;
+}
+
+export default function SignUpForm({type}: SignUpFormProps) {
   // use React Hook Form
   const ValidationShema = yup.object().shape({
-    email: yup.string().required("Vui lòng nhập email"),
+    email: yup.string().required("Vui lòng nhập email").email("Vui lòng nhập đúng email!"),
     password: yup
       .string()
       .required("Vui lòng nhập mật khẩu!")
@@ -51,12 +58,26 @@ export default function SignUpForm() {
       status: false,
     },
   ];
+  const inputs = useSelector((state: IInitialState) => state.signUpInfo);  
 
-  const handleSubmitSignup = () => {
+  const handleSubmitSignup = (data: FormInput) => {
    
-    setTimeout(()=>{
-      dispatch(updateStatus(1));
-    },1000);
+      dispatch(fillStep1({email: data.email, password: md5(data.password), type : Number(type)})); 
+      
+      // call api send mail after that forward to step 2
+
+      authApi.sendMailToSignUp(data.email).then(res=>{
+        
+        setTimeout(()=>{
+          dispatch(fillStep2({code: res}));
+
+        if(res){
+          dispatch(updateStatus(1));             
+        }
+        },1000)
+      })    
+
+      
   };
 
   const [checkValidation, setCheckValidation] = useState(validationList);

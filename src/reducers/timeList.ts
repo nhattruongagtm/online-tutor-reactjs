@@ -21,6 +21,6 @@ export const timeListReducer= (state = initialState, action: PayloadAction ) =>{
 
         default : return state;
     }
-}
+}   
 
 export default timeListReducer;

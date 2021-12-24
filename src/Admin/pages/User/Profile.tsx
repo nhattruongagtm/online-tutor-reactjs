@@ -1,8 +1,23 @@
 import React from 'react';
+import { useRouteMatch } from 'react-router';
 import './profile.scss';
 interface ProfileProps {}
 
+interface Params{
+  slug: string;
+}
 export const Profile = (props: ProfileProps) => {
+  const routeMatch = useRouteMatch();
+  const { params, url, path } = routeMatch;
+  const { slug } = params as Params;
+
+  
+  const handleDetail = ()=>{
+    console.log(slug)
+    console.log(url)
+    console.log("path",path)   
+
+  }
   return (
     <div className="profile__user__admin">
       <img
@@ -40,6 +55,9 @@ export const Profile = (props: ProfileProps) => {
               <i className="far fa-star"></i>
             </p>
           </div>
+        </div>
+        <div className="profile__user__admin__more">
+          <button onClick={handleDetail}>Xem thêm</button>
         </div>
       </div>
       <div className="profile__user__admin__permission">

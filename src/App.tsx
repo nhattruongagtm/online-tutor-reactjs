@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router';
 import { updateStatus, updateStatusForgotPassword } from './actions/signup';
 import DashBoard from './Admin/pages/Dashboard';
-import { ADMIN__HOME } from './Admin/routes/path';
 import './App.scss';
 import ForgotPassword from './components/Auth/ForgotPassword/ForgotPassword';
 import Login from './components/Auth/Login/Login';
@@ -31,15 +30,22 @@ import {
   SIGNUP_PATH,
   TUTOR_LIST_PATH,
   TUTOR_PATH,
-  WAITING_CLASS_PATH,
+  WAITING_CLASS_PATH
 } from './constants/path';
 import Cart from './pages/Cart/Cart';
 import DetailCourse from './pages/DetailCourse/DetailCourse';
 import Me from './pages/Me/Me';
 import Tutor from './pages/Tutor/Tutor';
+import { IInitialState } from './reducers/signUpInfo';
+
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
+  const selectorSignUpFill = useSelector((state: IInitialState) => state.signUpInfo);
+
+  useEffect(()=>{
+    console.log(selectorSignUpFill)
+  },[selectorSignUpFill])
 
   const stateList = [`${SIGNUP_PATH}`, `${FORGET_PASSWORD_PATH}`];
 

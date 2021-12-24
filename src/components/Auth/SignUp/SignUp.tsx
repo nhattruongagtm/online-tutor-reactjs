@@ -95,7 +95,7 @@ export default function SignUp() {
         </div>
       ) : (
         <div className="signup__main__wrap">
-          <Prompt when={true} message={"Bạn có muốn thoát khỏi trang này?"} />
+          {statusBar !== 2 && <Prompt when={true} message={"Bạn có muốn thoát khỏi trang này?"} />}
           <div className="signup__main__wrap__title">
             <div> Đăng ký tài khoản </div>
             <div>{Number(type) === 1 ? "Gia sư" : "Học viên"}</div>
@@ -121,7 +121,7 @@ export default function SignUp() {
             })}
           </div>
           <div className="signup__main__wrap__element">
-            {statusBar === 0 && <SignUpForm />}
+            {statusBar === 0 && <SignUpForm type={type}/>}
             {statusBar === 1 && <CodeValidation />}
             {statusBar === 2 && <InfoValidation />}
             {statusBar === 3 && <SuccessNotification />}

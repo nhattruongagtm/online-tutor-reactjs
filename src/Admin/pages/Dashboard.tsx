@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import * as React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { Route, Switch, useLocation } from 'react-router';
-import { Courses } from '../Courses/Courses';
+import { Courses } from './Courses/Courses';
 import { ADMIN__COURSE, ADMIN__HOME, ADMIN__PROFILE, ADMIN__SETTINGS, ADMIN__USER, ADMIN__USER__TUTOR } from '../routes/path';
 import './dashboard.scss';
 import { Home } from './Home/Home';
@@ -52,7 +52,7 @@ export default function DashBoard(props: DashBoardProps) {
                 <Route exact path={ADMIN__HOME}>
                     <Home/>
                 </Route>
-                <Route path={ADMIN__USER}>
+                <Route path={`${ADMIN__USER}/:slug`} >
                     <User/>
                 </Route>
                 <Route path={ADMIN__PROFILE}>
