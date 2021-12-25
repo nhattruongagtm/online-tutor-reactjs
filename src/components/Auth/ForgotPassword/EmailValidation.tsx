@@ -1,22 +1,28 @@
-import { CircularProgress } from "@material-ui/core";
-import { Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { updateStatusForgotPassword } from "../../../actions/signup";
-import "../SignUp/signup.scss";
+import { CircularProgress } from '@material-ui/core';
+import { Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { updateStatusForgotPassword } from '../../../actions/signup';
+import { authApi } from '../../../api/authApi';
+import '../SignUp/signup.scss';
 interface SendMailProps {
-  sendMail: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  sendMail: (userID: string) => void;
 }
 interface FormValue {
   email: string;
   code: string;
 }
+interface ResultValue{
+  userID: string;
+  code: string;
+}
 export default function EmailValidation({ sendMail }: SendMailProps) {
   const [status, setStatus] = useState<boolean>(false);
-  const [isSendMail,setIsSendMail] = useState<boolean>();
-  const [isSendCode,setIsSendCode] = useState<boolean>();
+  const [isSendMail, setIsSendMail] = useState<boolean>();
+  const [isSendCode, setIsSendCode] = useState<boolean>();
+  const [result, setResult] = useState<ResultValue>();
   const dispatch = useDispatch();
   const {
     register,
@@ -24,20 +30,32 @@ export default function EmailValidation({ sendMail }: SendMailProps) {
     formState: { errors },
   } = useForm<FormValue>();
 
-  const handleSendMail = () => {
-    setIsSendMail(true);
-    setTimeout(() => {
-      setStatus(true);
-      setIsSendMail(false);
-    }, 1000);
-  };
-  const handleSendCode = () => {
-    setIsSendCode(true);
-    setTimeout(()=>{
-      dispatch(updateStatusForgotPassword(1));
-      setIsSendCode(false);
+  const handleSendMail = async (data: FormValue) => {
+    // setIsSendMail(true);
 
-    }, 2000);
+    // setIsSendMail(false);
+
+    // send mail
+    const result = await authApi.sendMailToForgot(data.email);
+
+    if (result.code) {
+      sendMail(result.userID)
+      setResult(result);
+      setStatus(true);
+    }
+  };
+  const handleSendCode = (data: FormValue) => {
+    setIsSendCode(true);
+
+   if(result){
+    if(data.code === result.code){
+      dispatch(updateStatusForgotPassword(1));
+    }
+    else{
+      console.log("Mã xác nhận không đúng, vui lòng thử lại!");
+    }
+   }
+    setIsSendCode(false);
   };
   return (
     <div className="signup__main__wrap__form">
@@ -46,10 +64,10 @@ export default function EmailValidation({ sendMail }: SendMailProps) {
           <div className="signup__form__item">
             <label className="signup__form__item__label ">Email:</label>
             <input
-              type="text"
+              type="email"
               placeholder="Email"
-              className={errors.email && "login__error"}
-              {...register("email", {
+              className={errors.email && 'login__error'}
+              {...register('email', {
                 required: true,
                 pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i,
               })}
@@ -57,8 +75,8 @@ export default function EmailValidation({ sendMail }: SendMailProps) {
           </div>
           <div className="signup__form__item signup__form__item--validate">
             <label className="signup__form__item__label "></label>
-            {errors.email?.type === "pattern" && <span>Email không đúng!</span>}
-            {errors.email?.type === "required" && (
+            {errors.email?.type === 'pattern' && <span>Email không đúng!</span>}
+            {errors.email?.type === 'required' && (
               <span>Vui lòng nhập email!</span>
             )}
           </div>
@@ -75,29 +93,37 @@ export default function EmailValidation({ sendMail }: SendMailProps) {
               Gửi mã
             </div> */}
             <Button variant="contained" type="submit">
-              <Typography sx={{mr: 1}}>Gửi mã </Typography>
-              {isSendMail && <CircularProgress size={20} className="cirlce__progress"/>}
+              <Typography sx={{ mr: 1 }}>Gửi mã </Typography>
+              {isSendMail && (
+                <CircularProgress size={20} className="cirlce__progress" />
+              )}
             </Button>
           </div>
         </form>
       ) : (
         <form onSubmit={handleSubmit(handleSendCode)}>
-          <div className="signup__form__item">
+          <div className="signup__form__item 22">
             <div className="signup__form__item__label ">Mã xác nhận:</div>
-            <input type="text" placeholder="Nhập mã xác nhận" {...register("code")}/>
+            <input
+              type="number"
+              placeholder="Nhập mã xác nhận"
+              {...register('code')}
+            />
           </div>
           <div className="signup__form__item forgot__email">
             <div className="signup__form__item__label "></div>
             <span>
               Chúng tôi sẽ đã mã code vào email mà bạn đã đăng ký. Vui lòng kiểm
-              tra email và xác nhận.{" "}
+              tra email và xác nhận.{' '}
             </span>
           </div>
           <div className="signup__form__nav forgot__nav">
             <div className="signup__form__nav__back forgot__nav__back"></div>
             <Button variant="contained" type="submit">
-            <Typography sx={{mr: 1}}>Tiếp theo </Typography>
-              {isSendCode && <CircularProgress size={20} className="cirlce__progress"/>}
+              <Typography sx={{ mr: 1 }}>Tiếp theo </Typography>
+              {isSendCode && (
+                <CircularProgress size={20} className="cirlce__progress" />
+              )}
             </Button>
           </div>
         </form>

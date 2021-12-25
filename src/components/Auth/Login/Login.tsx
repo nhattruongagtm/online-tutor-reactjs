@@ -20,6 +20,9 @@ export default function Login() {
   const handleLoginAPI = async (provider: FacebookAuthProvider | GoogleAuthProvider) =>{
     const res = await socialAuth(provider);
 
+
+
+
     res && history.push(HOME_PATH) 
   }
   
@@ -76,7 +79,7 @@ export default function Login() {
             <span>{Number(type) === 1 ? "Gia sư" : "Học viên"}</span>
           </div>
           
-          <LoginForm/>
+          <LoginForm type={type}/>
 
           <Link to={FORGET_PASSWORD_PATH}><div className="login__main__forget">Quên mật khẩu?</div></Link>
           <div className="login__main__option">

@@ -1,9 +1,27 @@
-import React from "react";
-import "../Home/style.scss";
-import Banner from "./Banner";
-import ContactForm from "./ContactForm";
-import RecommendedList from "./RecommendedList";
+import React, { useEffect, useState } from 'react';
+import '../Home/style.scss';
+import Banner from './Banner';
+import ContactForm from './ContactForm';
+import RecommendedList from './RecommendedList';
 export default function Home() {
+  useEffect(() => {
+    const move = document.querySelector('#move-top');
+    move &&
+      document.addEventListener('scroll', () => {
+        const pos = window.scrollY;
+        if (pos > 200) {
+          move.classList.add('display');
+        } else {
+          move.classList.remove('display');
+        }
+      });
+
+    move &&
+      move.addEventListener('click', () => {
+        window.scrollTo(0, 0);
+      });
+  }, []);
+
   return (
     <div className="home">
       <Banner />
@@ -45,6 +63,9 @@ export default function Home() {
       </div>
       <RecommendedList />
       <ContactForm />
+      <div className="move-top" id="move-top">
+        <i className="fas fa-arrow-up"></i>
+      </div>
     </div>
   );
 }

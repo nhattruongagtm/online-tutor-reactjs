@@ -1,13 +1,15 @@
-import { watch } from "fs";
-import React, { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { updateStatusForgotPassword } from "../../../actions/signup";
-import  {CircularProgress} from "@material-ui/core";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Button from "@mui/material/Button";
-import { Typography } from "@mui/material";
+import { watch } from 'fs';
+import React, { useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { updateStatusForgotPassword } from '../../../actions/signup';
+import { CircularProgress } from '@material-ui/core';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import Button from '@mui/material/Button';
+import { Typography } from '@mui/material';
+import { authApi } from '../../../api/authApi';
+import md5 from 'md5';
 interface Validation {
   title: string;
   status: boolean;
@@ -16,38 +18,41 @@ interface FormInput {
   password: string;
   repassword: string;
 }
+interface NewPasswordProps {
+  onGetUserID: string | undefined;
+}
 const validationList: Validation[] = [
   {
-    title: "Ít nhất 8 ký tự",
+    title: 'Ít nhất 8 ký tự',
     status: true,
   },
   {
-    title: "Ít nhất 1 chữ cái in thường và 1 chữ cái in hoa",
+    title: 'Ít nhất 1 chữ cái in thường và 1 chữ cái in hoa',
     status: false,
   },
   {
-    title: "Ít nhất 1 số",
+    title: 'Ít nhất 1 số',
     status: true,
   },
   {
-    title: "Ít nhất một ký tự đặt biệt (VD: @,#,&,...)",
+    title: 'Ít nhất một ký tự đặt biệt (VD: @,#,&,...)',
     status: false,
   },
 ];
 
-export default function NewPassword() {
+export default function NewPassword({ onGetUserID }: NewPasswordProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // validation forms
   const validationSchema = yup.object().shape({
     password: yup
       .string()
-      .required("Vui lòng nhập mật khẩu!")
-      .min(8, "Mật khẩu phải chứa ít nhất 8 ký tự!"),
+      .required('Vui lòng nhập mật khẩu!')
+      .min(8, 'Mật khẩu phải chứa ít nhất 8 ký tự!'),
     repassword: yup
       .string()
-      .required("Vui lòng xác nhận mật khẩu!")
-      .oneOf([yup.ref("password")], "Mật khẩu không khớp!"),
+      .required('Vui lòng xác nhận mật khẩu!')
+      .oneOf([yup.ref('password')], 'Mật khẩu không khớp!'),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
 
@@ -64,11 +69,13 @@ export default function NewPassword() {
 
   const handleChangePassword = (data: FormInput) => {
     setIsLoading(true);
-    setTimeout(() => {
-      dispatch(updateStatusForgotPassword(2));
-      setIsLoading(false);
 
-    }, 3000);
+    if (onGetUserID) {
+      authApi.changePassword(onGetUserID, md5(data.password)).then((res) => {
+        setIsLoading(false);
+        dispatch(updateStatusForgotPassword(2));
+      });
+    }
   };
 
   return (
@@ -81,8 +88,8 @@ export default function NewPassword() {
         <input
           type="password"
           placeholder="Nhập mật khẩu mới"
-          className={errors.password && "login__error"}
-          {...register("password")}
+          className={errors.password && 'login__error'}
+          {...register('password')}
         />
       </div>
       <div className="signup__form__item signup__form__item--validate">
@@ -96,8 +103,8 @@ export default function NewPassword() {
             <div
               className={
                 item.status
-                  ? "signup__form__validate__item signup__form__validate__item--true"
-                  : "signup__form__validate__item"
+                  ? 'signup__form__validate__item signup__form__validate__item--true'
+                  : 'signup__form__validate__item'
               }
               key={index}
             >
@@ -112,8 +119,8 @@ export default function NewPassword() {
         <input
           type="password"
           placeholder="Xác nhận mật khẩu"
-          className={errors.repassword && "login__error"}
-          {...register("repassword")}
+          className={errors.repassword && 'login__error'}
+          {...register('repassword')}
         />
       </div>
       <div className="signup__form__item signup__form__item--validate">
@@ -122,7 +129,7 @@ export default function NewPassword() {
       </div>
       <div className="signup__form__nav forgot__nav">
         <div className="signup__form__nav__back forgot__nav__back"></div>
-        <Button variant="contained" type="submit">  
+        <Button variant="contained" type="submit">
           <Typography sx={{ mr: 1 }}>Đồng ý</Typography>
           {isLoading && (
             <CircularProgress size={20} className="cirlce__progress" />

@@ -41,7 +41,7 @@ const Form = styled.form`
         font-size: 14px;
       }
       input {
-        width: calc(100% - 22px);
+        width: calc(100%);
         outline: none;
         border: 1px solid #cccccc;
         border-radius: 5px;
@@ -55,7 +55,7 @@ const Form = styled.form`
         font-size: 14px;
       }
       textarea {
-        width: calc(100% - 22px);
+        width: calc(100%);
         outline: none;
         border: 1px solid #cccccc;
         border-radius: 5px;

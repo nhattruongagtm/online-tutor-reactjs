@@ -80,6 +80,7 @@ export default function InfoValidation() {
       gender: data.gender,
       city: data.city,
       district: data.district,
+      type: inputs.type
     }
     const result = await authApi.signUp(newData);
     if(result){

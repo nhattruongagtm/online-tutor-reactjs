@@ -1,10 +1,65 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router";
-import { TUTOR_PATH } from "../../constants/path";
-import "../TutorList/style.scss";
+import React, { useState } from 'react';
+import { useHistory } from 'react-router';
+import { TUTOR_PATH } from '../../constants/path';
+import { TutorItem as Item } from '../Home/TutorItem';
+
+import '../TutorList/style.scss';
+import { TutorItem } from './TutorItem';
+
 export default function TutorList() {
   const [isToogleFilter, setIsToogleFilter] = useState<boolean>(false);
   const history = useHistory();
+
+  const tutorList: Item[] = [
+    {
+      avatar:
+        'https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg',
+      name: 'Nguyễn Đô Ra Ê Môn',
+      education: 'Sinh viên',
+      experience:
+        'Sinh viên Học viện Hàng không Việt Nam Chuyên ngành Kỹ thuật hàng không',
+      subject: ['Toán học', 'Tiếng Anh', 'Vật lí'],
+      address: 'Quận 9, Tp. Thủ Đức, Tp. HCM',
+      rate: 4,
+    },
+    {
+      avatar:
+        'https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg',
+      name: 'Nguyễn Đô La',
+      education: 'Sinh viên',
+      experience: 'Sinh viên Học viện tài chính HN',
+      subject: [
+        'Toán học',
+        'Vật lí',
+        'Toán học',
+        'Vật lí',
+        'Toán học',
+        'Vật lí',
+      ],
+      address: 'Phường A, Quận Cầu Giấy, Tp. Hà Nội',
+      rate: 4,
+    },
+    {
+      avatar:
+        'https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg',
+      name: 'Nguyễn Tiến Đồng',
+      education: 'Sinh viên',
+      experience: 'Sinh viên Đại học kinh tế Tp. HCM',
+      subject: ['Toán học', 'Vật lí'],
+      address: 'Quận 3, Tp. HCM',
+      rate: 4,
+    },
+    {
+      avatar:
+        'https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg',
+      name: 'Nguyễn An Nhiên',
+      education: 'Sinh viên',
+      experience: 'Sinh viên Đại học kinh tế Tp. HCM',
+      subject: ['Toán học', 'Vật lí'],
+      address: 'Quận 10, Tp. HCM',
+      rate: 4,
+    },
+  ];
   return (
     <div className="waiting__class">
       <div className="waiting__class__bar">
@@ -20,11 +75,15 @@ export default function TutorList() {
         <div
           className={
             isToogleFilter
-              ? "class__features__tutor class__features__toogle"
-              : "class__features"
+              ? 'class__features__tutor class__features__toogle'
+              : 'class__features'
           }
         >
-          <input type="text" placeholder="Tên gia sư" className="class__features__tutor__input"/>
+          <input
+            type="text"
+            placeholder="Tên gia sư"
+            className="class__features__tutor__input"
+          />
           <select name="city" id="" className="class__features__item">
             <option value="">Tất cả tỉnh/thành</option>
           </select>
@@ -42,173 +101,11 @@ export default function TutorList() {
       </div>
       <div className="waiting__class__main">
         <div className="class__list__tutor">
-          <div className="tutor__item">
-            <div className="tutor__avatar">
-              <img
-                src="https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg"
-                alt=""
-              />
-            </div>
-            <div className="education">Sinh viên</div>
-            <div className="name">Nguyễn Đô Ra Ê Môn</div>
-            <div className="experience">
-              Sinh viên Học viện Hàng không Việt Nam Chuyên ngành Kỹ thuật hàng
-              không
-            </div>
-            <div className="subjects">
-              <div className="subjects__title">Môn:</div>
-              <div className="subjects__list">Toán Học, Tiếng Anh, Vật Lý</div>
-            </div>
-            <div className="address">
-              <div className="address__title">Địa điểm: </div>
-              <div className="address__list">Quận 9, Tp. Thủ Đức, Tp. HCM</div>
-            </div>
-            <div className="rate">
-              <div className="rate__title">Đánh giá: </div>
-              <div className="rate__list">
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star--border"></i>
-              </div>
-            </div>
-            <button className="tutor__detail" onClick={()=> history.push(TUTOR_PATH)}>Xem chi tiết</button>
-          </div>
-          <div className="tutor__item">
-            <div className="tutor__avatar">
-              <img
-                src="https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg"
-                alt=""
-              />
-            </div>
-            <div className="education">Sinh viên</div>
-            <div className="name">Nguyễn Đô Ra Ê Môn</div>
-            <div className="experience">
-              Sinh viên Học viện Hàng không Việt Nam Chuyên ngành Kỹ thuật hàng
-              không
-            </div>
-            <div className="subjects">
-              <div className="subjects__title">Môn:</div>
-              <div className="subjects__list">Toán Học, Tiếng Anh, Vật Lý</div>
-            </div>
-            <div className="address">
-              <div className="address__title">Địa điểm: </div>
-              <div className="address__list">Quận 9, Tp. Thủ Đức, Tp. HCM</div>
-            </div>
-            <div className="rate">
-              <div className="rate__title">Đánh giá: </div>
-              <div className="rate__list">
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star--border"></i>
-              </div>
-            </div>
-            <button className="tutor__detail">Xem chi tiết</button>
-          </div>
-          <div className="tutor__item">
-            <div className="tutor__avatar">
-              <img
-                src="https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg"
-                alt=""
-              />
-            </div>
-            <div className="education">Sinh viên</div>
-            <div className="name">Nguyễn Đô Ra Ê Môn</div>
-            <div className="experience">
-              Sinh viên Học viện Hàng không Việt Nam Chuyên ngành Kỹ thuật hàng
-              không
-            </div>
-            <div className="subjects">
-              <div className="subjects__title">Môn:</div>
-              <div className="subjects__list">Toán Học, Tiếng Anh, Vật Lý</div>
-            </div>
-            <div className="address">
-              <div className="address__title">Địa điểm: </div>
-              <div className="address__list">Quận 9, Tp. Thủ Đức, Tp. HCM</div>
-            </div>
-            <div className="rate">
-              <div className="rate__title">Đánh giá: </div>
-              <div className="rate__list">
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star--border"></i>
-              </div>
-            </div>
-            <button className="tutor__detail">Xem chi tiết</button>
-          </div>
-          <div className="tutor__item">
-            <div className="tutor__avatar">
-              <img
-                src="https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg"
-                alt=""
-              />
-            </div>
-            <div className="education">Sinh viên</div>
-            <div className="name">Nguyễn Đô Ra Ê Môn</div>
-            <div className="experience">
-              Sinh viên Học viện Hàng không Việt Nam Chuyên ngành Kỹ thuật hàng
-              không
-            </div>
-            <div className="subjects">
-              <div className="subjects__title">Môn:</div>
-              <div className="subjects__list">Toán Học, Tiếng Anh, Vật Lý</div>
-            </div>
-            <div className="address">
-              <div className="address__title">Địa điểm: </div>
-              <div className="address__list">Quận 9, Tp. Thủ Đức, Tp. HCM</div>
-            </div>
-            <div className="rate">
-              <div className="rate__title">Đánh giá: </div>
-              <div className="rate__list">
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star--border"></i>
-              </div>
-            </div>
-            <button className="tutor__detail">Xem chi tiết</button>
-          </div>
-          <div className="tutor__item">
-            <div className="tutor__avatar">
-              <img
-                src="https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg"
-                alt=""
-              />
-            </div>
-            <div className="education">Sinh viên</div>
-            <div className="name">Nguyễn Đô Ra Ê Môn</div>
-            <div className="experience">
-              Sinh viên Học viện Hàng không Việt Nam Chuyên ngành Kỹ thuật hàng
-              không
-            </div>
-            <div className="subjects">
-              <div className="subjects__title">Môn:</div>
-              <div className="subjects__list">Toán Học, Tiếng Anh, Vật Lý</div>
-            </div>
-            <div className="address">
-              <div className="address__title">Địa điểm: </div>
-              <div className="address__list">Quận 9, Tp. Thủ Đức, Tp. HCM</div>
-            </div>
-            <div className="rate">
-              <div className="rate__title">Đánh giá: </div>
-              <div className="rate__list">
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star"></i>
-                <i className="fas fa-star star--border"></i>
-              </div>
-            </div>
-            <button className="tutor__detail">Xem chi tiết</button>
-          </div>
-        
+          {tutorList.map((tutor, index) => (
+            <TutorItem tutor={tutor} key={index}/>
+             ))}
         </div>
+
         <div className="class__pagination">
           <div className="class__pagination__item class__pagination__item--nav">
             <i className="fas fa-chevron-left"></i>

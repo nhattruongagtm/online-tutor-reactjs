@@ -26,16 +26,16 @@ interface FormInput {
   phone: number;
   title: string;
   description: string;
-  subject: string;
-  class: string;
-  people: number;
-  formality: string;
+  subject?: string;
+  class?: string;
+  people?: number;
+  formality?: string;
   city?: string;
   district?: string;
-  address: string;
-  learningDate: Date;
-  fee: number;
-  time: LearningTime[];
+  address?: string;
+  learningDate?: Date;
+  fee?: number;
+  time?: LearningTime[];
 }
 export default function FindTutorList() {
   // use React Hook Form
@@ -59,6 +59,11 @@ export default function FindTutorList() {
   const [timeList, setTimeList] = useState<TimeItemProps[]>([
     { date: 2, time: 7, id: uuidv4() },
   ]);
+
+  useEffect(()=>{
+
+    
+  },[isAddingForm]);
 
   useEffect(() => {
     courseApi.getSubjectList().then((subject) => {
@@ -196,7 +201,7 @@ export default function FindTutorList() {
           <i className="fas fa-pencil-alt"></i>
           Điền đầy đủ các thông tin bên dưới để đăng ký tìm gia sư
         </div>
-        <p>Đăng ký nhanh</p>
+        <h4>Đăng ký nhanh</h4>
         <div
           className={
             errors.name ? "tutors__input validate__error" : "tutors__input"
@@ -284,7 +289,7 @@ export default function FindTutorList() {
         </label>
         {isAddingForm && (
           <div className="tutors__additional">
-            <p>Thông tin thêm</p>
+            <h4>Thông tin thêm</h4>
             <div className="tutors__input">
               <div className="tutors__input__label">Môn học:</div>
               <select id="" {...register("subject")}>

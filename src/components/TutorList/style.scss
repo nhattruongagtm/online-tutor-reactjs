@@ -217,18 +217,33 @@ $galaxy: #e9fff8;
     }
   }
   .subjects {
-    margin-top: 20px;
+    margin-top: 10px;
     &__list {
       color: #006fa7;
     }
   }
-  .address {
+  .address,.subjects {
+    width: 100%;
+    display: flex;
+    &__title {
+      width: fit-content;
+    }
     &__list {
       color: #8176d8;
+      width: 76%;      
+      p {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: pre-wrap;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+      }
     }
   }
   .rate {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 
     &__list {
       font-size: 16px;

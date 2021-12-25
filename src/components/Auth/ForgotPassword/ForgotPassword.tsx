@@ -17,6 +17,7 @@ export default function ForgotPassword() {
     const history = useHistory();
     const status = useSelector((state: RootState) => state.forgotStatus.status);
     const [statusBar, setStatusBar] = useState<number>(status); 
+    const [userID,setUserID] = useState<string>();
   
     useEffect(() => {
       setStatusBar(status);
@@ -43,6 +44,10 @@ export default function ForgotPassword() {
           </div>
         );
       };
+
+      const handleGetUserID = (userID: string) =>{
+        setUserID(userID);
+      }
   
     return (
         <div className="signup__main__wrap forgot__password">
@@ -73,8 +78,8 @@ export default function ForgotPassword() {
         </div>
 
         <div className="signup__main__wrap__element">
-          {statusBar === 0 && <EmailValidation sendMail={(e)=>{}}/>}
-          {statusBar === 1 && <NewPassword />}
+          {statusBar === 0 && <EmailValidation sendMail={handleGetUserID}/>}
+          {statusBar === 1 && <NewPassword onGetUserID={userID} />}
           {statusBar === 2 && <SuccessNotification />}
         </div> 
         <div className="signup__form__nav__back forgot__nav__back" onClick={()=> history.goBack()}>
