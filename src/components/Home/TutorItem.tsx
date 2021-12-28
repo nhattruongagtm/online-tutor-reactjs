@@ -1,5 +1,7 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
+import { TUTOR_PATH } from '../../constants/path';
 export const galaxy = '#e3fff9';
 const RecommendedItem = styled.div`
   width: calc(310px) !important;
@@ -70,7 +72,8 @@ const RecommendedItem = styled.div`
       color: #006fa7;
     }
   }
-  .address,.subjects {
+  .address,
+  .subjects {
     width: 100%;
     display: flex;
     &__title {
@@ -78,7 +81,7 @@ const RecommendedItem = styled.div`
     }
     &__list {
       color: #8176d8;
-      width: 76%;      
+      width: 76%;
       p {
         width: 100%;
         overflow: hidden;
@@ -117,26 +120,27 @@ const Avatar = styled.div`
   }
 `;
 interface TutorItemProps {
-    tutor: TutorItem;
+  tutor: TutorItem;
 }
-export interface TutorItem{
-    avatar: string;
-    name: string;
-    education: string;
-    experience: string;
-    subject: string[];
-    address: string;
-    rate: number;
+export interface TutorItem {
+  id: number;
+  avatar: string;
+  name: string;
+  education: string;
+  experience: string;
+  subject: string[];
+  address: string;
+  createdDate: Date,
+  rate: number;
+  description: string;
 }
-export const TutorItem = ({tutor}: TutorItemProps) => {
+export const TutorItem = ({ tutor }: TutorItemProps) => {
+  const history = useHistory();
   return (
-    <>
+    <div>
       <RecommendedItem>
         <Avatar>
-          <img
-            src={tutor.avatar}
-            alt=""
-          />
+          <img src={tutor.avatar} alt="" />
         </Avatar>
         <div className="education">{tutor.education}</div>
         <div className="name">{tutor.name}</div>
@@ -167,6 +171,6 @@ export const TutorItem = ({tutor}: TutorItemProps) => {
         </div>
         <button className="tutor__detail">Xem chi tiết</button>
       </RecommendedItem>
-    </>
+    </div>
   );
 };

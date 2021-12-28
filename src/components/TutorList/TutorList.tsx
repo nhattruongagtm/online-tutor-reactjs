@@ -21,6 +21,9 @@ export default function TutorList() {
       subject: ['Toán học', 'Tiếng Anh', 'Vật lí'],
       address: 'Quận 9, Tp. Thủ Đức, Tp. HCM',
       rate: 4,
+      description: '',
+      createdDate: new Date(),
+      id: 1,
     },
     {
       avatar:
@@ -38,6 +41,9 @@ export default function TutorList() {
       ],
       address: 'Phường A, Quận Cầu Giấy, Tp. Hà Nội',
       rate: 4,
+      description: '',
+      createdDate: new Date(),
+      id: 6,
     },
     {
       avatar:
@@ -48,6 +54,9 @@ export default function TutorList() {
       subject: ['Toán học', 'Vật lí'],
       address: 'Quận 3, Tp. HCM',
       rate: 4,
+      description: '',
+      createdDate: new Date(),
+      id: 3,
     },
     {
       avatar:
@@ -58,6 +67,9 @@ export default function TutorList() {
       subject: ['Toán học', 'Vật lí'],
       address: 'Quận 10, Tp. HCM',
       rate: 4,
+      description: '',
+      createdDate: new Date(),
+      id: 4,
     },
   ];
   return (

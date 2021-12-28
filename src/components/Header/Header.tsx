@@ -30,7 +30,7 @@ export default function Header() {
     },
     {
       path: `${FIND_TUTOR_PATH}`,
-      title: 'Đăng tìm gia sư',
+      title: 'Đăng bài viết',
     },
     {
       path: `${WAITING_CLASS_PATH}`,

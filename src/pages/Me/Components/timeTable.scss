@@ -1,0 +1,11 @@
+.schedule__scroll{
+    max-height: 700px;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar{
+        // display: none;
+    }
+}
+.e-appointment{
+    background-color:#00cde8!important;
+}

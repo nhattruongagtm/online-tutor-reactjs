@@ -1,3 +1,6 @@
+.container__detail__course{
+  min-height: 90vh;
+}
 .detail__course {
   width: 100%;
   padding-top: 25px;
@@ -9,14 +12,14 @@
     background-color: rgb(248, 252, 255);
     margin-bottom: 25px;
     border-radius: 10px;
-    padding: 30px;
+    padding: 20px;
     border: 1px solid rgb(226, 226, 226);
 
     &__intro {
       display: flex;
       // height: 110px;
       gap: 30px;
-      padding-bottom: 40px;
+      padding-bottom: 30px;
       border-bottom: 1px solid rgb(226, 226, 226);
       // background-color: antiquewhite;
 
@@ -121,7 +124,7 @@
       }
     }
     &__detail {
-      padding-top: 40px;
+      padding-top: 30px;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 20px;
@@ -176,7 +179,7 @@
       flex-direction: column;
       gap: 15px;
       border-radius: 10px;
-      padding: 30px;
+      padding: 20px;
       border: 1px solid rgb(241, 241, 241);
       &__title {
         font-weight: bold;

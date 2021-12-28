@@ -12,6 +12,39 @@
     box-shadow: 0 0 50px 10px rgba(114, 114, 114, 0.11);
     padding: 30px;
 
+    .tutors__type{
+      width: fit-content;
+      margin-bottom: 30px;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: rgb(212, 229, 255);
+
+      span{
+        margin-right: 5px;
+        font-size: 14px;
+        i{
+          margin-right: 5px;
+          padding: 5px;
+          background-color: white;
+          border-radius: 3px;
+        }
+      }
+
+      select{
+        border: 3px solid rgb(139, 180, 255);
+        padding: 7px;
+        border-radius: 5px;
+
+        &:focus{
+          outline: none;
+        }
+      }
+
+
+      
+
+    }
+
     .tutors__title {
       width: calc(100%);
       // background-color: antiquewhite;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ACCESS_TOKEN } from '../../constants/auth';
-import { COURSE_INFO_PATH, HOME_PATH, ME_PATH, PROFILE_PATH } from '../../constants/path';
+import { COURSE_INFO_PATH, HOME_PATH, ME_PATH, PROFILE_PATH, SCHEDULE_PATH } from '../../constants/path';
 import { useHistory } from 'react-router';
 import './style.scss';
 interface NavigationList {
@@ -16,7 +16,7 @@ export default function Navigation() {
   const navigationList: NavigationList[] = [
     {
       icon: 'fas fa-info-circle',
-      title: 'Thông tin cá nhân',
+      title: 'Tổng quan',
       path: `${ME_PATH}${PROFILE_PATH}`,
     },
     {
@@ -27,7 +27,7 @@ export default function Navigation() {
     {
       icon: 'fas fa-table',
       title: 'Lịch học',
-      path: `${ME_PATH}${COURSE_INFO_PATH}`,
+      path: `${ME_PATH}${SCHEDULE_PATH}`,
     },
   ];
 

@@ -46,6 +46,9 @@ export default function RecommendedList() {
       subject: ['Toán học', 'Tiếng Anh', 'Vật lí'],
       address: 'Quận 9, Tp. Thủ Đức, Tp. HCM',
       rate: 4,
+      description: '',
+      createdDate: new Date(),
+      id: 1,
     },
     {
       avatar:
@@ -63,6 +66,9 @@ export default function RecommendedList() {
       ],
       address: 'Phường A, Quận Cầu Giấy, Tp. Hà Nội',
       rate: 4,
+      description: '',
+      createdDate: new Date(),
+      id: 1,
     },
     {
       avatar:
@@ -73,6 +79,9 @@ export default function RecommendedList() {
       subject: ['Toán học', 'Vật lí'],
       address: 'Quận 3, Tp. HCM',
       rate: 4,
+      description: '',
+      createdDate: new Date(),
+      id: 1,
     },
     {
       avatar:
@@ -83,10 +92,13 @@ export default function RecommendedList() {
       subject: ['Toán học', 'Vật lí'],
       address: 'Quận 10, Tp. HCM',
       rate: 4,
+      description: '',
+      createdDate: new Date(),
+      id: 1,
     },
   ];
   return (
-    <>
+    <div id="recommend" className="recommend">
       <RecommendTilte>Gợi ý gia sư cho bạn</RecommendTilte>
       <RecommendedMain>
         <div className="waiting__class__main">
@@ -99,6 +111,6 @@ export default function RecommendedList() {
         </div>
         {/* </Slider> */}
       </RecommendedMain>
-    </>
+    </div>
   );
 }

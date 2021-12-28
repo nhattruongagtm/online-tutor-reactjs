@@ -1,0 +1,206 @@
+.profile {
+  display: flex;
+  gap: 20px;
+  &__base {
+    width: 40%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    border-radius: 10px;
+    height: 100%;
+
+    background-color: rgb(238, 238, 238);
+    &__title {
+      text-align: center;
+      // font-weight: bold;
+      background-color: rgb(255, 255, 255);
+      padding: 5px 0;
+      border-radius: 20px;
+    }
+    &__body {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      height: 100%;
+      &__avatar {
+        width: 150px;
+        height: 150px;
+        position: relative;
+        margin: 0 auto;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 50%;
+          border: 4px solid rgb(255, 255, 255);
+        }
+        i {
+          padding: 7px;
+          border-radius: 50%;
+          background-color: rgb(0, 132, 255);
+          color: white;
+          position: absolute;
+          bottom: 0px;
+          right: 20px;
+          border: 2px solid white;
+          cursor: pointer;
+        }
+      }
+      &__name {
+        display: flex;
+        align-items: center;
+        align-items: flex-start;
+
+        .profile__item__label {
+          width: 30%;
+          font-size: 14px;
+        }
+        input,
+        select {
+          flex-grow: 1;
+          padding: 7px;
+          border-radius: 10px;
+
+          &:focus {
+            outline: none;
+            // border: 0px;
+          }
+          &:disabled {
+            color: black;
+            background-color: white;
+          }
+        }
+      }
+    }
+    &__footer {
+      align-self: flex-end;
+      button {
+        padding: 10px 15px;
+        border-radius: 10px;
+        background-color: rgb(0, 162, 255);
+        cursor: pointer;
+        border: 0;
+        color: white;
+      }
+    }
+  }
+  &__more {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    & > div {
+      border-radius: 10px;
+      padding: 10px 20px;
+
+      & > div {
+        // padding: 5px 0px;
+      }
+    }
+    .profile__register {
+      margin: 0 auto;
+      padding: 5px 30px;
+      width: fit-content;
+      margin-bottom: 5px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid gray;
+    }
+    &__register {
+      height: 62%;
+      background-color: rgb(241, 241, 241);
+
+      &__body {
+        // overflow-y: scroll;
+        min-height: 200px;
+        .profile__register__list {
+          width: 100%;
+          height: 300px;
+        }
+      }
+    }
+    &__change {
+      flex-grow: 1;
+      background-color: rgb(238, 238, 238);
+      // background-image: linear-gradient( 10% rgb(90, 90, 255), 100% rgb(36, 255, 255));
+
+      &__body {
+        overflow-y: scroll;
+        height: 180px;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        .profile__introduce,
+        .profile__detail,
+        .profile__password {
+        }
+        .profile__change {
+          display: grid;
+          height: 300px;
+          grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .profile__introduce {
+          // background-color: yellow;
+          &__title {
+            font-weight: 500;
+            margin-bottom: 10px;
+          }
+          border-right: 1px solid rgb(192, 192, 192);
+        }
+        .profile__detail {
+          // background-color: green;
+          padding: 0 10px;
+        }
+        .profile__password {
+          padding-left: 10px;
+          display: flex;
+          justify-content: center;
+
+          border-left: 1px solid rgb(192, 192, 192);
+          // background-color: rgb(0, 196, 196);
+          & > .profile__base__footer {
+            align-self: flex-start !important;
+          }
+          button {
+          }
+        }
+      }
+    }
+  }
+}
+.frame__type__code {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  gap: 10px;
+  .change__password__input {
+    width: 100%;
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin: 10px 0 0 0 ;
+
+    &:focus {
+      outline: none;
+    }
+  }
+  span{
+    align-self: flex-end;
+    font-size: 14px;
+    cursor: pointer;
+  }
+}
+.btn__send__code {
+  margin: 15px 0 !important;
+  padding: 10px 15px!important;
+}
+
+.typoraphy {
+  margin-top: 20px !important;
+
+  &__success{
+    font-size: 28px!important;
+  }
+}

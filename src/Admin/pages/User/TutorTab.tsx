@@ -6,7 +6,7 @@ export const TutorTab = (props: TutorTabProps) => {
   return (
     <>
       <table>
-        <thead>
+        <thead className="thead">
           <tr>
             <td className="table__courses__checkbox">
               <input type="checkbox" />
@@ -29,7 +29,7 @@ export const TutorTab = (props: TutorTabProps) => {
       </table>
       <div className="table__courses__scroll">
         <table>
-          <tbody>
+          <tbody className="tbody">  
             <tr>
               <td className="table__courses__checkbox">
                 <input type="checkbox" />

@@ -102,7 +102,7 @@ const FormMain = styled.div`
 `;
 export default function ContactForm() {
   return (
-    <ContactMain>
+    <ContactMain id="contact__form" className="contact__form">
       <img src="https://akadon.edu.vn/static/media/askbg.24675d33.svg" alt="" />
       <FormMain>
         <Title>Bạn có câu hỏi dành cho chúng tôi?</Title>

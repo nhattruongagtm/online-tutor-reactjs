@@ -42,7 +42,7 @@ export const TutorItem = ({ tutor }: TutorItemProps) => {
       </div>
       <button
         className="tutor__detail"
-        onClick={() => history.push(TUTOR_PATH)}
+        onClick={()=>history.push(`${TUTOR_PATH}?id=${tutor.id}`)}
       >
         Xem chi tiết
       </button>

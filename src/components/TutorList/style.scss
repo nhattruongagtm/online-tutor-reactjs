@@ -160,13 +160,14 @@ $galaxy: #e9fff8;
   /* border: 1px solid black; */
   display: flex!important;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 5px;
   padding: 15px;
   background-color: $galaxy;
   border: 3px solid white;
   transition: 0.2s linear;
+
   
   &:hover {
       border: 3px solid #00ffbf;

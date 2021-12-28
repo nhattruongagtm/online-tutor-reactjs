@@ -1,5 +1,5 @@
 .me {
-  min-height: 100vh;
+  min-height: 90vh;
   display: grid;
   grid-template-columns: 1fr 5fr;
   position: relative;
@@ -38,17 +38,17 @@
 
     @keyframes signout {
       0% {
-        transform: rotateX(-10deg);
+        // transform: rotateX(-10deg);
         margin-top: 5px;
         
     }
     50% {
-        transform: rotateX(30deg);
+        // transform: rotateX(30deg);
         margin-top: -5px;
         box-shadow: 0 2px 20px 0px rgb(0, 224, 112);
     }
     100% {
-        transform: rotateX(-10deg);
+        // transform: rotateX(-10deg);
         margin-top: 5px;
        
       }
