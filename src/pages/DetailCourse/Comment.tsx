@@ -3,9 +3,7 @@ import { createContext } from 'react';
 import { CommentForm } from './CommentForm';
 import { Comment as CommentChild, CommentItem } from './CommentItem';
 import './comments.scss';
-interface CommentProps {
-
-}
+interface CommentProps {}
 
 const commentList: CommentChild[] = [
   {
@@ -20,12 +18,11 @@ const commentList: CommentChild[] = [
   },
 ];
 
-const setCommentList = (comment: CommentChild) : void => {
+const setCommentList = (comment: CommentChild): void => {
   console.log(comment);
-}
+};
 
-
-export const CommentContext = createContext({commentList,setCommentList});
+export const CommentContext = createContext({ commentList, setCommentList });
 
 export const Comment = (props: CommentProps) => {
   const comments = [
@@ -51,26 +48,19 @@ export const Comment = (props: CommentProps) => {
     },
   ];
   const [commentList, setCommentList] = useState<CommentChild[]>(comments);
-  
+
   const setComments = (comment: CommentChild) => {
-      setCommentList([comment,...commentList]);    
+    setCommentList([comment, ...commentList]);
   };
 
   return (
-    <CommentContext.Provider value={{commentList,setCommentList : setComments}}>
-      <div className="comment__main">
-        <div className="comment__main__tab">
-          <span>bình luận</span>
-          <span>đánh giá</span>
-        </div>
-        <div className="comment__main__content">
-          <CommentForm />
-          {commentList.map((cmt,index)=>(
-            <CommentItem cmt={cmt} key={index}/>
-          ))
-          }
-        </div>
-      </div>
+    <CommentContext.Provider
+      value={{ commentList, setCommentList: setComments }}
+    >
+      <CommentForm />
+      {commentList.map((cmt, index) => (
+        <CommentItem cmt={cmt} key={index} />
+      ))}
     </CommentContext.Provider>
   );
 };

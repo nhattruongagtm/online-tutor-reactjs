@@ -12,7 +12,7 @@ export const Settings = (props: SettingsProps) => {
     return (
         <Col className="profile__detail__course__admin">
             {/* <DetailCourse/>   */}
-            <Tutor/>  
+            {/* <Tutor/>   */}
         </Col>
     )
 }

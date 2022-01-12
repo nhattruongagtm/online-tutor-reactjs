@@ -2,13 +2,48 @@ import React, { useState } from 'react';
 import { ChangePassword } from './ChangPassword';
 import EditProfileInfo from './EditProfileInfo';
 import './profileInfo2.scss';
-import ProfileRegister from './ProfileRegister';
+import ProfileRegister, { createData } from './ProfileRegister';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { ProfileForm } from './ProfileForm';
+const rows = [
+  createData('India', 'IN', 1324171354, 3287263),
+  createData('China', 'CN', 1403500365, 9596961),
+  createData('Italy', 'IT', 60483973, 301340),
+  createData('United States', 'US', 327167434, 9833520),
+  createData('Canada', 'CA', 37602103, 9984670),
+  createData('Australia', 'AU', 25475400, 7692024),
+  createData('Germany', 'DE', 83019200, 357578),
+  createData('Ireland', 'IE', 4857000, 70273),
+  createData('Mexico', 'MX', 126577691, 1972550),
+  createData('Japan', 'JP', 126317000, 377973),
+  createData('France', 'FR', 67022000, 640679),
+  createData('United Kingdom', 'GB', 67545757, 242495),
+  createData('Russia', 'RU', 146793744, 17098246),
+  createData('Nigeria', 'NG', 200962417, 923768),
+  createData('Brazil', 'BR', 210147125, 8515767),
+];
 
 export default function ProfileInfo2() {
   const [isEdit, setIsEdit] = useState<boolean>();
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleEditProfile = () => {
-    setIsEdit(!isEdit);
+    // setIsEdit(!isEdit);
+    handleClickOpen();
   };
   return (
     <div className="profile">
@@ -22,7 +57,7 @@ export default function ProfileInfo2() {
               src="https://i.pinimg.com/originals/5f/12/21/5f12212ed4d94b0dafe0f18a8e55832b.jpg"
               alt=""
             />
-            <i className="fas fa-pen"></i>
+           
           </div>
           <div className="profile__base__body__name">
             <div className="profile__item__label">Họ tên: </div>
@@ -69,6 +104,15 @@ export default function ProfileInfo2() {
             <button onClick={handleEditProfile}>
               {isEdit ? 'Lưu thông tin' : 'Cập nhật'}
             </button>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              className="profile__change__info"
+            >
+              <ProfileForm onCloseForm={handleClose}/>
+              </Dialog>
           </div>
         </div>
       </div>
@@ -78,7 +122,7 @@ export default function ProfileInfo2() {
             <p>Danh sách bày đăng</p>
           </div>
           <div className="profile__more__register__body">
-            <ProfileRegister />
+            <ProfileRegister rows={rows} height={240} />
           </div>
         </div>
         <div className="profile__more__change">
@@ -104,7 +148,7 @@ export default function ProfileInfo2() {
                   deserunt, iste.
                 </p>
               </div>
-              <ChangePassword/>
+              <ChangePassword />
             </div>
           </div>
         </div>

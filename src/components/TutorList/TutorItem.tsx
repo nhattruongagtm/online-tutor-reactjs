@@ -33,9 +33,9 @@ export const TutorItem = ({ tutor }: TutorItemProps) => {
         <div className="rate__list">
           {Array.from(new Array(5)).map((item, index) => {
             if (index < tutor.rate) {
-              return <i className="fas fa-star star "></i>;
+              return <i className="fas fa-star star " key={index}></i>;
             } else {
-              return <i className="fas fa-star star--border"></i>;
+              return <i className="fas fa-star star--border" key={index}></i>;
             }
           })}
         </div>

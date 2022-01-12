@@ -4,12 +4,38 @@ import { ACCESS_TOKEN } from '../../constants/auth';
 import { COURSE_INFO_PATH, HOME_PATH, ME_PATH, PROFILE_PATH, SCHEDULE_PATH } from '../../constants/path';
 import { useHistory } from 'react-router';
 import './style.scss';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import { TransitionProps } from '@mui/material/transitions';
 interface NavigationList {
   icon: string;
   title: string;
   path: string;
 }
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 export default function Navigation() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const history = useHistory();
   const [isSignOut,setIsSignOut] = useState<boolean>(false);
 
@@ -48,23 +74,29 @@ export default function Navigation() {
             </NavLink>
           );
         })}
-        <label className="me__nav__item" onClick={()=>setIsSignOut(!isSignOut)}>
+        <label className="me__nav__item" onClick={handleClickOpen}>
           <i className="fas fa-sign-out-alt"></i>
-          <span>Đăng xuất</span>
+          <span >Đăng xuất</span>
         </label>
       </div>
-        {isSignOut && (
-           <div className="me__nav__signout">
-           <div className="me__nav__signout__title">
-             Bạn chắc chắn muốn đăng xuất chứ?
-           </div>
-           <div className="me__nav__signout__btn">
-             <button className="signout__btn signout__btn--cancel" onClick={()=>setIsSignOut(false)}>Đóng</button>
-             <button className="signout__btn signout__btn--agree"onClick={handleSignOut}>Đồng ý</button>
-           </div>
-     
-           </div>
-        )}
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>Đăng xuất</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Bạn có muốn đăng xuất không?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Thoát</Button>
+          <Button onClick={handleSignOut}>Đông ý</Button>
+        </DialogActions>
+      </Dialog>
 
       <div className="me__nav__footer"></div>
     </div>

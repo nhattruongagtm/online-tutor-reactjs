@@ -24,8 +24,8 @@ export const convertDate = (date: Date) => {
                 if(day <= 3){
                     timeResult = `${minute} ngày trước`;  
                 }
-                else{
-                    timeResult = date.toLocaleString();
+                else{   
+                    timeResult = date.toLocaleString().split(',')[1];  
                 }
 
             }

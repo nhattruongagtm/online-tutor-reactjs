@@ -3,7 +3,7 @@ import { useHistory } from 'react-router';
 import { COURSE_PATH } from '../../constants/path';
 import { ClassItem as Course } from './WaitingClassList';
 
-interface ClassItemProps {
+export interface ClassItemProps {
   classItem: Course;
 }
 
@@ -30,8 +30,9 @@ export const ClassItem = ({ classItem }: ClassItemProps) => {
           <span className="content__schedule__title">Lịch học:</span>
           {classItem.schedule.map((item, index) => (
             <>
-              <span className="content__schedule__item">T{item.day} ({item.time})</span>
-          
+              <span className="content__schedule__item">
+                T{item.day} ({item.time})
+              </span>
             </>
           ))}
         </div>
@@ -40,16 +41,18 @@ export const ClassItem = ({ classItem }: ClassItemProps) => {
             {classItem.tuition}đ <span>/tháng</span>
           </div>
           <div className="content__price__fee">
-           {classItem.fee}đ <span>/phí nhận lớp</span>
+            {classItem.fee}đ <span>/phí nhận lớp</span>
           </div>
         </div>
-        <div className="content__offers">Đã có {classItem.offer}/3 đề nghị dạy</div>
+        <div className="content__offers">
+          Đã có {classItem.offer}/3 đề nghị dạy
+        </div>
         <div className="content__subjects">
           <div className="content__subjects__item content__subjects__item--subject">
             {classItem.subject}
           </div>
           <div className="content__subjects__item content__subjects__item--detail">
-           {classItem.topic}
+            {classItem.topic}
           </div>
           <div className="content__subjects__item content__subjects__item--address">
             {classItem.address}

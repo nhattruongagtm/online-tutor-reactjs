@@ -75,14 +75,32 @@
     }
     &__footer {
       align-self: flex-end;
-      button {
+      display: flex;
+      gap: 10px;
+      button{
         padding: 10px 15px;
         border-radius: 10px;
-        background-color: rgb(0, 162, 255);
         cursor: pointer;
         border: 0;
+        &:hover{
+          box-shadow: 0 5px 5px 5px rgba(128, 128, 128, 0.103);
+        }
+
+      }
+      button:last-child {
+        background-color: rgb(0, 162, 255);
         color: white;
       }
+      button.profile__close{
+        background-color: rgb(207, 207, 207);
+      }
+    }
+  }
+  &__change__info{
+    width: 100%!important;
+
+    .profile__base__dialog{
+      width: 500px!important;
     }
   }
   &__more {
@@ -163,8 +181,10 @@
           // background-color: rgb(0, 196, 196);
           & > .profile__base__footer {
             align-self: flex-start !important;
+           
           }
           button {
+            
           }
         }
       }

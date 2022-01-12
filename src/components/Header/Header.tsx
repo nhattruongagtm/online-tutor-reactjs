@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router';
 import {
@@ -15,11 +15,26 @@ import {
 } from '../../constants/path';
 import '../Header/header.scss';
 import { ACCESS_TOKEN } from '../../constants/auth';
+import {ClassItem} from '../../components/WaitingClassList/WaitingClassList';
+import {courseApi} from '../../api/CourseApi';
 interface IRoutes {
   path: string;
   title: string;
 }
 export default function Header() {
+  const [savedCourse,setSavedCourse] = useState<ClassItem[]>();
+  // get saved courses (cart)
+  useEffect(()=>{
+    if(localStorage.getItem(ACCESS_TOKEN)){
+      courseApi.getAllSavedCourse(1).then(res=>{
+        if(res){
+          setSavedCourse(res);
+        }
+      })
+    }
+
+  },[]);
+
   const history = useHistory();
   const location = useLocation();
   const pathName = location.pathname;
@@ -88,7 +103,7 @@ export default function Header() {
             onClick={() => history.push(CART_PATH)}
           >
             <i className="fas fa-shopping-cart"></i>
-            <div className="header__auth__cart__number">2</div>
+            <div className="header__auth__cart__number">{savedCourse?.length}</div>
           </div>
 
           {localStorage.getItem(ACCESS_TOKEN) ? (
@@ -121,7 +136,7 @@ export default function Header() {
             <ul className="navigation__responsive">
               <li>
                 <label htmlFor="header__menu">
-                  {' '}
+                
                   <i className="fas fa-times-circle menu__close__header"></i>
                 </label>
               </li>

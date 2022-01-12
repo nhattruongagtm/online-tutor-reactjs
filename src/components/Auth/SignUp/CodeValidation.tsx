@@ -1,11 +1,11 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { updateStatus } from '../../../actions/signup';
-import { IInitialState } from '../../../reducers/signUpInfo';
-import { FieldError, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { requestSignUp, requestSignUpCheckCode } from '../../../actions/signup';
+import { InitialStateSignUp, SignUpSelector } from '../../../reducers/signup';
 
 const ValidationMain = styled.div`
   /* background-color: grey; */
@@ -104,28 +104,24 @@ export default function CodeValidation() {
     handleSubmit,
     formState: { errors },
   } = useForm<CodeValidation>(formOptions);
-  const inputs = useSelector((state: IInitialState) => state.signUpInfo);
+  // const inputs = useSelector((state: IInitialState) => state.signUpInfo);
   const [message, setMessage] = useState<string>('');
+  const signUpUser = useSelector((state : SignUpSelector)=> state.signUpUser.user);
 
   useEffect(() => {
     if (errors.code) {
       const mess = errors.code.message;
       setMessage(mess as string);
     }
-  },[errors.code?.message]);
+  }, [errors.code?.message]);
 
   const handleSendCode = (data: CodeValidation) => {
-    console.log(data);
     setMessage('');
-
-    
-    if(data.code === inputs.code){
-      dispatch(updateStatus(2))
-    }
-    else{
-      console.log("Mã sai, vui lòng thử lại")
-    }
+    dispatch(requestSignUpCheckCode(data.code));  
   };
+  const handleReSendMail = () =>{
+    dispatch(requestSignUp(signUpUser));  
+  }
 
   return (
     <ValidationMain>
@@ -143,12 +139,12 @@ export default function CodeValidation() {
           />
         </FormInput>
         <FormInput>
-        <div className="form__label"> </div>
+          <div className="form__label"> </div>
           <p style={{ fontSize: '12px', color: 'red' }}>{message}</p>
         </FormInput>
         <ResendCode>
           <span>Bạn chưa nhận được mã? </span>
-          <span>Gửi lại mã</span>
+          <span onClick={handleReSendMail}>Gửi lại mã</span>
         </ResendCode>
         <div className="signup__form__nav">
           <div className="signup__form__nav__back">

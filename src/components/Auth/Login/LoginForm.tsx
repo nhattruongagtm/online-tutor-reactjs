@@ -8,7 +8,9 @@ import { HOME_PATH, LOGIN_PATH } from '../../../constants/path';
 import { authApi } from '../../../api/authApi';
 import md5 from 'md5';
 import { ACCESS_TOKEN } from '../../../constants/auth';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { requestLogin } from '../../../actions/login';
+import { LoginSelector } from '../../../reducers/login';
 interface FormInput {
   email: string;
   password: string;
@@ -18,37 +20,40 @@ interface LoginFormProps {
   type: number;
 }
 export default function LoginForm({ type }: LoginFormProps) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const history = useHistory();
+  const dispatch = useDispatch();
+  const loading = useSelector((state: LoginSelector) => state.loginUser.loading); 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormInput>();
-  const handleLoginSubmit = async (data: FormInput) => {
-    setIsLoading(true);
+  const handleLoginSubmit = (data: FormInput) => {
+    const user = {email: data.email,password: data.password, type};
+    dispatch(requestLogin(user));
+    // setIsLoading(true);
 
     // setTimeout(()=>{
     //   setIsLoading(false);
     //   history.push(HOME_PATH);
     // },1000)
 
-    const userLogin = {
-      email: data.email,
-      password: md5(data.password),
-      type: type,
-    };
+    // const userLogin = {
+    //   email: data.email,
+    //   password: md5(data.password),
+    //   type: type,
+    // };
 
-    const result = await authApi.login(userLogin);
+    // const result = await authApi.login(userLogin);
 
-    setIsLoading(false);
+    // setIsLoading(false);
 
-    if (result.status === 200) {
+    // if (result.status === 200) {
       
-      localStorage.setItem(ACCESS_TOKEN,userLogin.email);
+    //   localStorage.setItem(ACCESS_TOKEN,userLogin.email);
 
-      history.push(HOME_PATH);
-    }
+    //   history.push(HOME_PATH);
+    // }
 
     // console.log(userLogin)
   };
@@ -100,7 +105,7 @@ export default function LoginForm({ type }: LoginFormProps) {
       {/* <button type="submit">Đăng nhập</button> */}
       <Button variant="contained" type="submit">
         <Typography sx={{ mr: 1 }}>Đăng nhập</Typography>
-        {isLoading && (
+        {loading && (  
           <CircularProgress size={20} className="cirlce__progress" />
         )}
       </Button>

@@ -5,18 +5,19 @@ import './style.scss';
 import * as qs from 'query-string';
 import {TutorItem} from '../../components/Home/TutorItem';
 import { tutorApi } from '../../api/tutorApi';
+
 export default function Tutor() {
   const history = useHistory();
   const location = useLocation().search;
   const [tutor,setTutor] = useState<TutorItem>();
 
-  const params = qs.parse(location);
+  const params = qs.parse(location);    
 
-  const id = params.id;
+  const id = params.id as string;
 
   useEffect(() => {
 
-    tutorApi.getTutorByID(`${id}`).then(res=>{
+    tutorApi.getTutorByID(Number(id)).then(res=>{
       if(res){
         setTutor(res);
       }

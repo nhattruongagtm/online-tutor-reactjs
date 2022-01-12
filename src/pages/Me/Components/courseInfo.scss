@@ -1,0 +1,25 @@
+.courses__main {
+  .course__tab {
+    display: flex;
+    justify-content: center;
+    gap: 0 5px;
+    span {
+      cursor: pointer;
+      padding: 10px 15px;
+      background-color: white;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      border: 2px solid rgb(0, 153, 255);
+    }
+
+    &--active {
+      background-color: rgb(0, 153, 255)!important;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      color: white;
+    }
+  }
+}
+.courses__info__tab{
+  height: 100%;
+}

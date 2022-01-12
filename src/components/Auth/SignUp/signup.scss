@@ -105,16 +105,15 @@
               // box-shadow: 0 0 8px 1px rgba(0, 116, 224, 0.5);
             }
           }
-          &--validate{
+          &--validate {
             margin-top: -15px;
-            span{
+            span {
               font-size: 13px;
               color: red;
             }
-
           }
         }
-        
+
         .signup__form__validate {
           font-size: 14px;
           color: rgb(179, 179, 179);
@@ -158,9 +157,20 @@
             font-size: 17px;
             transition: opacity 0.2s;
             background-color: rgb(0, 54, 201);
+
+            span:first-child{
+              width: 20px!important;
+              height: 20px !important;
+              margin-right: 5px;
+            }
           }
           button:hover {
             opacity: 0.9;
+          }
+          .loading,.loading-signup {
+            width: 20px !important;
+            height: 20px !important;
+            margin-right: 5px;
           }
         }
         .login__error {
@@ -225,7 +235,7 @@
     &__img {
       width: 250px;
       height: 250px;
-      background: url("../../../assets/images/success_signup.png");
+      background: url('../../../assets/images/success_signup.png');
       background-size: cover;
       background-repeat: no-repeat;
     }
@@ -234,15 +244,14 @@
       text-align: center;
       margin-bottom: 25px;
 
-      div:first-child{
+      div:first-child {
         font-size: 22px;
         font-weight: bold;
         margin-bottom: 10px;
       }
-      div:last-child{
+      div:last-child {
         font-size: 16px;
         color: rgb(165, 158, 158);
-        
       }
     }
     &__login {
@@ -258,25 +267,24 @@
       background-color: rgb(17, 0, 173);
       cursor: pointer;
 
-      &:hover{
+      &:hover {
         opacity: 0.8;
       }
     }
   }
 }
-.cirlce__progress{
-  color: white!important;
+.cirlce__progress {
+  color: white !important;
 }
 
-@media screen and (width: 768px){
-  .signup{
-    &__form{
-      &__item{
-        
+@media screen and (width: 768px) {
+  .signup {
+    &__form {
+      &__item {
       }
     }
   }
-  .signup__form__item__labe{
+  .signup__form__item__labe {
     width: 40px;
   }
 }

@@ -17,7 +17,7 @@ export const tutorApi = {
 
     return axiosClient.get(url, { params }).catch((e) => console.log(e));
   },
-  getTutorByID(id: string): Promise<TutorItem> {
+  getTutorByID(id: number): Promise<TutorItem> {
     const url = `gia-su/${id}`;
     // return axiosClient.get(url).catch(e=>console.log(e));
     return new Promise((resovle, reject) => {

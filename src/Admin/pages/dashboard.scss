@@ -384,11 +384,29 @@ $height-child: calc(100% - 100px - $height-item + 5px);
       background-color: white;
       border-radius: 10px;
       padding: 10px;
+      position: relative;
       @extend flex;
 
       .chart__js {
         width: 250px !important;
         height: 250px !important;
+      }
+      i{
+        padding: 10px;
+        border-radius: 50%;
+        background-color: $primary;
+        color: white;
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        cursor: pointer;
+        transition: 0.3s
+
+        
+      }
+      i:hover{
+        transform: rotateZ(30deg);
+        font-size: 20px;
       }
     }
   }
@@ -401,7 +419,7 @@ $height-child: calc(100% - 100px - $height-item + 5px);
     background-color: rgba(255, 255, 255, 0.801);
 
     &__title {
-      margin-bottom: 10px;
+      margin-bottom: 10px!important;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -540,4 +558,9 @@ $height-child: calc(100% - 100px - $height-item + 5px);
       }
     }
   }
+}
+
+.chart{
+  width: 600px;
+  height: fit-content;
 }

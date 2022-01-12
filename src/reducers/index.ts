@@ -1,15 +1,14 @@
 import { combineReducers } from 'redux';
-import signUpReducer from './signup';
 import forgotReducer from './forgotPassword';
+import loginReducer from './login';
+import signUpReducer from './signup';
 import timeListReducer from './timeList';
-import signUpInfoReducer from './signUpInfo';
-
 
 const rootReducer = combineReducers({
-    signUpStatus: signUpReducer,
-    forgotStatus: forgotReducer,
+    signUpUser: signUpReducer,
+    forgotPassword: forgotReducer,
     timeList: timeListReducer,  
-    signUpInfo: signUpInfoReducer,
+    loginUser: loginReducer,
 })
 
 export default rootReducer;   

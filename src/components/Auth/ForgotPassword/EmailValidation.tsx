@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { requestForgotPassword, requestForgotPasswordCheckCode } from '../../../actions/forgotPassword';
 import { updateStatusForgotPassword } from '../../../actions/signup';
 import { authApi } from '../../../api/authApi';
 import '../SignUp/signup.scss';
@@ -31,31 +32,33 @@ export default function EmailValidation({ sendMail }: SendMailProps) {
   } = useForm<FormValue>();
 
   const handleSendMail = async (data: FormValue) => {
-    // setIsSendMail(true);
 
-    // setIsSendMail(false);
+    // const result = await authApi.sendMailToForgot(data.email);
 
-    // send mail
-    const result = await authApi.sendMailToForgot(data.email);
+    // if (result.code) {
+    //   sendMail(result.userID)
+    //   setResult(result);
+    //   setStatus(true);
+    // }
 
-    if (result.code) {
-      sendMail(result.userID)
-      setResult(result);
-      setStatus(true);
-    }
+    dispatch(requestForgotPassword(data.email));
   };
   const handleSendCode = (data: FormValue) => {
-    setIsSendCode(true);
+    
+    dispatch(requestForgotPasswordCheckCode(data.code));
 
-   if(result){
-    if(data.code === result.code){
-      dispatch(updateStatusForgotPassword(1));
-    }
-    else{
-      console.log("Mã xác nhận không đúng, vui lòng thử lại!");
-    }
-   }
-    setIsSendCode(false);
+  //   setIsSendCode(true);
+
+  //  if(result){
+  //   if(data.code === result.code){
+  //     dispatch(updateStatusForgotPassword(1));
+  //   }
+  //   else{
+  //     console.log("Mã xác nhận không đúng, vui lòng thử lại!");
+  //   }
+  //  }
+  //   setIsSendCode(false);
+
   };
   return (
     <div className="signup__main__wrap__form">

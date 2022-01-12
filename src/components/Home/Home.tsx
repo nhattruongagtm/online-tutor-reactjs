@@ -3,6 +3,7 @@ import '../Home/style.scss';
 import Banner from './Banner';
 import ContactForm from './ContactForm';
 import RecommendedList from './RecommendedList';
+
 export default function Home() {
   useEffect(() => {
     const move = document.querySelector('#move-top');
@@ -12,40 +13,36 @@ export default function Home() {
     const item4 = document.querySelector('#recommend');
     const item5 = document.querySelector('#contact__form');
     move &&
-    document.addEventListener('scroll', () => {
+      document.addEventListener('scroll', () => {
         const pos = window.scrollY;
-        console.log(pos)
+        console.log(pos);
         if (pos > 200) {
           move.classList.add('display');
         } else {
           move.classList.remove('display');
         }
 
-        if(pos > 400){
+        if (pos > 400) {
           item1?.classList.add('home__intro__item--1');
         }
-        if(pos > 1100){
+        if (pos > 1100) {
           item2?.classList.add('home__intro__item--1');
         }
-        if(pos > 1700){
+        if (pos > 1700) {
           item3?.classList.add('home__intro__item--1');
         }
-        if(pos > 2500){
+        if (pos > 2500) {
           item4?.classList.add('recommend--display');
         }
-        if(pos > 3000){
+        if (pos > 3000) {
           item5?.classList.add('contact__form--display');
         }
-
-       
       });
 
     move &&
       move.addEventListener('click', () => {
         window.scrollTo(0, 0);
       });
-
-      
   }, []);
 
   return (
@@ -92,6 +89,7 @@ export default function Home() {
       <div className="move-top" id="move-top">
         <i className="fas fa-arrow-up"></i>
       </div>
+    
     </div>
   );
 }

@@ -9,6 +9,7 @@ import CodeValidation from "./CodeValidation";
 import InfoValidation from "./InfoValidation";
 import { useSelector } from "react-redux";
 import { Prompt } from "react-router";
+import { SignUpSelector } from "../../../reducers/signup";
 
 interface RootState {
   signUpStatus: {
@@ -18,7 +19,7 @@ interface RootState {
 export default function SignUp() {
   const history = useHistory();
   const [type, setType] = useState<number>(-1);
-  const status = useSelector((state: RootState) => state.signUpStatus.status);
+  const status = useSelector((state: SignUpSelector) => state.signUpUser.progress);
   const [statusBar, setStatusBar] = useState<number>(status);
 
   useEffect(() => {

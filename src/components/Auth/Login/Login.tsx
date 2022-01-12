@@ -1,32 +1,30 @@
-import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { FORGET_PASSWORD_PATH, HOME_PATH, SIGNUP_PATH } from "../../../constants/path";
-import "../Login/login.scss";
-import LoginForm from "./LoginForm";
-import { facebookProvider,googleProvider } from "../../../config/authMethods";
-import { FacebookAuthProvider, GoogleAuthProvider } from "@firebase/auth";
-import socialAuth from "../../../auth/auth";
-
-
-
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import {
+  FORGET_PASSWORD_PATH,
+  HOME_PATH,
+  SIGNUP_PATH,
+} from '../../../constants/path';
+import '../Login/login.scss';
+import LoginForm from './LoginForm';
+import { facebookProvider, googleProvider } from '../../../config/authMethods';
+import { FacebookAuthProvider, GoogleAuthProvider } from '@firebase/auth';
+import socialAuth from '../../../auth/auth';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Login() {
-
+  
   // 1 là gia sư, 0 là học viên, mặc định -1
-  const [type, setType] = useState< -1 | 1 | 0>(-1);
+  const [type, setType] = useState<-1 | 1 | 0>(-1);
   const history = useHistory();
 
-
   // đăng nhập bằng google, facebook
-  const handleLoginAPI = async (provider: FacebookAuthProvider | GoogleAuthProvider) =>{
+  const handleLoginAPI = async (
+    provider: FacebookAuthProvider | GoogleAuthProvider
+  ) => {
     const res = await socialAuth(provider);
-
-
-
-
-    res && history.push(HOME_PATH) 
-  }
-  
-
+    res && history.push(HOME_PATH);
+  };
 
   return (
     <div className="login__main">
@@ -76,21 +74,31 @@ export default function Login() {
           </div>
           <div className="login__main__title">
             <div>Đăng nhập</div>
-            <span>{Number(type) === 1 ? "Gia sư" : "Học viên"}</span>
+            <span>{Number(type) === 1 ? 'Gia sư' : 'Học viên'}</span>
           </div>
-          
-          <LoginForm type={type}/>
 
-          <Link to={FORGET_PASSWORD_PATH}><div className="login__main__forget">Quên mật khẩu?</div></Link>
+          <LoginForm type={type} />
+
+          <Link to={FORGET_PASSWORD_PATH}>
+            <div className="login__main__forget">Quên mật khẩu?</div>
+          </Link>
           <div className="login__main__option">
             --------hoặc đăng nhập bằng---------
           </div>
           <div className="login__main__api">
-            <button className="login__main__api--google" onClick={()=>handleLoginAPI(googleProvider)}>
-            Google
+            <button
+              className="login__main__api--google"
+              onClick={() => handleLoginAPI(googleProvider)}
+            >
+              Google
             </button>
-           
-            <button className="login__main__api--facebook" onClick={()=>handleLoginAPI(facebookProvider)}>Facebook</button>
+
+            <button
+              className="login__main__api--facebook"
+              onClick={() => handleLoginAPI(facebookProvider)}
+            >
+              Facebook
+            </button>
           </div>
           <div className="login__main__nav">
             <span>Bạn chưa có tài khoản? </span>

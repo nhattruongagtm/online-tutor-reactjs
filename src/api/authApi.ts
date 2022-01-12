@@ -1,65 +1,54 @@
+import { AxiosResponse } from 'axios';
 import md5 from 'md5';
 import Login from '../components/Auth/Login/Login';
+import { UserAuth, UserLogin } from '../reducers/login';
+import { ISignUpInfo } from '../reducers/signup';
 import signUpInfoReducer from '../reducers/signUpInfo';
 import axiosClient from './axiosClient';
 interface SignUpInput {
   email: string;
   password: string;
-  phone: string;
-  fullName: string;
-  city: string;
-  district: string;
-  gender: boolean;
+  phone?: string;
+  fullName?: string;
+  city?: string;
+  district?: string;
+  gender?: number;
   type: number;
 }
-interface LoginInput {
+export interface LoginInput {
   email: string;
   password: string;
   type: number;
 }
+export interface ResponseData<T>{
+  message: string;
+  status: string;
+  data: T,
+}
 export const authApi = {
-  async sendMailToSignUp(email: string) {
-    const url = `/send-mail/${email}`;
+  checkMail(email: string): Promise<boolean>{
+    const url = '/check-mail'
 
-    // return await axiosClient.post(url).catch(e=>{console.log(e)})
-
-    // fake code
-    return '123456';
+    return axiosClient.post(url,{email:email});
   },
-  async signUp(input: SignUpInput) {
+
+  sendMailToSignUp(email: string) {
+    const url = `/send-mail`;
+
+    const params = {
+      email: email
+    }
+
+    return axiosClient.post(url,params).catch(e=>{console.log(e)})  
+  },
+  signUp(input: SignUpInput): Promise<ResponseData<ISignUpInfo>> {
     const url = '/sign-up';
-    // return await axiosClient.post(url,input).catch(e=> console.log(e));
-    return true;
+    return axiosClient.post(url,input);     
   },
-  async login(user: LoginInput) {
+  login(user: LoginInput) : Promise<ResponseData<UserAuth>> {
     const url = '/login';
 
-    // return await axiosClient.post(url,user).catch(e=>console.log(e))
-
-    if (user.email === 'nhattruongagtm@gmail.com') {
-      if (user.password === md5('123123123')) {
-        return {
-          status: 200,
-          data: {
-            message: 'Đăng nhập thành công!',
-          },
-        };
-      } else {
-        return {
-          status: 403,
-          data: {
-            message: 'Sai mật khẩu, vui lòng thử lại!',
-          },
-        };
-      }
-    } else {
-      return {
-        status: 403,
-        data: {
-          message: 'Không tồn tại tài khoản!',
-        },
-      };
-    }
+    return axiosClient.post(url,user);
   },
   async sendMailToForgot(email: string) {
     const url = `/send-mail/${email}`;

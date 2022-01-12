@@ -8,6 +8,8 @@
   &__item {
     overflow: hidden;
     position: relative;
+    overflow: hidden;
+    border-radius: 10px;
     // background-color: rgb(223, 240, 255)!important;
 
     &__layer {
@@ -16,18 +18,21 @@
       position: absolute;
       top: 0;
       right: 0;
-      background-color: rgba(0, 0, 0, 0.596);
+      background-color: rgba(159, 244, 255, 0.89);
       z-index: 2;
       transition: 0.3s;
       display: none;
+      background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.397) 30%, rgb(80 235 255 / 32%) 70%);
 
       & > div {
         padding: 10px 15px;
         border-radius: 5px;
         border: 1px solid black;
+        cursor: pointer;
 
         span:first-child {
           margin-right: 5px;
+
         }
       }
 

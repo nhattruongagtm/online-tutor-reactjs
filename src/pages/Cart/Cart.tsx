@@ -1,10 +1,28 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router";
-import { COURSE_PATH } from "../../constants/path";
-import "./style.scss";
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
+import { courseApi } from '../../api/CourseApi';
+import { ClassItem } from '../../components/WaitingClassList/WaitingClassList';
+import { ACCESS_TOKEN } from '../../constants/auth';
+import { CartItem } from './CartItem';
+import './style.scss';
 export default function Cart() {
   const history = useHistory();
   const [isToogleFilter, setIsToogleFilter] = useState<boolean>(false);
+  const [savedCourse, setSavedCourse] = useState<ClassItem[]>();
+  // get saved courses (cart)
+  useEffect(() => {
+    if (localStorage.getItem(ACCESS_TOKEN)) {
+      console.log('oke');
+      courseApi.getAllSavedCourse(1).then((res) => {
+        if (res) {
+          setSavedCourse(res);
+        }
+        console.log('res', res);
+      });
+    } else {
+      console.log('no');
+    }
+  }, []);
   return (
     <div className="cart">
       <div className="waiting__class">
@@ -23,8 +41,8 @@ export default function Cart() {
           <div
             className={
               isToogleFilter
-                ? "class__features class__features__toogle"
-                : "class__features"
+                ? 'class__features class__features__toogle'
+                : 'class__features'
             }
           >
             <input type="text" placeholder="Tên khóa học" />
@@ -43,92 +61,32 @@ export default function Cart() {
             <button>Tìm khóa học</button>
           </div>
         </div>
-        <div className="waiting__class__main">
-          <div className="class__list">
-            <div className="class__item cart__item">
-              <div className="cart__item__layer">
-                <div className="cart__item__layer--delete">
-                  <span>
-                    <i className="fas fa-trash-alt"></i>
-                  </span>
-                  <span>Xóa</span>
-                </div>
-                <div className="cart__item__layer--detail">
-                  <span>
-                    <i className="fas fa-info-circle"></i>
-                  </span>
-                  <span onClick={() => history.push(COURSE_PATH)}>
-                    Xem chi tiết
-                  </span>
-                </div>
-                <div className="cart__item__layer--register">
-                  <span>
-                    <i className="fas fa-wallet"></i>
-                  </span>
-                  <span>Đăng ký</span>
-                </div>
+        {savedCourse ? (
+          <div className="waiting__class__main">
+            <div className="class__list">
+              {savedCourse.map((item) => (
+                <CartItem classItem={item} key={item.id} />
+              ))}
+            </div>
+            <div className="class__pagination">
+              <div className="class__pagination__item class__pagination__item--nav">
+                <i className="fas fa-chevron-left"></i>
               </div>
-              <div className="class__item__uinfo">
-                <div className="uinfo__img">
-                  <img
-                    src="https://img.vn/uploads/version/img24-png-20190726133727cbvncjKzsQ.png"
-                    alt=""
-                  />
-                </div>
-                <p className="uinfo__name">Quản trị viên</p>
+              <div className="class__pagination__item">1</div>
+              <div className="class__pagination__item">2</div>
+              <div className="class__pagination__item class__pagination__item--checked">
+                3
               </div>
-              <div className="class__item__content">
-                <div className="content__title">
-                  Cần tìm gia sư dạy tiếng anh gia tiếp cho người đi làm
-                </div>
-                <div className="content__description">
-                  Cần gia sư có kinh nghiệm nghe nói đọc viết, phát âm chuẩn dạy
-                  kèm cho người đ
-                </div>
-                <div className="content__schedule">
-                  <span className="content__schedule__title">Lịch học:</span>
-                  <span className="content__schedule__item">T6 (9:30)</span>,
-                  <span className="content__schedule__item">T7 (8:30)</span>
-                </div>
-                <div className="content__price">
-                  <div className="content__price__month">
-                    2.000.000đ <span>/tháng</span>
-                  </div>
-                  <div className="content__price__fee">
-                    600.00đ <span>phí nhận lớp</span>
-                  </div>
-                </div>
-                <div className="content__offers">Đã có 1/3 đề nghị dạy</div>
-                <div className="content__subjects">
-                  <div className="content__subjects__item content__subjects__item--subject">
-                    Tiếng anh
-                  </div>
-                  <div className="content__subjects__item content__subjects__item--detail">
-                    Giao tiếp căn bản de hieu
-                  </div>
-                  <div className="content__subjects__item content__subjects__item--address">
-                    Quận Phú Nhuận, TP.HCM
-                  </div>
-                </div>
+              <div className="class__pagination__item">...</div>
+              <div className="class__pagination__item">10</div>
+              <div className="class__pagination__item class__pagination__item--nav">
+                <i className="fas fa-chevron-right"></i>
               </div>
             </div>
           </div>
-          <div className="class__pagination">
-            <div className="class__pagination__item class__pagination__item--nav">
-              <i className="fas fa-chevron-left"></i>
-            </div>
-            <div className="class__pagination__item">1</div>
-            <div className="class__pagination__item">2</div>
-            <div className="class__pagination__item class__pagination__item--checked">
-              3
-            </div>
-            <div className="class__pagination__item">...</div>
-            <div className="class__pagination__item">10</div>
-            <div className="class__pagination__item class__pagination__item--nav">
-              <i className="fas fa-chevron-right"></i>
-            </div>
-          </div>
-        </div>
+        ) : (
+          <h1>loading...</h1>
+        )}
       </div>
     </div>
   );

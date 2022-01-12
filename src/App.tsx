@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router';
+import { toast } from 'react-toastify';
 import { updateStatus, updateStatusForgotPassword } from './actions/signup';
 import DashBoard from './Admin/pages/Dashboard';
 import './App.scss';
 import ForgotPassword from './components/Auth/ForgotPassword/ForgotPassword';
 import Login from './components/Auth/Login/Login';
 import SignUp from './components/Auth/SignUp/SignUp';
+import { Toast } from './components/Common/Toast';
 import FAQ from './components/FAQ/FAQ';
 import FindTutorList from './components/FindTutorList/FindTutorList';
 import Footer from './components/Footer/Footer';
@@ -36,16 +38,17 @@ import Cart from './pages/Cart/Cart';
 import DetailCourse from './pages/DetailCourse/DetailCourse';
 import Me from './pages/Me/Me';
 import Tutor from './pages/Tutor/Tutor';
-import { IInitialState } from './reducers/signUpInfo';
+import { LoginSelector } from './reducers/login';
 
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
-  const selectorSignUpFill = useSelector((state: IInitialState) => state.signUpInfo);
+  
+  // const selectorSignUpFill = useSelector((state: IInitialState) => state.signUpInfo);
 
-  useEffect(()=>{
-    console.log(selectorSignUpFill)
-  },[selectorSignUpFill])
+  // useEffect(()=>{
+  //   console.log(selectorSignUpFill)
+  // },[selectorSignUpFill])
 
   const stateList = [`${SIGNUP_PATH}`, `${FORGET_PASSWORD_PATH}`];
 
@@ -71,8 +74,13 @@ function App() {
 
   const isAdminPage = location.pathname.toString().indexOf('/admin') !== -1;
 
+  // const loginSelector = useSelector((state : LoginSelector) => state.loginUser);
+
+  // console.log("loginSelector",loginSelector);
+
   return (
     <div>
+      <Toast/>
       {isAdminPage ? (
         <Switch>
           <Route path="/admin">
