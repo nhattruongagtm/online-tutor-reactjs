@@ -1,17 +1,10 @@
-import React from 'react';
-import Timetable from 'react-timetable-events';
-import './timeTable.scss';
-import {
-  ScheduleComponent,
-  Inject,
-  Day,
-  Week,
-  WorkWeek,
-  Agenda,
-  Month,
-  EventSettingsModel,
-} from '@syncfusion/ej2-react-schedule';
 import { DataManager, WebApiAdaptor } from '@syncfusion/ej2-data';
+import {
+  Agenda, Day, EventSettingsModel, Inject, Month, ScheduleComponent, Week,
+  WorkWeek
+} from '@syncfusion/ej2-react-schedule';
+import React from 'react';
+import './timeTable.scss';
 interface TimeTableProps {}
 
 const events = {

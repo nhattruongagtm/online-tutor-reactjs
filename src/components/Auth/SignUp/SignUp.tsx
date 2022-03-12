@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import "../SignUp/signup.scss";
-import "../Login/login.scss";
-import { Link } from "react-router-dom";
-import { LOGIN_PATH, SIGNUP_PATH } from "../../../constants/path";
-import { useHistory } from "react-router-dom";
-import SignUpForm from "./SignUpForm";
-import CodeValidation from "./CodeValidation";
-import InfoValidation from "./InfoValidation";
 import { useSelector } from "react-redux";
 import { Prompt } from "react-router";
+import { Link, useHistory } from "react-router-dom";
+import { LOGIN_PATH } from "../../../constants/path";
 import { SignUpSelector } from "../../../reducers/signup";
+import "../Login/login.scss";
+import "../SignUp/signup.scss";
+import CodeValidation from "./CodeValidation";
+import InfoValidation from "./InfoValidation";
+import SignUpForm from "./SignUpForm";
 
 interface RootState {
   signUpStatus: {
