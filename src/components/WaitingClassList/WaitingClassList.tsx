@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import ReactPaginate from 'react-paginate';
 import { useHistory } from 'react-router';
+import { courseApi } from '../../api/CourseApi';
 import { COURSE_PATH } from '../../constants/path';
 import '../WaitingClassList/style.scss';
 import { ClassItem } from './ClassItem';
+import { SelectedItem } from '../TutorList/TutorList';
 interface LearningDate {
   day: number;
   time: number;
@@ -29,69 +32,46 @@ export interface ClassItem {
   schedule: LearningDate[];
 }
 export default function WaitingClassList() {
+  const limit = 10;
   const history = useHistory();
   const [isToogleFilter, setIsToogleFilter] = useState<boolean>(false);
   const [courses, setCourses] = useState<ClassItem[]>();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalRows, setTotalRows] = useState<number>(100);
+  const [pageCount, setPageCount] = useState<number>(
+    Math.ceil(totalRows / limit)
+  );
   useEffect(() => {
     // get data from api
-    const dataFromApi: ClassItem[] = [
-      {
-        id: 123,
-        name: 'CẦN TÌM GIA SƯ DẠY TIẾNG ANH GIAO TIẾP CHO NGƯỜI ĐI LÀM',
-        createdBy: 'Quản trị viên',
-        createdDate: '00:54, 26/11/2021',
-        views: 1633,
-        photo:
-          'https://img.vn/uploads/version/img24-png-20190726133727cbvncjKzsQ.png',
-        status: 0,
-        topic: 'Giao tiếp căn bản',
-        subject: 'Tiếng anh',
-        address: 'phường Linh Trung, Thành phố Thủ Đức',
-        gender: 0,
-        tuition: 1800000,
-        fee: 600000,
-        formality: 0,
-        times: 2,
-        learningDate: new Date(),
-        offer: 1,
-        detail: 'Cần gia sư là Giáo viên chuyên dạy Toán tiếng anh hệ Toán tiếng Anh hệ Cambridge cho bé lớp 4 và lớp 6, yêu cầu có kinh nghiệm và kỹ năng dạy chuyên nghiệp. Dạy',
-        schedule: [
-          { day: 6, time: 13 },
-          { day: 7, time: 9 },
-        ],
-      },
-      {
-        id: 234,
-        name: 'CẦN TÌM GIA SƯ DẠY TIẾNG ANH GIAO TIẾP CHO NGƯỜI ĐI LÀM',
-        createdBy: 'Quản trị viên',
-        createdDate: '00:54, 26/11/2021',
-        views: 1633,
-        photo:
-          'https://img.vn/uploads/version/img24-png-20190726133727cbvncjKzsQ.png',
-        status: 0,
-        topic: 'Giao tiếp căn bản',
-        subject: 'Tiếng anh',
-        address: 'phường Linh Trung, Thành phố Thủ Đức',
-        gender: 0,
-        tuition: 1800000,
-        fee: 600000,
-        formality: 0,
-        times: 2,
-        learningDate: new Date(),
-        offer: 1,
-        detail: 'Cần gia sư là Giáo viên chuyên dạy Toán tiếng anh hệ Toán tiếng Anh hệ Cambridge cho bé lớp 4 và lớp 6, yêu cầu có kinh nghiệm và kỹ năng dạy chuyên nghiệp. Dạy',
-        schedule: [
-          { day: 6, time: 13 },
-          { day: 7, time: 9 },
-        ],
-      },
-    ];
+    let isCancel = false;  
+    const params = {
+      _limit: limit,
+      _page: currentPage,
+    };
+    const resp = courseApi.getWaitingClass(params);
 
-    setCourses(dataFromApi);
+    if (!isCancel) {
+      setCourses(resp.data);
+      setTotalRows(resp.totalRows);
+    }
 
-  }, []);
+    return () => {isCancel = true;
+    }
+  }, [currentPage]);
+  const handlePageClick = (data: SelectedItem) => {
+    const currentPage = data.selected + 1;
+    setCurrentPage(currentPage);
+  };
+  const ScrollToTop = () => {
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [currentPage]);
+    return null;
+  };
+
   return (
     <div className="waiting__class">
+      <ScrollToTop />
       <div className="waiting__class__bar">
         <div className="class__header">
           <div className="class__header__title">Lớp học tìm gia sư</div>
@@ -132,21 +112,26 @@ export default function WaitingClassList() {
               <ClassItem classItem={course} key={course.id} />
             ))}
         </div>
-        <div className="class__pagination">
-          <div className="class__pagination__item class__pagination__item--nav">
-            <i className="fas fa-chevron-left"></i>
-          </div>
-          <div className="class__pagination__item">1</div>
-          <div className="class__pagination__item">2</div>
-          <div className="class__pagination__item class__pagination__item--checked">
-            3
-          </div>
-          <div className="class__pagination__item">...</div>
-          <div className="class__pagination__item">10</div>
-          <div className="class__pagination__item class__pagination__item--nav">
-            <i className="fas fa-chevron-right"></i>
-          </div>
-        </div>
+        <ReactPaginate
+          nextLabel=">>"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          marginPagesDisplayed={2}
+          pageCount={pageCount}
+          previousLabel="<<"
+          pageClassName="page-item"
+          pageLinkClassName="page-link"
+          previousClassName="page-item"
+          previousLinkClassName="page-link"
+          nextClassName="page-item"
+          nextLinkClassName="page-link"
+          breakLabel="..."
+          breakClassName="page-item"
+          breakLinkClassName="page-link"
+          containerClassName="pagination"
+          activeClassName="active"
+          // renderOnZeroPageCount={null}
+        />
       </div>
     </div>
   );

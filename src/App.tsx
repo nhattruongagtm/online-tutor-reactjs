@@ -21,6 +21,7 @@ import { ACCESS_TOKEN } from './constants/auth';
 import {
   ADMIN_PATH,
   CART_PATH,
+  CHECKOUT,
   COURSE_PATH,
   FAQ_PATH,
   FIND_TUTOR_PATH,
@@ -35,6 +36,7 @@ import {
   WAITING_CLASS_PATH
 } from './constants/path';
 import Cart from './pages/Cart/Cart';
+import { Checkout } from './pages/Checkout/Checkout';
 import DetailCourse from './pages/DetailCourse/DetailCourse';
 import Me from './pages/Me/Me';
 import Tutor from './pages/Tutor/Tutor';
@@ -64,6 +66,7 @@ function App() {
     `${SIGNUP_PATH}`,
     `${FORGET_PASSWORD_PATH}`,
     `${ADMIN_PATH}`,
+    `${CHECKOUT}`
   ];
   const isAuth = () => {
     if (path.includes(location.pathname)) {
@@ -149,7 +152,12 @@ function App() {
           </Switch>
         </div>
       ) : (
-        <Redirect to={HOME_PATH} />
+        // <Redirect to={HOME_PATH} />
+        <Switch>
+          <Route path={CHECKOUT}>
+            <Checkout/>  
+          </Route>
+        </Switch>
   )}
     </div>
   );

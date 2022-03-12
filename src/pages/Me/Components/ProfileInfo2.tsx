@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChangePassword } from './ChangPassword';
+import { ChangePassword } from './ChangePassword';
 import EditProfileInfo from './EditProfileInfo';
 import './profileInfo2.scss';
 import ProfileRegister, { createData } from './ProfileRegister';
@@ -98,6 +98,12 @@ export default function ProfileInfo2() {
             <select disabled={!isEdit}>
               <option value="hcm">Quận 1</option>
               <option value="la">Tp Thủ Đức</option>
+            </select>
+          </div>
+          <div className="profile__base__body__name">
+            <div className="profile__item__label">Giới tính: </div>
+            <select disabled={!isEdit}>
+              <option value={0}>Nam</option>
             </select>
           </div>
           <div className="profile__base__footer">

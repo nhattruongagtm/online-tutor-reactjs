@@ -1,6 +1,6 @@
-export const convertDate = (date: Date) => {
+export const convertDate = (now: Date,date: Date) => {
   let timeResult = ``;
-  const miliseconds = Math.floor(new Date().getTime() - date.getTime());
+  const miliseconds = Math.floor(now.getTime() - date.getTime());
   // return date.getTime();
   if (miliseconds < 1000) {
     timeResult = `vừa mới`;

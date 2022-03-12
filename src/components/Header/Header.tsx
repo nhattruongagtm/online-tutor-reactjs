@@ -26,7 +26,7 @@ export default function Header() {
   // get saved courses (cart)
   useEffect(()=>{
     if(localStorage.getItem(ACCESS_TOKEN)){
-      courseApi.getAllSavedCourse(1).then(res=>{
+      courseApi.getAllSavedCourse(1,null).then(res=>{
         if(res){
           setSavedCourse(res);
         }
@@ -57,11 +57,11 @@ export default function Header() {
     },
     {
       path: `${NEWS_PATH}`,
-      title: 'Tin tức',
+      title: 'Tin tức',   
     },
     // {
     //   path: `${FAQ_PATH}`,
-    //   title: "Hỏi đáp",
+    //   title: "Hỏi đáp",   
     // },
   ];
 

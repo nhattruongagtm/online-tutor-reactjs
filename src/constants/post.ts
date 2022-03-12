@@ -1,0 +1,3 @@
+export const ADD_TIME_LIST = 'ADD_TIME_LIST';
+export const UPDATE_TIME_LIST = 'UPDATE_TIME_LIST';
+export const DELETE_TIME_LIST = 'DELETE_TIME_LIST';

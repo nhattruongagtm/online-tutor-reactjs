@@ -75,17 +75,17 @@ export const ChangePassword = (props: ChangePasswordProps) => {
       console.log('Mật khẩu không khớp!');
     } else {
       setIsSending(true);
-      authApi.changePassword('id', md5(inputStep2.newPassword)).then((res) => {
+      authApi.changePassword(5, md5(inputStep2.newPassword)).then((res) => {
         if (res) {
-          if (res.status === 200) {
-            setTimeout(() => {
-              setStep(3);
-              setIsSending(false);
-            }, 2000);
-          } else {
-            console.log('Đã xảy lỗi, vui lòng thử lại!');
-            setIsSending(false);
-          }
+          // if (res.status === 200) {
+          //   setTimeout(() => {
+          //     setStep(3);
+          //     setIsSending(false);
+          //   }, 2000);
+          // } else {
+          //   console.log('Đã xảy lỗi, vui lòng thử lại!');
+          //   setIsSending(false);
+          // }
         }
       }).catch(e=>{
         console.log(e);

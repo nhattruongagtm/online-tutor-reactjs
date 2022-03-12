@@ -3,11 +3,12 @@ import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { requestForgotPassword, requestForgotPasswordCheckCode } from '../../../actions/forgotPassword';
 import { updateStatusForgotPassword } from '../../../actions/signup';
 import { authApi } from '../../../api/authApi';
 import '../SignUp/signup.scss';
+import { ForgotSelector } from './ForgotPassword';
 interface SendMailProps {
   sendMail: (userID: string) => void;
 }
@@ -25,6 +26,8 @@ export default function EmailValidation({ sendMail }: SendMailProps) {
   const [isSendCode, setIsSendCode] = useState<boolean>();
   const [result, setResult] = useState<ResultValue>();
   const dispatch = useDispatch();
+  const forgotPasswordSelector = useSelector((state : ForgotSelector)=> state.forgotPassword);
+  const {loading} = forgotPasswordSelector;
   const {
     register,
     handleSubmit,
@@ -44,9 +47,8 @@ export default function EmailValidation({ sendMail }: SendMailProps) {
     dispatch(requestForgotPassword(data.email));
   };
   const handleSendCode = (data: FormValue) => {
-    
     dispatch(requestForgotPasswordCheckCode(data.code));
-
+    
   //   setIsSendCode(true);
 
   //  if(result){
@@ -78,7 +80,7 @@ export default function EmailValidation({ sendMail }: SendMailProps) {
           </div>
           <div className="signup__form__item signup__form__item--validate">
             <label className="signup__form__item__label "></label>
-            {errors.email?.type === 'pattern' && <span>Email không đúng!</span>}
+            {errors.email?.type === 'pattern' && <span>Email không đúng!</span>}   
             {errors.email?.type === 'required' && (
               <span>Vui lòng nhập email!</span>
             )}
@@ -97,9 +99,9 @@ export default function EmailValidation({ sendMail }: SendMailProps) {
             </div> */}
             <Button variant="contained" type="submit">
               <Typography sx={{ mr: 1 }}>Gửi mã </Typography>
-              {isSendMail && (
+              {loading && (
                 <CircularProgress size={20} className="cirlce__progress" />
-              )}
+              )}   
             </Button>
           </div>
         </form>

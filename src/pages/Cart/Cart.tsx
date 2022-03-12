@@ -5,26 +5,51 @@ import { ClassItem } from '../../components/WaitingClassList/WaitingClassList';
 import { ACCESS_TOKEN } from '../../constants/auth';
 import { CartItem } from './CartItem';
 import './style.scss';
+import { SelectedItem } from '../../components/TutorList/TutorList';
+import ReactPaginate from 'react-paginate';
+
+const limit = 8;
+
 export default function Cart() {
   const history = useHistory();
   const [isToogleFilter, setIsToogleFilter] = useState<boolean>(false);
   const [savedCourse, setSavedCourse] = useState<ClassItem[]>();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>(100);
+  const [pageCount, setPageCount] = useState<number>(
+    Math.ceil(totalPage / limit)
+  );
   // get saved courses (cart)
   useEffect(() => {
+    const params = {_page: currentPage, _limit: limit};
     if (localStorage.getItem(ACCESS_TOKEN)) {
       console.log('oke');
-      courseApi.getAllSavedCourse(1).then((res) => {
+      courseApi.getAllSavedCourse(1,params).then((res) => {
         if (res) {
           setSavedCourse(res);
         }
         console.log('res', res);
-      });
+      });   
     } else {
       console.log('no');
     }
-  }, []);
+  }, [currentPage]);
+
+  const ScrollToTop = () => {
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [currentPage]);
+    return null;
+  };
+
+  const handlePageClick = (data: SelectedItem) => {
+    const currentPage = data.selected + 1;
+    setCurrentPage(currentPage);
+  };
+
   return (
     <div className="cart">
+      <ScrollToTop/>
       <div className="waiting__class">
         <div className="waiting__class__bar">
           <div className="class__header">
@@ -68,21 +93,26 @@ export default function Cart() {
                 <CartItem classItem={item} key={item.id} />
               ))}
             </div>
-            <div className="class__pagination">
-              <div className="class__pagination__item class__pagination__item--nav">
-                <i className="fas fa-chevron-left"></i>
-              </div>
-              <div className="class__pagination__item">1</div>
-              <div className="class__pagination__item">2</div>
-              <div className="class__pagination__item class__pagination__item--checked">
-                3
-              </div>
-              <div className="class__pagination__item">...</div>
-              <div className="class__pagination__item">10</div>
-              <div className="class__pagination__item class__pagination__item--nav">
-                <i className="fas fa-chevron-right"></i>
-              </div>
-            </div>
+            <ReactPaginate
+              nextLabel=">>"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={3}
+              marginPagesDisplayed={2}
+              pageCount={pageCount}
+              previousLabel="<<"
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item"
+              previousLinkClassName="page-link"
+              nextClassName="page-item"
+              nextLinkClassName="page-link"
+              breakLabel="..."
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              activeClassName="active"
+              // renderOnZeroPageCount={null}
+            />
           </div>
         ) : (
           <h1>loading...</h1>

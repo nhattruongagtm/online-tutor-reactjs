@@ -5,18 +5,20 @@ import { ClassItem as Course } from './WaitingClassList';
 
 export interface ClassItemProps {
   classItem: Course;
+  onChangePage?(): void | null;
 }
 
-export const ClassItem = ({ classItem }: ClassItemProps) => {
+export const ClassItem = ({ classItem, onChangePage }: ClassItemProps) => {
   const history = useHistory();
 
+  const handleRedirectPage = () => {
+    history.push(`${COURSE_PATH}?id=${classItem.id}`);
+    if (onChangePage) {
+      onChangePage();
+    }
+  };
   return (
-    <div
-      className="class__item"
-      onClick={() => {
-        history.push(`${COURSE_PATH}?id=${classItem.id}`);
-      }}
-    >
+    <div className="class__item" onClick={handleRedirectPage}>
       <div className="class__item__uinfo">
         <div className="uinfo__img">
           <img src={classItem.photo} alt="" />

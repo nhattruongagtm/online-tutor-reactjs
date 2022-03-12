@@ -13,6 +13,7 @@ interface ProfileForm {
   phone: string;
   district: string;
   city: string;
+  gender: number;
 }
 export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
   const [user, setUser] = useState<ProfileForm>({
@@ -21,13 +22,13 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
     phone: '0384459719',
     district: 'Huyện Đức Hòa',
     city: 'Tỉnh Long An',
+    gender: 0,
   });
   const [district, city] = useAddress();
-  const [chooseCity,setChooseCity] = useState<string>(user.city);
-  const [districts,setDistricts] = useState<District[]>();
+  const [chooseCity, setChooseCity] = useState<string>(user.city);
+  const [districts, setDistricts] = useState<District[]>();
 
-  
-  const getCityID = (name: string) => {   
+  const getCityID = (name: string) => {
     return city.find((item) => item.name_with_type === name)?.code;
   };
 
@@ -36,9 +37,14 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
   );
   const validationSchema = yup.object().shape({
     name: yup.string().required(),
-    phone: yup.number().required().max(11).min(10),
+    phone: yup
+      .string()
+      .required('Vui lòng nhập sô điện thoại!')
+      .matches(/^[0-9]+$/, 'Vui lòng nhập số điện thoại!')
+      .max(11)
+      .min(10),
     email: yup.string().required(),
-    district: yup.string().required(),  
+    district: yup.string().required(),
     city: yup.string().required(),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
@@ -68,7 +74,7 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
       (item) => item.parent_code === getCityID(chooseCity)
     );
     setDistricts(districts);
-  }, [chooseCity,district]);
+  }, [chooseCity, district]);
 
   useEffect(() => {
     return () => {
@@ -78,8 +84,16 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
     };
   }, [avatar]);
 
+  const handleChangeInfo = (data: ProfileForm) => {
+    console.log(data);
+  };
+  console.log(errors);
+
   return (
-    <form className="profile__base profile__base__dialog">
+    <form
+      className="profile__base profile__base__dialog"
+      onSubmit={handleSubmit(handleChangeInfo)}
+    >
       <div className="profile__base__title">
         <p>Thông tin cơ bản</p>
       </div>
@@ -123,27 +137,53 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
         </div>
         <div className="profile__base__body__name">
           <div className="profile__item__label">Tỉnh/thành phố: </div>
-          <select {...register('city')} onChange={(e)=>setChooseCity(e.target.value)}>  
+          <select
+            {...register('city')}
+            onChange={(e) => setChooseCity(e.target.value)}
+          >
             <option value="city">Chọn thành phố</option>
-            {city && city.map(item=>(
-                <option key={item.slug} value={item.name_with_type} selected={item.name_with_type === user.city ? true : false}>{item.name_with_type}</option>
-            ))}
+            {city &&
+              city.map((item) => (
+                <option
+                  key={item.slug}
+                  value={item.name_with_type}
+                  selected={item.name_with_type === user.city ? true : false}
+                >
+                  {item.name_with_type}
+                </option>
+              ))}
           </select>
         </div>
         <div className="profile__base__body__name">
           <div className="profile__item__label">Quận/huyện: </div>
           <select {...register('district')}>
             <option value="district">Chọn quận/huyện</option>
-            {districts && districts.map(district=>(
-                <option key={district.slug} value={district.name_with_type} selected={district.name_with_type === user.district ? true : false}>{district.name_with_type}</option>
-            ))}
+            {districts &&
+              districts.map((district) => (
+                <option
+                  key={district.slug}
+                  value={district.name_with_type}
+                  selected={
+                    district.name_with_type === user.district ? true : false
+                  }
+                >
+                  {district.name_with_type}
+                </option>
+              ))}
+          </select>
+        </div>
+        <div className="profile__base__body__name">
+          <div className="profile__item__label">Giới tính: </div>
+          <select {...register('gender')}>
+            <option value={0}>Nam</option>
+            <option value={1}>Nữ</option>
+            <option value={2}>Khác</option>
           </select>
         </div>
         <div className="profile__base__footer">
           <button onClick={onCloseForm} className="profile__close">
             Thoát
           </button>
-
           <button type="submit">Thay đổi</button>
         </div>
       </div>

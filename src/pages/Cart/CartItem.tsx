@@ -2,19 +2,38 @@ import React from 'react';
 import { useHistory } from 'react-router';
 import { ClassItem } from '../../components/WaitingClassList/ClassItem';
 import { ClassItem as IClassItem } from '../../components/WaitingClassList/WaitingClassList';
-import { COURSE_PATH } from '../../constants/path';
+import { CHECKOUT, COURSE_PATH } from '../../constants/path';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 interface CartItemProps {
   classItem: IClassItem;
 }
 
 export const CartItem = ({ classItem }: CartItemProps) => {
-  const history = useHistory();                                                                     
+  const history = useHistory();   
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };      
+  const handleRegisterCourse = () =>{
+    history.push(`${CHECKOUT}?id=${classItem.id}`)
+  }                                                          
 
   return (
     <div className="class__items cart__item">
       <div className="cart__item__layer">
-        <div className="cart__item__layer--delete">
+        <div className="cart__item__layer--delete" onClick={handleClickOpen}>
           <span>
             <i className="fas fa-trash-alt"></i>
           </span>
@@ -30,9 +49,31 @@ export const CartItem = ({ classItem }: CartItemProps) => {
           <span>
             <i className="fas fa-wallet"></i>
           </span>
-          <span>Đăng ký</span>           
+          <span onClick={handleRegisterCourse}>Đăng ký</span>           
         </div>
       </div>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Xóa khóa học"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Bạn chắc chắn muốn xóa khóa học này chứ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={handleClose} autoFocus>
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </Dialog>
      
         <ClassItem classItem={classItem} />  
        

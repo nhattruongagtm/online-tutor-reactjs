@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createContext } from 'react';
 import { commentApi } from '../../api/commentApi';
 import { convertDate } from '../../utils/date';
@@ -43,6 +43,8 @@ export const CommentItem = ({ cmt }: CommentItemProps) => {
   const [isDisplayMore, setIsDisplayMore] = useState<boolean>(false);
   const [replyList, setReplysList] = useState<Comment[]>(replysList);
   const [isReply, setIsReply] = useState<boolean>(false);
+  const dateRef = useRef<Date>(new Date());
+
   useEffect(() => {
     // get reply comments
     commentApi
@@ -77,7 +79,7 @@ export const CommentItem = ({ cmt }: CommentItemProps) => {
         <div className="comment__footer">
           <span>Thích</span>
           <span onClick={() => setIsReply(!isReply)}>Trả lời</span>
-          <span>{convertDate(cmt.createdDate)}</span>
+          <span>{convertDate(dateRef.current,cmt.createdDate)}</span>
         </div>
         {isReply && (
           <div className="comment__reply__form">

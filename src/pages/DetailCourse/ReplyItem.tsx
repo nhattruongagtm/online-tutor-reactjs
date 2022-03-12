@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { convertDate } from '../../utils/date';
 import {Comment} from './CommentItem';
 export interface Reply{
@@ -20,6 +20,7 @@ interface ReplyItemProps {
 }
 
 export const ReplayItem = ({cmt}: ReplyItemProps) => {
+  const dateRef = useRef<Date>(new Date());
   return (
     <div className="comment__item comment__reply__item">
       <div className="comment__body">
@@ -42,7 +43,7 @@ export const ReplayItem = ({cmt}: ReplyItemProps) => {
       <div className="comment__footer">
         <span>Thích</span>
         <span>Trả lời</span>
-        <span>{convertDate(cmt.createdDate)}</span>
+        <span>{convertDate(dateRef.current,cmt.createdDate)}</span>
       </div>
     </div>
   );

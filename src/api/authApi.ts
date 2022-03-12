@@ -20,52 +20,55 @@ export interface LoginInput {
   password: string;
   type: number;
 }
-export interface ResponseData<T>{
+export interface ResponseData<T> {
   message: string;
   status: string;
-  data: T,
+  data: T;
+}
+export interface ForgotData {
+  id: number;
+  code: string;
 }
 export const authApi = {
-  checkMail(email: string): Promise<boolean>{
-    const url = '/check-mail'
+  checkMail(email: string): Promise<boolean> {
+    const url = '/check-mail';
 
-    return axiosClient.post(url,{email:email});
+    return axiosClient.post(url, { email: email });
   },
 
   sendMailToSignUp(email: string) {
     const url = `/send-mail`;
 
     const params = {
-      email: email
-    }
+      email: email,
+    };
 
-    return axiosClient.post(url,params).catch(e=>{console.log(e)})  
+    return axiosClient.post(url, params).catch((e) => {
+      console.log(e);
+    });
   },
   signUp(input: SignUpInput): Promise<ResponseData<ISignUpInfo>> {
     const url = '/sign-up';
-    return axiosClient.post(url,input);     
+    return axiosClient.post(url, input);
   },
-  login(user: LoginInput) : Promise<ResponseData<UserAuth>> {
+  login(user: LoginInput): Promise<ResponseData<UserAuth>> {
     const url = '/login';
 
-    return axiosClient.post(url,user);
+    return axiosClient.post(url, user);
   },
-  async sendMailToForgot(email: string) {
-    const url = `/send-mail/${email}`;
+  sendMailToForgot(email: string): Promise<ForgotData> {
+    const url = `/send-mail-to-forgot/${email}`;
 
-    // return await axiosClient.post(url).catch(e=>{console.log(e)})
-
-    // fake code
-    return {userID: 'kh1',code: '123456'};
+    return axiosClient.post(url);
   },
-  async changePassword(userID: string, newPassword: string) {
-    const url = '/user';
+  changePassword(userID: number, newPassword: string): Promise<boolean> {
+    const url = `/users/${userID}`;
 
-    // return axiosClient.put(url, { userID: userID, newPassword: newPassword });
-
-    return {
-      status: 200,
-      message: 'success',
-    }
+    return axiosClient.put(url, { password: newPassword });
   },
+  updateProfile(user: ISignUpInfo) : Promise<boolean>{
+    const url = `/profile/${user.id}`;
+
+    return axiosClient.put(url,user);
+  }
 };

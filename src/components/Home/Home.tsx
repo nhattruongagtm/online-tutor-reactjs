@@ -22,19 +22,19 @@ export default function Home() {
           move.classList.remove('display');
         }
 
-        if (pos > 400) {
+        if (pos > 500) {
           item1?.classList.add('home__intro__item--1');
         }
-        if (pos > 1100) {
+        if (pos > 1200) {
           item2?.classList.add('home__intro__item--1');
         }
-        if (pos > 1700) {
+        if (pos > 1800) {
           item3?.classList.add('home__intro__item--1');
         }
-        if (pos > 2500) {
+        if (pos > 2600) {
           item4?.classList.add('recommend--display');
         }
-        if (pos > 3000) {
+        if (pos > 3300) {
           item5?.classList.add('contact__form--display');
         }
       });

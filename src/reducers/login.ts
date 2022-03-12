@@ -49,7 +49,6 @@ export const loginReducer = (
 ) => {
   switch (action.type) {
     case REQUEST_LOGIN:
-     console.log(action.payload)
       return {
         ...state,
         loading: true,

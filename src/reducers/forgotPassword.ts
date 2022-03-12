@@ -10,13 +10,18 @@
 // };
 
 import {
+  LOADING_FORGOT,
   REQUEST_FORGOT_CHANGE_PASSWORD,
   REQUEST_FORGOT_CHANGE_PASSWORD_FAIL,
   REQUEST_FORGOT_CHANGE_PASSWORD_SUCESS,
   REQUEST_FORGOT_CHECK_CODE,
+  REQUEST_FORGOT_PASSWORD,
+  REQUEST_FORGOT_PASSWORD_FAIL,
+  REQUEST_FORGOT_PASSWORD_SUCCESS,
   REQUEST_FORGOT_SEND_MAIL,
   REQUEST_FORGOT_SEND_MAIL_FAIL,
   REQUEST_FORGOT_SEND_MAIL_SUCCESS,
+  REQUEST_FORGOT_UPDATE_CODEID,
 } from '../constants/forgotPassword';
 import { InitialStateSignUp, ISignUpInfo } from './signup';
 
@@ -36,7 +41,8 @@ import { InitialStateSignUp, ISignUpInfo } from './signup';
 
 export interface InitialStateForgot {
   code: string;
-  user: ISignUpInfo | null;
+  email: string;
+  id: number | null;
   loading: boolean;
   error: string;
   progress: number;
@@ -47,21 +53,41 @@ interface PayloadAction {
 }
 const initialStateForgot = {
   code: '',
-  user: null,
+  id: null,
+  email: '',
   loading: false,
   error: '',
   progress: 0,
 };
 
 const forgotReducer = (
-  state: InitialStateForgot = initialStateForgot,
+  state: InitialStateForgot = initialStateForgot,  
   action: PayloadAction
 ) => {
   switch (action.type) {
-    case REQUEST_FORGOT_CHANGE_PASSWORD:
+    case REQUEST_FORGOT_PASSWORD:
       return {
         ...state,
+        email: action.payload,
         loading: true,
+      };
+    case REQUEST_FORGOT_UPDATE_CODEID:
+      return {
+        ...state,
+        id: action.payload.id,
+        loading: true,
+        code: action.payload.code,
+
+      };
+    case REQUEST_FORGOT_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case REQUEST_FORGOT_PASSWORD_FAIL:
+      return {
+        ...state,
+        loading: false,
       };
     case REQUEST_FORGOT_SEND_MAIL:
       return {
@@ -82,24 +108,24 @@ const forgotReducer = (
     case REQUEST_FORGOT_CHECK_CODE:
       return {
         ...state,
+        code: action.payload,
         loading: false,
       };
     case REQUEST_FORGOT_CHANGE_PASSWORD:
       return {
         ...state,
-        loading: false,
+        loading: true,
       };
     case REQUEST_FORGOT_CHANGE_PASSWORD_SUCESS:
       return {
         ...state,
-        loading: true,
-      };
-    case REQUEST_FORGOT_CHANGE_PASSWORD_FAIL:
-      return {
-        ...state,
         loading: false,
       };
-
+    case LOADING_FORGOT:
+      return {
+        ...state,
+        loading: action.payload,  
+      };
     default:
       return state;
   }

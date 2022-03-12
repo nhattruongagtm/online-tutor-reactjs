@@ -13,6 +13,7 @@ import {
 } from '../actions/login';
 import md5 from 'md5';
 import { AxiosError } from 'axios';
+import {ERROR_EXCUTE} from '../constants/notify'
 import { toast } from 'react-toastify';
 interface Action {
   type: string;
@@ -50,7 +51,7 @@ function* loginWatcher(action: Action) {
       
   } catch (error: any) {
     yield put(requestLoginFail(error));
-    toast.error('Đã xảy ra lỗi!, vui lóng thử lại!');
+    toast.error(ERROR_EXCUTE);
   }
 }
 

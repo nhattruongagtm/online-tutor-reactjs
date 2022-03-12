@@ -8,7 +8,7 @@ import { TutorItem } from '../TutorList/TutorItem';
 export const galaxy = '#e3fff9';
 const RecommendedMain = styled.div`
   margin-top: 10px !important;
-  height: 450px;
+  /* height: 450px; */
   margin-bottom: 100px;
   align-items: center !important;
   /* gap: 20px!important; */

@@ -11,13 +11,13 @@ import { useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import { HOME_PATH, LOGIN_PATH } from '../../../constants/path';
 import { InitialStateForgot } from '../../../reducers/forgotPassword';
-interface RootState {
+export interface ForgotSelector {
   forgotPassword: InitialStateForgot;
 }
 export default function ForgotPassword() {
   const history = useHistory();
   const forgotSelector = useSelector(
-    (state: RootState) => state.forgotPassword
+    (state: ForgotSelector) => state.forgotPassword
   );
   const { progress } = forgotSelector;
   const [statusBar, setStatusBar] = useState<number>(forgotSelector.progress);

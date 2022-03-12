@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { convertDate } from '../../utils/date';
 
 export interface Rate {
@@ -16,6 +16,7 @@ interface RateItemProps {
 }
 
 export const RateItem = ({ rate }: RateItemProps) => {
+  const dateRef = useRef<Date>(new Date());
   return (
     <div className="comment__item">
       <div className="comment__body">
@@ -39,7 +40,7 @@ export const RateItem = ({ rate }: RateItemProps) => {
         </div>
       </div>
       <div className="comment__footer">
-        <span>{convertDate(rate.createdDate)}</span>
+        <span>{convertDate(dateRef.current,rate.createdDate)}</span>
       </div>
     </div>
   );

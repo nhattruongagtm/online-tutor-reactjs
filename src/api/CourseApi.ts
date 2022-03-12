@@ -1,6 +1,7 @@
 import { resolve } from 'dns';
 import { ClassItem } from '../components/WaitingClassList/WaitingClassList';
 import axiosClient from './axiosClient';
+import { Params, Resp } from './tutorApi';
 
 export const courseApi = {
   getSubjectList() {
@@ -56,9 +57,9 @@ export const courseApi = {
     // return axiosClient.post(url,{userID,courseID});
     return this.getCourseByID(234);
   },
-  getAllSavedCourse(userID: number): Promise<ClassItem[]> {
+  getAllSavedCourse(userID: number, params: Params | null): Promise<ClassItem[]> {
     const url = `courses/${userID}`;
-
+   
     // return axiosClient.get(url);
 
     return new Promise((resolve, reject) => {
@@ -142,7 +143,12 @@ export const courseApi = {
         },
       ];
       if (list) {
-        resolve(list);
+        if (params) {
+          const rs = params._page === 1 ? list : list.slice(0, 1);
+          resolve(rs);
+        } else {
+          resolve(list);
+        }
       } else {
         reject('error to load saved courses');
       }
@@ -230,11 +236,128 @@ export const courseApi = {
         },
       ];
 
-      if (list && id === 234) {   
+      if (list && id === 234) {
         resolve(list);
       } else {
         reject('no courses');
       }
     });
+  },
+  getWaitingClass(params: Params): Resp<ClassItem> {
+    const dataFromApi: ClassItem[] = [
+      {
+        id: 123,
+        name: 'CẦN TÌM GIA SƯ DẠY TIẾNG ANH GIAO TIẾP CHO NGƯỜI ĐI LÀM',
+        createdBy: 'Quản trị viên',
+        createdDate: '00:54, 26/11/2021',
+        views: 1633,
+        photo:
+          'https://img.vn/uploads/version/img24-png-20190726133727cbvncjKzsQ.png',
+        status: 0,
+        topic: 'Giao tiếp căn bản',
+        subject: 'Tiếng anh',
+        address: 'phường Linh Trung, Thành phố Thủ Đức',
+        gender: 0,
+        tuition: 1800000,
+        fee: 600000,
+        formality: 0,
+        times: 2,
+        learningDate: new Date(),
+        offer: 1,
+        detail:
+          'Cần gia sư là Giáo viên chuyên dạy Toán tiếng anh hệ Toán tiếng Anh hệ Cambridge cho bé lớp 4 và lớp 6, yêu cầu có kinh nghiệm và kỹ năng dạy chuyên nghiệp. Dạy',
+        schedule: [
+          { day: 6, time: 13 },
+          { day: 7, time: 9 },
+        ],
+      },
+      {
+        id: 234,
+        name: 'CẦN TÌM GIA SƯ DẠY TIẾNG ANH GIAO TIẾP CHO NGƯỜI ĐI LÀM',
+        createdBy: 'Quản trị viên',
+        createdDate: '00:54, 26/11/2021',
+        views: 1633,
+        photo:
+          'https://img.vn/uploads/version/img24-png-20190726133727cbvncjKzsQ.png',
+        status: 0,
+        topic: 'Giao tiếp căn bản',
+        subject: 'Tiếng anh',
+        address: 'phường Linh Trung, Thành phố Thủ Đức',
+        gender: 0,
+        tuition: 1800000,
+        fee: 600000,
+        formality: 0,
+        times: 2,
+        learningDate: new Date(),
+        offer: 1,
+        detail:
+          'Cần gia sư là Giáo viên chuyên dạy Toán tiếng anh hệ Toán tiếng Anh hệ Cambridge cho bé lớp 4 và lớp 6, yêu cầu có kinh nghiệm và kỹ năng dạy chuyên nghiệp. Dạy',
+        schedule: [
+          { day: 6, time: 13 },
+          { day: 7, time: 9 },
+        ],
+      },
+      {
+        id: 344,
+        name: 'CẦN TÌM GIA SƯ DẠY lập trình cho bé',
+        createdBy: 'Quản trị viên',
+        createdDate: '00:54, 26/11/2021',
+        views: 1633,
+        photo:
+          'https://img.vn/uploads/version/img24-png-20190726133727cbvncjKzsQ.png',
+        status: 0,
+        topic: 'Giao tiếp căn bản',
+        subject: 'Tiếng anh',
+        address: 'phường Linh Trung, Thành phố Thủ Đức',
+        gender: 0,
+        tuition: 1800000,
+        fee: 600000,
+        formality: 0,
+        times: 2,
+        learningDate: new Date(),
+        offer: 1,
+        detail:
+          'Cần gia sư là Giáo viên chuyên dạy Toán tiếng anh hệ Toán tiếng Anh hệ Cambridge cho bé lớp 4 và lớp 6, yêu cầu có kinh nghiệm và kỹ năng dạy chuyên nghiệp. Dạy',
+        schedule: [
+          { day: 6, time: 13 },
+          { day: 7, time: 9 },
+        ],
+      },
+      {
+        id: 434,
+        name: 'CẦN TÌM GIA SƯ DẠY vẽ cho bé',
+        createdBy: 'Quản trị viên',
+        createdDate: '00:54, 26/11/2021',
+        views: 1633,
+        photo:
+          'https://img.vn/uploads/version/img24-png-20190726133727cbvncjKzsQ.png',
+        status: 0,
+        topic: 'Giao tiếp căn bản',
+        subject: 'Tiếng anh',
+        address: 'phường Linh Trung, Thành phố Thủ Đức',
+        gender: 0,
+        tuition: 1800000,
+        fee: 600000,
+        formality: 0,
+        times: 2,
+        learningDate: new Date(),
+        offer: 1,
+        detail:
+          'Cần gia sư là Giáo viên chuyên dạy Toán tiếng anh hệ Toán tiếng Anh hệ Cambridge cho bé lớp 4 và lớp 6, yêu cầu có kinh nghiệm và kỹ năng dạy chuyên nghiệp. Dạy',
+        schedule: [
+          { day: 6, time: 13 },
+          { day: 7, time: 9 },
+        ],
+      },
+    ];
+    const resp = {
+      totalRows: dataFromApi.length,
+      data:
+        params._page === 1
+          ? dataFromApi.splice(0, Math.floor(dataFromApi.length / 2))
+          : dataFromApi,
+    };
+
+    return resp;
   },
 };

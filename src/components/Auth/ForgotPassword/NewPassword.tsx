@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 import { authApi } from '../../../api/authApi';
 import md5 from 'md5';
+import { requestChangePassword } from '../../../actions/forgotPassword';
 interface Validation {
   title: string;
   status: boolean;
@@ -68,14 +69,15 @@ export default function NewPassword({ onGetUserID }: NewPasswordProps) {
   const dispatch = useDispatch();
 
   const handleChangePassword = (data: FormInput) => {
-    setIsLoading(true);
+    // setIsLoading(true);
 
-    if (onGetUserID) {
-      authApi.changePassword(onGetUserID, md5(data.password)).then((res) => {
-        setIsLoading(false);
-        dispatch(updateStatusForgotPassword(2));
-      });
-    }
+    // if (onGetUserID) {
+    //   authApi.changePassword(onGetUserID, md5(data.password)).then((res) => {
+    //     setIsLoading(false);
+    //     dispatch(updateStatusForgotPassword(2));
+    //   });
+    // }
+    dispatch(requestChangePassword(data.password));      
   };
 
   return (
@@ -130,7 +132,7 @@ export default function NewPassword({ onGetUserID }: NewPasswordProps) {
       <div className="signup__form__nav forgot__nav">
         <div className="signup__form__nav__back forgot__nav__back"></div>
         <Button variant="contained" type="submit">
-          <Typography sx={{ mr: 1 }}>Đồng ý</Typography>
+          <Typography sx={{ mr: 1 }}>Đồng ý</Typography> 
           {isLoading && (
             <CircularProgress size={20} className="cirlce__progress" />
           )}

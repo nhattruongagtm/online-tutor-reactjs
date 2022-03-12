@@ -57,6 +57,7 @@ export default function InfoValidation() {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [getDistrictsByID, setGetDistrictsByID] = useState<District[]>([]);
+  
   const signUpSelector = useSelector(
     (state: SignUpSelector) => state.signUpUser
   );
