@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 interface District {
   name_with_type: string;
   parent_code: string;
@@ -9,13 +9,13 @@ interface City {
   code: string;
   slug: string;
 }
-export default function useAddress() : [District[],City[]] {
+export default function useAddress(): [District[], City[]] {
   const [district, setDistricts] = useState<District[]>([]);
   const [city, setCitys] = useState<City[]>([]);
   // get citys data
   useEffect(() => {
     fetch(
-      "https://raw.githubusercontent.com/madnh/hanhchinhvn/master/dist/tinh_tp.json"
+      'https://raw.githubusercontent.com/madnh/hanhchinhvn/master/dist/tinh_tp.json'
     )
       .then((response) => response.json())
       .then((data) => {
@@ -37,7 +37,7 @@ export default function useAddress() : [District[],City[]] {
   // get districts data
   useEffect(() => {
     fetch(
-      "https://raw.githubusercontent.com/madnh/hanhchinhvn/master/dist/quan_huyen.json"
+      'https://raw.githubusercontent.com/madnh/hanhchinhvn/master/dist/quan_huyen.json'
     )
       .then((response) => response.json())
       .then((data) => {
@@ -59,5 +59,5 @@ export default function useAddress() : [District[],City[]] {
       })
       .catch((e) => console.log(e));
   }, []);
-  return [district,city];
+  return [district, city];
 }

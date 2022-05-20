@@ -32,6 +32,7 @@ export default function Tutor() {
         <h1>Loading...</h1>
       ) : (
         <div className="tutor__info">
+          <div className="tutor__info__main">
           <div className="tutor__info__general">
             <div className="tutor__general__cv">
               <img
@@ -94,6 +95,7 @@ export default function Tutor() {
                 tiếng Anh giao tiếp cơ bản.
               </div>
             </div>
+            <div className="tutor__info__location">
             <div className="tutor__info__detail__item">
               <div className="tutor__info__item__title">Các môn đã đăng ký</div>
               <div className="tutor__info__item__content">
@@ -126,6 +128,8 @@ export default function Tutor() {
                 </span>
               </div>
             </div>
+            </div>
+          </div>
           </div>
           <div className="tutor__info__classes">
             <div className="tutor__info__classes__title">

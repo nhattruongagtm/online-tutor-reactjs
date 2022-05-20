@@ -45,7 +45,8 @@ export default function DetailCourse() {
         .getCourseByID(Number(id))
         .then((res) => {
           if (res) {
-            setCourse(res);
+            console.log(res.data)
+            setCourse(res.data);
           }
         })
         .catch((e) => {

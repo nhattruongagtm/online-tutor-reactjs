@@ -9,20 +9,21 @@ interface DetailInfoProps {
 }
 
 const handleSaveCourse = () => {
-  courseApi
-    .saveCourse(1, 1)
-    .then((res) => {
-      console.log('add a course success!');
-      setTimeout(() => {
-        toast.success("Thêm khóa học thành công!");
-      }, 1000);
-    })
-    .catch((e) => {
-      console.log('add a course fail!');
-    });
+  // courseApi
+  //   .saveCourse(1, 1)
+  //   .then((res) => {
+  //     console.log('add a course success!');
+  //     setTimeout(() => {
+  //       toast.success("Thêm khóa học thành công!");
+  //     }, 1000);
+  //   })
+  //   .catch((e) => {
+  //     console.log('add a course fail!');
+  //   });
 };
 
 export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
+  console.log(course.photo)
   return (
     <>
       <div className="detail__course__main">
@@ -31,7 +32,7 @@ export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
             <img src={course.photo} alt="" />
           </div>
           <div className="course__intro__info">
-            <div className="course__intro__info__title">{course.name}</div>
+            <div className="course__intro__info__title">{course.title}</div>
             <div className="course__intro__info__main">
               <span className="info__main__id">MS: {course.id}</span>
               <span className="info__main__auth">
@@ -42,7 +43,7 @@ export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
               </span>
               <span className="info__main__views">
                 <i className="fas fa-eye"></i> {course.views}
-              </span>
+              </span>   
             </div>
             <div className="content__subjects">
               <div className="content__subjects__item content__subjects__item--subject">
@@ -132,7 +133,7 @@ export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
             </div>
             <div className="course__detail__item__info">
               <p>Thời lượng</p>
-              <p>Tuần {course.schedule.length} buổi (90p/buổi)</p>
+              <p>Tuần {course.schedule && course.schedule.length} buổi (90p/buổi)</p>
             </div>
           </div>
           <div className="course__detail__item">
@@ -141,7 +142,7 @@ export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
             </div>
             <div className="course__detail__item__info">
               <p>Ngày học dự kiến</p>
-              <p>{course.learningDate.toLocaleDateString()}</p>
+              {/* <p>{course.learningDate.toLocaleDateString()}</p> */}
             </div>
           </div>
           <div className="course__detail__item">
@@ -160,7 +161,7 @@ export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
           <div className="course__general__content__title">
             Chi tiết nội dung khóa học
           </div>
-          <p>{course.detail}</p>
+          <p>{course.content}</p>  
         </div>
         <div className="course__general__schedule">
           <div className="course__general__content__title">
@@ -171,7 +172,7 @@ export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
               <div className="schedule__item__date">Thứ ngày</div>
               <div className="schedule__item__time">giờ bắt đầu</div>
             </div>
-            {course.schedule.map((item, index) => (
+            {course.schedule && course.schedule.map((item, index) => (
               <div className="course__general__schedule__item" key={index}>
                 <div className="schedule__item__date">Thứ {item.day}</div>
                 <div className="schedule__item__time">{item.time}</div>

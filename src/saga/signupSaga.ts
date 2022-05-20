@@ -6,35 +6,25 @@ import {
   takeEvery,
   takeLatest,
 } from '@redux-saga/core/effects';
+import { PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import {
-  loadingSignUp,
-  requestSignUpFail,
-  requestSignUpSendMail,
-  requestSignUpSendMailFail,
-  requestSignUpSendMailSuccess,
-  requestSignUpStart,
-  requestSignUpSuccess,
-  updateProgressSignUp,
-} from '../actions/signup';
-import { authApi } from '../api/authApi';
-import {
-  REQUEST_SIGNUP,
-  REQUEST_SIGNUP_CHECK_CODE,
-  REQUEST_SIGNUP_PROFILE,
-  REQUEST_SIGNUP_START,
-} from '../constants/signup';
+
+import { authApi, ResponseData } from '../api/authApi';
+
 import {
   InitialStateSignUp,
   ISignUpInfo,
-  PayloadAction,
+  loadingSignUp,
+  requestCheckCode,
+  requestSignUp,
+  requestSignUpFail,
+  requestSignUpProfile,
+  requestSignUpSendMailSuccess,
+  requestSignUpSuccess,
   SignUpSelector,
-} from '../reducers/signup';
+  updateProgressSignUp,
+} from '../reducers/signUpSlice';
 
-interface CodeAction {
-  type: string;
-  payload: string;
-}
 function* signUp() {
   yield delay(1000);
 
@@ -42,12 +32,13 @@ function* signUp() {
     (state: SignUpSelector) => state.signUpUser
   );
   const { user } = signUpSelector;
+  console.log(user);
 
   // call api to sign up
-  yield put(requestSignUpStart());
+  // yield put(requestSignUpStart());
   try {
-    const resp: ISignUpInfo = yield call(authApi.signUp, user);
-    if (resp.id) {
+    const resp: ResponseData<ISignUpInfo> = yield call(authApi.signUp, user);
+    if (resp.data.id) {
       yield put(requestSignUpSuccess());
       yield put(updateProgressSignUp(3));
     } else {
@@ -59,48 +50,49 @@ function* signUp() {
     toast.error('Đã xảy ra lỗi, vui lòng thử lại!');
   }
 }
-function* validateCode({ payload }: CodeAction) {
+function* validateCode({ payload }: PayloadAction<string>) {
   const signUpSelector: InitialStateSignUp = yield select(
     (state: SignUpSelector) => state.signUpUser
   );
 
-  const { code } = signUpSelector;
+  const { code } = signUpSelector;  
 
   if (code === payload) {
     // go to sign up
     yield put(updateProgressSignUp(2));
 
-    yield takeLatest(REQUEST_SIGNUP_PROFILE, signUp);
+    yield takeLatest(requestSignUpProfile, signUp);
   } else {
-    toast.error('Mã xác nhận không đúng!');
+    toast.error('Mã xác nhận không đúng!');  
   }
 }
 
-function* signUpWatcher({ payload }: PayloadAction) {
+function* signUpWatcher({ payload }: PayloadAction<ISignUpInfo>) {
   yield delay(1000);
 
-  const { user } = payload;
+  const { email } = payload;
 
   // check is email exist?
   try {
-    const isExist: boolean = yield call(authApi.checkMail, user.email);
+    const isExist: boolean = yield call(authApi.checkMail, email);
     if (isExist) {
       yield toast.error('Email đã tồn tại! Vui lòng nhập email khác!');
     } else {
       toast.info('Đang gửi mail...');
       // send mail
-      yield put(requestSignUpSendMail(user.email));
+      // yield put(requestSignUpSendMail(user.email));
       try {
-        const code: string = yield call(authApi.sendMailToSignUp, user.email);
+        const code: string = yield call(authApi.sendMailToSignUp, email);
+
         yield put(requestSignUpSendMailSuccess(code));
 
-        // update progress
+        // update progressP
         yield put(updateProgressSignUp(1));
 
         // validate code
-        yield takeEvery(REQUEST_SIGNUP_CHECK_CODE, validateCode);
+        yield takeEvery(requestCheckCode, validateCode);
       } catch (e) {
-        yield put(requestSignUpSendMailFail('cannot send mail, send again!'));
+        yield put(requestSignUpFail('cannot send mail, send again!'));
       }
     }
     yield put(loadingSignUp(false));
@@ -111,6 +103,6 @@ function* signUpWatcher({ payload }: PayloadAction) {
 }
 
 function* signUpSaga() {
-  yield takeLatest(REQUEST_SIGNUP, signUpWatcher);
+  yield takeLatest(requestSignUp, signUpWatcher);
 }
 export default signUpSaga;

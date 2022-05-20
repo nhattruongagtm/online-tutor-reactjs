@@ -9,8 +9,8 @@ import { authApi } from '../../../api/authApi';
 import md5 from 'md5';
 import { ACCESS_TOKEN } from '../../../constants/auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { requestLogin } from '../../../actions/login';
-import { LoginSelector } from '../../../reducers/login';
+import { LoginSelector } from '../../../reducers/loginSlice';
+import { UserLogin, requestLogin } from '../../../reducers/loginSlice';
 interface FormInput {
   email: string;
   password: string;
@@ -22,15 +22,22 @@ interface LoginFormProps {
 export default function LoginForm({ type }: LoginFormProps) {
   const history = useHistory();
   const dispatch = useDispatch();
-  const loading = useSelector((state: LoginSelector) => state.loginUser.loading); 
+  const loading = useSelector(
+    (state: LoginSelector) => state.loginUser.loading
+  );
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormInput>();
   const handleLoginSubmit = (data: FormInput) => {
-    const user = {email: data.email,password: data.password, type};
+    const user: UserLogin = {
+      email: data.email,
+      password: data.password,
+      type,
+    };
     dispatch(requestLogin(user));
+
     // setIsLoading(true);
 
     // setTimeout(()=>{
@@ -49,7 +56,7 @@ export default function LoginForm({ type }: LoginFormProps) {
     // setIsLoading(false);
 
     // if (result.status === 200) {
-      
+
     //   localStorage.setItem(ACCESS_TOKEN,userLogin.email);
 
     //   history.push(HOME_PATH);
@@ -65,7 +72,7 @@ export default function LoginForm({ type }: LoginFormProps) {
       <div className="login__main__form__info">
         <div className="login__main__form__info__label">Email</div>
         <input
-          type="text"
+          type="text"  
           placeholder="Email"
           {...register('email', {
             required: true,
@@ -105,9 +112,7 @@ export default function LoginForm({ type }: LoginFormProps) {
       {/* <button type="submit">Đăng nhập</button> */}
       <Button variant="contained" type="submit">
         <Typography sx={{ mr: 1 }}>Đăng nhập</Typography>
-        {loading && (  
-          <CircularProgress size={20} className="cirlce__progress" />
-        )}
+        {loading && <CircularProgress size={20} className="cirlce__progress" />}
       </Button>
     </form>
   );

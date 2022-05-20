@@ -47,10 +47,10 @@ export default function TutorList() {
   };
 
   useEffect(() => {
-    const params = { _limit: limit, _page: currentPage };
+    const params = { limit: limit, page: currentPage };
     const getPostsFromApi = () => {
       const resp = tutorApi.getAllTutor(params);
-      setTutorList(resp.data);
+      setTutorList(resp.list);
     };
     // const getPost = async () => {
     //   const list = await getPostsFromApi();
@@ -149,7 +149,7 @@ export default function TutorList() {
           <div className="class__pagination__item class__pagination__item--nav">
             <i className="fas fa-chevron-right"></i>
           </div>
-        </div> */}
+        </div> */}   
       </div>
     </div>
   );

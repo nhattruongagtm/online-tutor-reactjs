@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import Dialog from '@mui/material/Dialog';
+import React, { useEffect, useState } from 'react';
 import { ChangePassword } from './ChangePassword';
-import EditProfileInfo from './EditProfileInfo';
+import { ProfileForm } from './ProfileForm';
 import './profileInfo2.scss';
 import ProfileRegister, { createData } from './ProfileRegister';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { ProfileForm } from './ProfileForm';
+import { User } from '../../../models/user';
+import useUser from '../../../hooks/useUser';
+import { userApi } from '../../../api/userApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import { loadUserInfo, UserProfile } from '../../../reducers/profileSlice';
 const rows = [
   createData('India', 'IN', 1324171354, 3287263),
   createData('China', 'CN', 1403500365, 9596961),
@@ -29,9 +29,24 @@ const rows = [
 ];
 
 export default function ProfileInfo2() {
+  const dispatch = useDispatch();
   const [isEdit, setIsEdit] = useState<boolean>();
-
   const [open, setOpen] = React.useState(false);
+  const [user] = useUser();
+  const userInfo = useSelector((state: RootState) => state.profile.userInfo);
+
+  useEffect(() => {
+    user &&
+      userApi
+        .getUserByID(user.id)
+        .then((res) => {
+          console.log(res.data)   
+          dispatch(loadUserInfo(res.data as UserProfile));
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+  }, [user]);  
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -57,14 +72,13 @@ export default function ProfileInfo2() {
               src="https://i.pinimg.com/originals/5f/12/21/5f12212ed4d94b0dafe0f18a8e55832b.jpg"
               alt=""
             />
-           
           </div>
           <div className="profile__base__body__name">
             <div className="profile__item__label">Họ tên: </div>
             <input
               type="text"
               placeholder="Nhập họ tên..."
-              value="Huỳnh Nhật Trường"
+              value={userInfo.displayName}
               disabled={!isEdit}
             />
           </div>
@@ -73,7 +87,7 @@ export default function ProfileInfo2() {
             <input
               type="email"
               placeholder="Nhập email..."
-              value="nhattruongagtm@gmail.com"
+              value={userInfo.email}
               disabled={!isEdit}
             />
           </div>
@@ -82,14 +96,13 @@ export default function ProfileInfo2() {
             <input
               type="number"
               placeholder="Nhập số điện thoại..."
-              value="0384458718"
+              value={userInfo.phone}
               disabled={!isEdit}
             />
           </div>
           <div className="profile__base__body__name">
             <div className="profile__item__label">Tỉnh/thành phố: </div>
             <select disabled={!isEdit}>
-              <option value="hcm">TP.HCM</option>
               <option value="la">Long An</option>
             </select>
           </div>
@@ -103,7 +116,7 @@ export default function ProfileInfo2() {
           <div className="profile__base__body__name">
             <div className="profile__item__label">Giới tính: </div>
             <select disabled={!isEdit}>
-              <option value={0}>Nam</option>
+              <option value={0}>{userInfo.gender === 0 ? 'Nam' : 'Nữ'}</option>
             </select>
           </div>
           <div className="profile__base__footer">
@@ -117,8 +130,8 @@ export default function ProfileInfo2() {
               aria-describedby="alert-dialog-description"
               className="profile__change__info"
             >
-              <ProfileForm onCloseForm={handleClose}/>
-              </Dialog>
+              <ProfileForm onCloseForm={handleClose} info={userInfo}/>
+            </Dialog>
           </div>
         </div>
       </div>

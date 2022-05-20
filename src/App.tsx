@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, Route, Switch, useLocation } from 'react-router';
-import { toast } from 'react-toastify';
-import { updateStatus, updateStatusForgotPassword } from './actions/signup';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Route, Switch, useLocation } from 'react-router';
 import DashBoard from './Admin/pages/Dashboard';
 import './App.scss';
 import ForgotPassword from './components/Auth/ForgotPassword/ForgotPassword';
@@ -33,19 +31,21 @@ import {
   SIGNUP_PATH,
   TUTOR_LIST_PATH,
   TUTOR_PATH,
-  WAITING_CLASS_PATH
+  WAITING_CLASS_PATH,
 } from './constants/path';
 import Cart from './pages/Cart/Cart';
 import { Checkout } from './pages/Checkout/Checkout';
 import DetailCourse from './pages/DetailCourse/DetailCourse';
 import Me from './pages/Me/Me';
 import Tutor from './pages/Tutor/Tutor';
-import { LoginSelector } from './reducers/login';
+import { updateStatus } from './reducers/forgotPasswordSlice';
+import { updateProgressSignUp } from './reducers/signUpSlice';
+import { courseApi } from './api/CourseApi';
 
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
-  
+
   // const selectorSignUpFill = useSelector((state: IInitialState) => state.signUpInfo);
 
   // useEffect(()=>{
@@ -56,17 +56,31 @@ function App() {
 
   useEffect(() => {
     if (stateList.includes(location.pathname)) {
-      dispatch(updateStatusForgotPassword(0));
+      dispatch(updateProgressSignUp(0));
       dispatch(updateStatus(0));
     }
   }, [location]);
+
+  // useEffect(() => {
+  //   courseApi
+  //     .getWaitingClass({
+  //       page: 1,
+  //       limit: 10,
+  //     })
+  //     .then((res) => {
+  //       console.log(res);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // }, []);
 
   const path = [
     `${LOGIN_PATH}`,
     `${SIGNUP_PATH}`,
     `${FORGET_PASSWORD_PATH}`,
     `${ADMIN_PATH}`,
-    `${CHECKOUT}`
+    `${CHECKOUT}`,
   ];
   const isAuth = () => {
     if (path.includes(location.pathname)) {
@@ -83,7 +97,7 @@ function App() {
 
   return (
     <div>
-      <Toast/>
+      <Toast />
       {isAdminPage ? (
         <Switch>
           <Route path="/admin">
@@ -155,10 +169,10 @@ function App() {
         // <Redirect to={HOME_PATH} />
         <Switch>
           <Route path={CHECKOUT}>
-            <Checkout/>  
+            <Checkout />
           </Route>
         </Switch>
-  )}
+      )}
     </div>
   );
 }

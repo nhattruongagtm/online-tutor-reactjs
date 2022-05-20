@@ -3,15 +3,14 @@ body {
   /* background-color: #eaebee; */
   background-color: white;
 
-  font-family: "PT Sans", sans-serif;
-  font-family: "Roboto", sans-serif;
+  font-family: 'PT Sans', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .container__app {
   width: 90%;
   padding-top: 80px;
   margin: auto;
- 
 
   & > div {
     min-height: 90vh;
@@ -19,7 +18,7 @@ body {
 }
 
 textarea {
-  font-family: "PT Sans", sans-serif;
+  font-family: 'PT Sans', sans-serif;
 }
 
 .user {
@@ -65,7 +64,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 
@@ -74,52 +73,64 @@ input[type="number"] {
   border: 1px solid red;
 }
 
-button, input, optgroup, select, textarea {
+button,
+input,
+optgroup,
+select,
+textarea {
   // margin: 0!important;
   // font-family: unset!important;
-  font-size: 14px!important;
-  line-height: 1!important;
+  font-size: 14px !important;
+  line-height: 1 !important;
 }
 
-@media screen and (max-width: 768px){
-  .container__app{
+.center {
+  padding-top: 30px;
+  text-align: center;
+  img {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container__app {
     width: 99.5%;
   }
 }
-.profile__detail__course__admin{
+.profile__detail__course__admin {
   // background-color: rgba(255, 255, 255, 0.349);
-    overflow: scroll;
-    width: 100%;
-    height: 500px;
-    min-height: 600px;
+  overflow: scroll;
+  width: 100%;
+  height: 500px;
+  min-height: 600px;
 
-    .tutor__info{
-      padding: 0px!important;
+  .tutor__info {
+    padding: 0px !important;
 
-      .tutor__info__general{
-        margin-bottom: 10px!important;
-      }
-      .tutor__info__detail{
-        gap: 10px!important;
-      }
-      .tutor__info__classes{
-        margin-top: 10px!important;
-      }
-
-      .class__list{
-        margin: 20px 0!important;
-      }
+    .tutor__info__general {
+      margin-bottom: 10px !important;
+    }
+    .tutor__info__detail {
+      gap: 10px !important;
+    }
+    .tutor__info__classes {
+      margin-top: 10px !important;
     }
 
-    &::-webkit-scrollbar{
-      width: 10px;
-      background-color: transparent;
+    .class__list {
+      margin: 20px 0 !important;
     }
-    &::-webkit-scrollbar-thumb{
-      background-color: rgba(255, 255, 255, 0.767);
-      border-radius: 10px;
-    }
-    
+  }
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.767);
+    border-radius: 10px;
+  }
 }
 
 .star {
@@ -127,4 +138,8 @@ button, input, optgroup, select, textarea {
 }
 .star--border {
   color: #e0e3ed;
+}
+
+html {
+  scroll-behavior: unset !important;
 }

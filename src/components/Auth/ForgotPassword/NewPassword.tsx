@@ -2,7 +2,6 @@ import { watch } from 'fs';
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { updateStatusForgotPassword } from '../../../actions/signup';
 import { CircularProgress } from '@material-ui/core';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,7 +9,6 @@ import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 import { authApi } from '../../../api/authApi';
 import md5 from 'md5';
-import { requestChangePassword } from '../../../actions/forgotPassword';
 interface Validation {
   title: string;
   status: boolean;
@@ -77,7 +75,9 @@ export default function NewPassword({ onGetUserID }: NewPasswordProps) {
     //     dispatch(updateStatusForgotPassword(2));
     //   });
     // }
-    dispatch(requestChangePassword(data.password));      
+
+    
+    // dispatch(requestChangePassword(data.password));      
   };
 
   return (

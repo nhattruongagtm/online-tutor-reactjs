@@ -3,14 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
-import { requestSignUpProfile } from '../../../actions/signup';
 import useAddress from '../../../hooks/useAddress';
 import { SignUpSelector } from '../../../reducers/signup';
 import '../SignUp/infoValidation.scss';
 import { Button, CircularProgress } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { requestSignUpProfile } from '../../../reducers/signUpSlice';
 
-export interface District {
+export interface District {   
   name_with_type: string;
   parent_code: string;
   slug: string;
@@ -87,14 +87,11 @@ export default function InfoValidation() {
   };
 
   const handleSignUp = async (data: FormInput) => {
-    const userSignUp = { ...user };
-    userSignUp.displayName = data.displayName;
-    userSignUp.gender = data.gender;
-    userSignUp.phone = data.phone;
-    userSignUp.district = data.district;
-    userSignUp.city = data.city;
+    const userSignUp = { ...user,...data };
 
     dispatch(requestSignUpProfile(userSignUp));
+
+    
     // const newData = {
     //   email: inputs.email,
     //   password: inputs.password,
@@ -119,7 +116,7 @@ export default function InfoValidation() {
     // else{
     //   console.log("Đã xảy ra lỗi, vui lòng thử lại!");
     // }
-    console.log(data);
+
   };
   const handleChangeCity = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setGetDistrictsByID([]);

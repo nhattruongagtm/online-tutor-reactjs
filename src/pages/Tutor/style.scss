@@ -1,9 +1,19 @@
 $main-color: rgb(240, 240, 240);
+
 .tutor__info {
   padding: 20px;
+  
+  &__main{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  
 
   &__general {
-      margin-bottom: 20px;
+      // margin-bottom: 20px;
+      min-width: 40%;
     & > div {
       padding: 20px;
     }
@@ -51,7 +61,7 @@ $main-color: rgb(240, 240, 240);
     }
     .tutor__info__follow {
       display: flex;
-      gap: 100px;
+      gap: 20px;
       &__course {
         display: flex;
         gap: 15px;
@@ -60,6 +70,7 @@ $main-color: rgb(240, 240, 240);
         border-radius: 10px;
         background-color: white;
         border: 1px solid rgb(216, 216, 216);
+        box-shadow: 10px 10px 15px 2px rgb(231, 231, 231);
         .tutor__info__course__icon {
           font-size: 30px;
         }
@@ -85,9 +96,19 @@ $main-color: rgb(240, 240, 240);
     }
   }
   &__detail {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      // display: grid;
+      // grid-template-columns: 1fr 1fr 1fr;
+      // gap: 20px;
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
       gap: 20px;
+      
+      .tutor__info__location{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
 
     &__item {
         background-color: $main-color;
@@ -114,12 +135,18 @@ $main-color: rgb(240, 240, 240);
   }
   &__classes {
     &__title{
-      font-size: 18px;
+      font-size: 20px;
       font-weight: bold;
+      text-align: center;
     }
       margin-top: 20px;
         padding: 20px;
         border-radius: 10px;
         background-color: $main-color;
+  }
+
+  .tutor__info__general,.tutor__info__detail__item,.tutor__info__classes{
+    box-shadow: 0 0 100px 5px #d3d3ff;
+    background-color: white;
   }
 }

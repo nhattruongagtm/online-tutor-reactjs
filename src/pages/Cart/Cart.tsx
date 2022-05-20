@@ -21,15 +21,15 @@ export default function Cart() {
   );
   // get saved courses (cart)
   useEffect(() => {
-    const params = {_page: currentPage, _limit: limit};
+    const params = { page: currentPage, limit: limit };
     if (localStorage.getItem(ACCESS_TOKEN)) {
       console.log('oke');
-      courseApi.getAllSavedCourse(1,params).then((res) => {
+      courseApi.getAllSavedCourse(1, params).then((res) => {
         if (res) {
           setSavedCourse(res);
         }
         console.log('res', res);
-      });   
+      });
     } else {
       console.log('no');
     }
@@ -49,7 +49,7 @@ export default function Cart() {
 
   return (
     <div className="cart">
-      <ScrollToTop/>
+      <ScrollToTop />
       <div className="waiting__class">
         <div className="waiting__class__bar">
           <div className="class__header">

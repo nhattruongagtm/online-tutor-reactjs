@@ -1,16 +1,19 @@
+import { connectRouter } from 'connected-react-router';
 import { combineReducers } from 'redux';
-import forgotReducer from './forgotPassword';
-import loginReducer from './login';
-import postReducer from './post';
-import profileReducer from './profile';
-import signUpReducer from './signup';
+import { history } from '../utils';
+import forgotPasswordSlice from './forgotPasswordSlice';
+import loginSlice from './loginSlice';
+import postSlice from './postSlice';
+import profileSlice from './profileSlice';
+import signUpSlice from './signUpSlice';
 
 const rootReducer = combineReducers({
-    signUpUser: signUpReducer,
-    forgotPassword: forgotReducer,
-    loginUser: loginReducer,
-    post: postReducer,
-    profile: profileReducer,
+    router: connectRouter(history),
+    signUpUser: signUpSlice,
+    forgotPassword: forgotPasswordSlice,
+    loginUser: loginSlice,
+    post: postSlice,
+    profile: profileSlice,
 })
 
 export default rootReducer;   

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import './profile.scss';
-interface ProfileBriefProps{
-    onToogleChangePassword: ()=>void;
+interface ProfileBriefProps {
+  onToogleChangePassword: () => void;
 }
 export default function Profile() {
-    const [isChangePassword,setIsChangePassword] = useState<boolean>(false);
-  const ProfileBrief = ({onToogleChangePassword}:ProfileBriefProps ) => {
+  const [isChangePassword, setIsChangePassword] = useState<boolean>(false);
+  const ProfileBrief = ({ onToogleChangePassword }: ProfileBriefProps) => {
     return (
       <>
         <div className="profile__admin__main__brief__avatar">
@@ -39,71 +39,65 @@ export default function Profile() {
           </div>
         </div>
         <div className="profile__admin__main__brief__more">
-          <button type="submit" onClick={()=>onToogleChangePassword()}>Đổi mật khẩu </button>
+          <button type="submit" onClick={() => onToogleChangePassword()}>
+            Đổi mật khẩu{' '}
+          </button>
         </div>
-      </>  
+      </>
     );
   };
 
   const ProfileChangePassword = () => {
     return (
-        <div className="profile__admin__changepass">
-            <div className="profile__admin__changepass__back">
-                
+      <div className="profile__admin__changepass">
+        <div className="profile__admin__changepass__back"></div>
+        <div className="profile__admin__changepass__main">
+          <div className="admin__change__title">
+            <p>Đổi mật khẩu</p>
+          </div>
+          <div className="admin__change__step1">
+            <div className="admin__change__item">
+              <p>Nhập email:</p>
+              <input type="email" />
             </div>
-            <div className="profile__admin__changepass__main">
-                <div className="admin__change__title">
-                    <p>Đổi mật khẩu</p>
-                </div>
-                <div className="admin__change__step1">
-                <div className="admin__change__item">
-                    <p>Nhập email:</p>
-                    <input type="email" />
-                </div>
-                <button type="submit">Gửi mã xác nhận</button>
-                
-                </div>
-                <div className="admin__change__step1 admin__change__step2">
-                <div className="admin__change__item">
-                    <p>Xác nhận mã:</p>
-                    <input type="text" />
-                </div>
-                <button type="submit">Tiếp tục</button>
-                
-                </div>
-                <div className="admin__change__step1 admin__change__step3">
-                <div className="admin__change__item">
-                    <p>Mật khẩu mới:</p>
-                    <input type="password" placeholder="Nhập mật khẩu"/>
-                
-                </div>
-                <div className="admin__change__item">
-                    <p>Xác nhận mật khẩu mới:</p>
-                    <input type="password" placeholder="Xác nhận mật khẩu"/>
-                
-                </div>
-                <button type="submit">Thay đổi</button>
-                
-                </div>
-                
+            <button type="submit">Gửi mã xác nhận</button>
+          </div>
+          <div className="admin__change__step1 admin__change__step2">
+            <div className="admin__change__item">
+              <p>Xác nhận mã:</p>
+              <input type="text" />
             </div>
+            <button type="submit">Tiếp tục</button>
+          </div>
+          <div className="admin__change__step1 admin__change__step3">
+            <div className="admin__change__item">
+              <p>Mật khẩu mới:</p>
+              <input type="password" placeholder="Nhập mật khẩu" />
+            </div>
+            <div className="admin__change__item">
+              <p>Xác nhận mật khẩu mới:</p>
+              <input type="password" placeholder="Xác nhận mật khẩu" />
+            </div>
+            <button type="submit">Thay đổi</button>
+          </div>
         </div>
-    )
+      </div>
+    );
   };
 
-  const handleChangePassword = () =>{
-      setIsChangePassword(!isChangePassword);
-  }
+  const handleChangePassword = () => {
+    setIsChangePassword(!isChangePassword);
+  };
 
   return (
     <Col className="profile__detail__course__admin profile__admin__page">
       <Row className="profile__admin__page__main">
         <Col sm={3} className="profile__admin__main__brief">
-            {!isChangePassword ? (
-                <ProfileBrief onToogleChangePassword={handleChangePassword}/>
-            ) : (
-                <ProfileChangePassword/>
-            )}
+          {!isChangePassword ? (
+            <ProfileBrief onToogleChangePassword={handleChangePassword} />
+          ) : (
+            <ProfileChangePassword />
+          )}
         </Col>
         <Col sm={9} className="profile__admin__main__task">
           <form action="" className="profile__admin__main__task__form">

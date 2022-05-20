@@ -10,7 +10,7 @@ import NewPassword from './NewPassword';
 import { useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import { HOME_PATH, LOGIN_PATH } from '../../../constants/path';
-import { InitialStateForgot } from '../../../reducers/forgotPassword';
+import { InitialStateForgot } from '../../../reducers/forgotPasswordSlice';
 export interface ForgotSelector {
   forgotPassword: InitialStateForgot;
 }

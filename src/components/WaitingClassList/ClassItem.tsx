@@ -11,6 +11,8 @@ export interface ClassItemProps {
 export const ClassItem = ({ classItem, onChangePage }: ClassItemProps) => {
   const history = useHistory();
 
+  console.log(classItem);
+
   const handleRedirectPage = () => {
     history.push(`${COURSE_PATH}?id=${classItem.id}`);
     if (onChangePage) {
@@ -26,12 +28,12 @@ export const ClassItem = ({ classItem, onChangePage }: ClassItemProps) => {
         <p className="uinfo__name">{classItem.createdBy}</p>
       </div>
       <div className="class__item__content">
-        <div className="content__title">{classItem.name}</div>
-        <div className="content__description">{classItem.detail}</div>
+        <div className="content__title">{classItem.title}</div>
+        <div className="content__description">{classItem.content}</div>
         <div className="content__schedule">
           <span className="content__schedule__title">Lịch học:</span>
-          {classItem.schedule.map((item, index) => (
-            <>
+          {classItem.schedule && classItem.schedule.map((item, index) => (
+            <>  
               <span className="content__schedule__item">
                 T{item.day} ({item.time})
               </span>
@@ -43,7 +45,7 @@ export const ClassItem = ({ classItem, onChangePage }: ClassItemProps) => {
             {classItem.tuition}đ <span>/tháng</span>
           </div>
           <div className="content__price__fee">
-            {classItem.fee}đ <span>/phí nhận lớp</span>
+            {classItem.fee}đ <span>/phí nhận lớp</span> 
           </div>
         </div>
         <div className="content__offers">

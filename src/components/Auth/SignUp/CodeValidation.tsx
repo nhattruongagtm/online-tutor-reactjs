@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import * as yup from 'yup';
-import { requestSignUp, requestSignUpCheckCode } from '../../../actions/signup';
 import { InitialStateSignUp, SignUpSelector } from '../../../reducers/signup';
+import { requestCheckCode, requestSignUp } from '../../../reducers/signUpSlice';
 
 const ValidationMain = styled.div`
   /* background-color: grey; */
@@ -117,7 +117,7 @@ export default function CodeValidation() {
 
   const handleSendCode = (data: CodeValidation) => {
     setMessage('');
-    dispatch(requestSignUpCheckCode(data.code));  
+    dispatch(requestCheckCode(data.code));  
   };
   const handleReSendMail = () =>{
     dispatch(requestSignUp(signUpUser));  

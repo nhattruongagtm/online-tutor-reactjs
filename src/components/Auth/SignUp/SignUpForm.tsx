@@ -5,25 +5,25 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
-import { requestSignUp, requestSignUpSendMail } from '../../../actions/signup';
 import { InitialStateSignUp } from '../../../reducers/signup';
+import { requestSignUp } from '../../../reducers/signUpSlice';
 interface Validation {
   title: string;
   status: boolean;
 }
 interface FormInput {
-  email: string; 
+  email: string;
   password: string;
   repassword: string;
 }
 interface SignUpFormProps {
   type: number;
 }
-export interface SignUpSelector{
+export interface SignUpSelector {
   signUpUser: InitialStateSignUp;
 }
 
-export default function SignUpForm({ type : signUpType }: SignUpFormProps) {   
+export default function SignUpForm({ type: signUpType }: SignUpFormProps) {
   // loading
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -47,11 +47,12 @@ export default function SignUpForm({ type : signUpType }: SignUpFormProps) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormInput>(formOptions);  
+  } = useForm<FormInput>(formOptions);
   const dispatch = useDispatch();
-  const signUpSelector = useSelector((state: SignUpSelector) =>state.signUpUser);
-  const {loading} = signUpSelector;
-
+  const signUpSelector = useSelector(
+    (state: SignUpSelector) => state.signUpUser
+  );
+  const { loading } = signUpSelector;
 
   const validationList: Validation[] = [
     {
@@ -74,48 +75,50 @@ export default function SignUpForm({ type : signUpType }: SignUpFormProps) {
   // const inputs = useSelector((state: IInitialState) => state.signUpInfo);
 
   const handleSubmitSignup = async (data: FormInput) => {
-    dispatch(requestSignUp({
-      displayName: '',   
-      password: md5(data.password),  
-      phone: '',
-      district: '',
-      city: '',
-      email: data.email,
-      gender: 0,   
-      type: signUpType,
-    }));
+    dispatch(
+      requestSignUp({
+        displayName: '',
+        password: md5(data.password),
+        phone: '',
+        district: '',
+        city: '',
+        email: data.email,
+        gender: 0,
+        type: signUpType,
+      })
+    );
 
-  //   setIsLoading(true);
+    //   setIsLoading(true);
 
-  //   authApi
-  //     .checkMail(data.email)
-  //     .then((res) => {
-  //       console.log(res);
-  //       if (res === true) {
-  //         setIsLoading(false);
-  //         alert('Email tồn tại! Vui lòng nhập email khác!');
-  //       } else {
-  //         // call api send mail after that forward to step 2
-  //         authApi.sendMailToSignUp(data.email).then((res) => {
-  //           if (res) {
-  //             setIsLoading(false);
-  //             // dispatch(
-  //             //   fillStep1({
-  //             //     email: data.email,
-  //             //     password: md5(data.password),
-  //             //     type: Number(type),
-  //             //   })
-  //             //   );
-  //             //   dispatch(fillStep2({ code: res }));
-  //             //   dispatch(updateStatus(1));
-  //           }
-  //         });
-  //       }
-  //     })
-  //     .catch((e) => {
-  //       console.log(e);
-  //       setIsLoading(true);
-  //     });
+    //   authApi
+    //     .checkMail(data.email)
+    //     .then((res) => {
+    //       console.log(res);
+    //       if (res === true) {
+    //         setIsLoading(false);
+    //         alert('Email tồn tại! Vui lòng nhập email khác!');
+    //       } else {
+    //         // call api send mail after that forward to step 2
+    //         authApi.sendMailToSignUp(data.email).then((res) => {
+    //           if (res) {
+    //             setIsLoading(false);
+    //             // dispatch(
+    //             //   fillStep1({
+    //             //     email: data.email,
+    //             //     password: md5(data.password),
+    //             //     type: Number(type),
+    //             //   })
+    //             //   );
+    //             //   dispatch(fillStep2({ code: res }));
+    //             //   dispatch(updateStatus(1));
+    //           }
+    //         });
+    //       }
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //       setIsLoading(true);
+    //     });
   };
 
   const [checkValidation, setCheckValidation] = useState(validationList);
@@ -141,7 +144,7 @@ export default function SignUpForm({ type : signUpType }: SignUpFormProps) {
           className={
             errors.password
               ? 'signup__form__item validate__error'
-              : 'signup__form__item'  
+              : 'signup__form__item'
           }
         >
           <div className="signup__form__item__label">

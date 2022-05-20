@@ -1,9 +1,8 @@
 import { AxiosResponse } from 'axios';
 import md5 from 'md5';
 import Login from '../components/Auth/Login/Login';
-import { UserAuth, UserLogin } from '../reducers/login';
-import { ISignUpInfo } from '../reducers/signup';
-import signUpInfoReducer from '../reducers/signUpInfo';
+import { UserAuth } from '../reducers/loginSlice';
+import { ISignUpInfo } from '../reducers/signUpSlice';
 import axiosClient from './axiosClient';
 interface SignUpInput {
   email: string;
@@ -38,7 +37,7 @@ export const authApi = {
 
   sendMailToSignUp(email: string) {
     const url = `/send-mail`;
-
+  
     const params = {
       email: email,
     };
@@ -59,7 +58,7 @@ export const authApi = {
   sendMailToForgot(email: string): Promise<ForgotData> {
     const url = `/send-mail-to-forgot/${email}`;
 
-    return axiosClient.post(url);
+    return axiosClient.post(url);  
   },
   changePassword(userID: number, newPassword: string): Promise<boolean> {
     const url = `/users/${userID}`;

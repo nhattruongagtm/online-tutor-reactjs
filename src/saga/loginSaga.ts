@@ -1,20 +1,19 @@
-import { call, delay, put, take, takeLatest } from '@redux-saga/core/effects';
-import { UserAuth, UserLogin } from '../reducers/login';
+import { call, delay, put, takeLatest } from '@redux-saga/core/effects';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { push } from 'connected-react-router';
+import md5 from 'md5';
+import { toast } from 'react-toastify';
+import { HOME_PATH } from '.././constants/path';
 import { authApi, ResponseData } from '../api/authApi';
-import {
-  REQUEST_LOGIN,
-  REQUEST_LOGIN_SUCCESS,
-  REQUEST_LOGIN_FAIL,
-} from '../constants/login';
+import { ERROR_EXCUTE } from '../constants/notify';
 import {
   requestLogin,
   requestLoginFail,
   requestLoginSuccess,
-} from '../actions/login';
-import md5 from 'md5';
-import { AxiosError } from 'axios';
-import {ERROR_EXCUTE} from '../constants/notify'
-import { toast } from 'react-toastify';
+  UserAuth,
+  UserLogin,
+} from '../reducers/loginSlice';
+
 interface Action {
   type: string;
   payload: User;
@@ -28,9 +27,8 @@ interface LoginInput {
   type: number;
 }
 
-function* loginWatcher(action: Action) {
+function* loginWatcher({payload : user}: PayloadAction<LoginInput>) {
   yield delay(500);
-  const { user } = action.payload;
   user.password = md5(user.password);
 
   try {
@@ -38,23 +36,23 @@ function* loginWatcher(action: Action) {
     if (data.data) {
       toast.success('Đăng nhập thành công!');
       yield put(requestLoginSuccess(data.data));
-    } else{
-     if (data.status === 'WRONG') {
-      toast.error('Sai mật khẩu! Vui lòng thử lại!');
-    } else if (data.status === 'CHANGE') {
-      toast.error('Vui lòng chuyển đổi tài khoản!');
+      yield put(push(HOME_PATH));
     } else {
-      toast.error('Email hoặc mật khẩu không chính xác!');
+      if (data.status === 'WRONG') {
+        toast.error('Sai mật khẩu! Vui lòng thử lại!');
+      } else if (data.status === 'CHANGE') {
+        toast.error('Vui lòng chuyển đổi tài khoản!');
+      } else {
+        toast.error('Email hoặc mật khẩu không chính xác!');
+      }
+      yield put(requestLoginFail());
     }
-    yield put(requestLoginFail("error"));
-  }
-      
   } catch (error: any) {
-    yield put(requestLoginFail(error));
+    yield put(requestLoginFail());
     toast.error(ERROR_EXCUTE);
   }
 }
-
+  
 export default function* loginSaga() {
-  yield takeLatest(REQUEST_LOGIN, loginWatcher);
+  yield takeLatest(requestLogin, loginWatcher);
 }

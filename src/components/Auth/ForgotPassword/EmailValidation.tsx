@@ -4,9 +4,8 @@ import Button from '@mui/material/Button';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { requestForgotPassword, requestForgotPasswordCheckCode } from '../../../actions/forgotPassword';
-import { updateStatusForgotPassword } from '../../../actions/signup';
 import { authApi } from '../../../api/authApi';
+import { requestForgotCheckCode, requestForgotPassword } from '../../../reducers/forgotPasswordSlice';
 import '../SignUp/signup.scss';
 import { ForgotSelector } from './ForgotPassword';
 interface SendMailProps {
@@ -47,7 +46,7 @@ export default function EmailValidation({ sendMail }: SendMailProps) {
     dispatch(requestForgotPassword(data.email));
   };
   const handleSendCode = (data: FormValue) => {
-    dispatch(requestForgotPasswordCheckCode(data.code));
+    dispatch(requestForgotCheckCode(data.code));
     
   //   setIsSendCode(true);
 

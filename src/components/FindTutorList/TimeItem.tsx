@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { deleteTimeList, updateTimeList, addTimeList } from '../../actions/post';
+import { deleteTimeList, updateTimeList } from '../../reducers/postSlice';
 import { LearningTime } from './FindTutorList';
 
 export interface TimeItemProps {
   timeProps: LearningTime;
 }
-export interface TimeInput{
+export interface TimeInput {
   date: number;
   time: number;
 }
 export const TimeItem = ({ timeProps }: TimeItemProps) => {
   const dispatch = useDispatch();
   const { day, time, id } = timeProps;
-  const [dateTime,setDateTime] = useState<LearningTime>({
+  const [dateTime, setDateTime] = useState<LearningTime>({
     id: id,
     day: day,
     time: time,
@@ -35,20 +35,23 @@ export const TimeItem = ({ timeProps }: TimeItemProps) => {
     return fullTime;
   };
 
-
   const handleDelete = (timeItem: LearningTime) => {
     dispatch(deleteTimeList(timeItem));
   };
   const handleUpdateDateTime = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const name = e.target.name;
     const value = e.target.value;
-    const newDateTime = {id, day: name === 'day' ? Number(value) : dateTime.day, time: name === 'time' ? Number(value) : dateTime.time};
-    dispatch(updateTimeList(newDateTime))
+    const newDateTime = {
+      id,
+      day: name === 'day' ? Number(value) : dateTime.day,
+      time: name === 'time' ? Number(value) : dateTime.time,
+    };
+    dispatch(updateTimeList(newDateTime));
     setDateTime({
       ...dateTime,
       [name]: Number(value),
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -72,11 +75,7 @@ export const TimeItem = ({ timeProps }: TimeItemProps) => {
         </select>
       </div>
       <div className="tutors__input__item">
-        <select
-          name="time"
-          id=""
-          onChange={handleUpdateDateTime}
-        >
+        <select name="time" id="" onChange={handleUpdateDateTime}>
           {times.map((item) => {
             return (
               <option value={item} key={item} selected={time === item}>

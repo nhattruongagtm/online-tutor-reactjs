@@ -3,9 +3,15 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import useAddress from '../../../hooks/useAddress';
+import { User } from '../../../models/user';
+import { userApi } from '../../../api/userApi';
 import { District } from '../../../components/Auth/SignUp/InfoValidation';
+import useUser from '../../../hooks/useUser';
+import { UserProfile } from '../../../reducers/profileSlice';
+import { useDispatch } from 'react-redux';
 interface ProfileFormProps {
   onCloseForm: () => void;
+  info: UserProfile;
 }
 interface ProfileForm {
   name: string;
@@ -15,41 +21,51 @@ interface ProfileForm {
   city: string;
   gender: number;
 }
-export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
-  const [user, setUser] = useState<ProfileForm>({
-    name: 'Huỳnh Nhật Trường',
-    email: 'nhattruongagtm@gmail.com',
-    phone: '0384459719',
-    district: 'Huyện Đức Hòa',
-    city: 'Tỉnh Long An',
-    gender: 0,
-  });
+export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
+  const [user, setUser] = useState<User>();
+  const dispatch = useDispatch();
   const [district, city] = useAddress();
-  const [chooseCity, setChooseCity] = useState<string>(user.city);
+  const [chooseCity, setChooseCity] = useState<string>(user ? user.city : '');
   const [districts, setDistricts] = useState<District[]>();
+  const [userInfo, setInfo] = useState<UserProfile>(info);
 
   const getCityID = (name: string) => {
     return city.find((item) => item.name_with_type === name)?.code;
   };
 
+  const [u] = useUser();
+
+  useEffect(() => {
+    u &&
+      userApi
+        .getUserByID(u.id)
+        .then((res) => {
+          setUser(res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+  }, []);
+
   const [avatar, setAvatar] = useState<string>(
     'https://i.pinimg.com/originals/5f/12/21/5f12212ed4d94b0dafe0f18a8e55832b.jpg'
   );
   const validationSchema = yup.object().shape({
-    name: yup.string().required(),
+    name: yup.string().required().default(info.displayName),
     phone: yup
       .string()
       .required('Vui lòng nhập sô điện thoại!')
       .matches(/^[0-9]+$/, 'Vui lòng nhập số điện thoại!')
       .max(11)
-      .min(10),
-    email: yup.string().required(),
+      .min(10)
+      .default(info.phone),
+    email: yup.string().required().default(info.email),
     district: yup.string().required(),
     city: yup.string().required(),
   });
-  const formOptions = { resolver: yupResolver(validationSchema) };
+  const formOptions = {  defaultValues: validationSchema.cast({}),resolver: yupResolver(validationSchema) };
 
-  const {
+  const {  
     register,
     handleSubmit,
     reset,
@@ -87,7 +103,7 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
   const handleChangeInfo = (data: ProfileForm) => {
     console.log(data);
   };
-  console.log(errors);
+  // console.log(errors);
 
   return (
     <form
@@ -115,7 +131,6 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
           <input
             type="text"
             placeholder="Nhập họ tên..."
-            // value="Huỳnh Nhật Trường"
             {...register('name')}
           />
         </div>
@@ -143,6 +158,7 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
           >
             <option value="city">Chọn thành phố</option>
             {city &&
+              user &&
               city.map((item) => (
                 <option
                   key={item.slug}
@@ -159,6 +175,7 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
           <select {...register('district')}>
             <option value="district">Chọn quận/huyện</option>
             {districts &&
+              user &&
               districts.map((district) => (
                 <option
                   key={district.slug}
@@ -174,7 +191,7 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
         </div>
         <div className="profile__base__body__name">
           <div className="profile__item__label">Giới tính: </div>
-          <select {...register('gender')}>
+          <select {...register('gender')} defaultValue={info.gender}>
             <option value={0}>Nam</option>
             <option value={1}>Nữ</option>
             <option value={2}>Khác</option>

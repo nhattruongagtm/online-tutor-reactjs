@@ -71,7 +71,7 @@ export const Checkout = (props: Props) => {
       .getCourseByID(Number(id))
       .then((res) => {
         if (res) {
-          setCourse(res);
+          setCourse(res.data);
         }
       })
       .catch((e) => {

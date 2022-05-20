@@ -15,7 +15,6 @@ export default function Home() {
     move &&
       document.addEventListener('scroll', () => {
         const pos = window.scrollY;
-        console.log(pos);
         if (pos > 200) {
           move.classList.add('display');
         } else {
@@ -89,7 +88,6 @@ export default function Home() {
       <div className="move-top" id="move-top">
         <i className="fas fa-arrow-up"></i>
       </div>
-    
     </div>
   );
 }
