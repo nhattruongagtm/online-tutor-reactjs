@@ -1,0 +1,51 @@
+.filter__options{
+    display: flex;
+    margin: 20px 5px;
+
+    .ant-input{
+        height: 100%;
+    }
+}
+.ant-table-thead{
+    tr{
+        th{
+            color: white;
+            background-color: rgb(47, 155, 255);
+        }
+
+    }
+}
+.ant-table-tbody{
+    tr:nth-child(even){
+        td{
+            background-color: rgb(235, 235, 235);
+        }
+    }
+}
+.learning__courses__list{
+    height: calc(100%  - 48px);
+    display: flex;
+    flex-direction: column;
+
+    .ant-table-wrapper{
+        flex-grow: 1;
+
+        & > div,.ant-spin-container{
+            height: 100%;
+        }
+ 
+        .ant-spin-container{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .ant-pagination{
+            display: flex;
+            justify-content: center;
+        }
+        .ant-table-pagination.ant-pagination{
+            margin: 16px 0 0 0!important;
+        }
+    }
+}

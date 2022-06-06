@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { toast } from 'react-toastify';
 import { courseApi } from '../../api/CourseApi';
+import Loading from '../../components/Common/Loading';
 import { ClassItem } from '../../components/WaitingClassList/ClassItem';
 import { ClassItem as IClassItem } from '../../components/WaitingClassList/WaitingClassList';
 import '../DetailCourse/style.scss';
@@ -45,7 +46,7 @@ export default function DetailCourse() {
         .getCourseByID(Number(id))
         .then((res) => {
           if (res) {
-            console.log(res.data)
+            console.log(res.data);
             setCourse(res.data);
           }
         })
@@ -79,7 +80,7 @@ export default function DetailCourse() {
   return (
     <div className="container__detail__course">
       {!course ? (
-        <>{isFail ? <h1>Không tồn tại khóa học!</h1> : <h1>Loading...</h1>}</>
+        <>{isFail ? <h1>Không tồn tại khóa học!</h1> : <Loading />}</>
       ) : (
         <div className="detail__course">
           <DetailInfo course={course} isRegister={false} />

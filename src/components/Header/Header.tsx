@@ -17,22 +17,23 @@ import '../Header/header.scss';
 import { ACCESS_TOKEN } from '../../constants/auth';
 import {ClassItem} from '../../components/WaitingClassList/WaitingClassList';
 import {courseApi} from '../../api/CourseApi';
+import useUser from '../../hooks/useUser';
 interface IRoutes {
   path: string;
   title: string;
 }
 export default function Header() {
   const [savedCourse,setSavedCourse] = useState<ClassItem[]>();
+  const [user] = useUser();
   // get saved courses (cart)
   useEffect(()=>{
-    if(localStorage.getItem(ACCESS_TOKEN)){
-      courseApi.getAllSavedCourse(1,null).then(res=>{
+    if(user){
+      courseApi.getAllSavedCourse(user.id,null).then(res=>{
         if(res){
           setSavedCourse(res);
         }
       })
     }
-
   },[]);
 
   const history = useHistory();
@@ -102,7 +103,8 @@ export default function Header() {
             className="header__auth__cart"
             onClick={() => history.push(CART_PATH)}
           >
-            <i className="fas fa-shopping-cart"></i>
+            {/* <i className="fas fa-shopping-cart"></i> */}
+            <i className="fa-solid fa-book"></i>
             <div className="header__auth__cart__number">{savedCourse?.length}</div>
           </div>
 
@@ -115,11 +117,11 @@ export default function Header() {
             >
               <div className="header__auth__user__img">
                 <img
-                  src="https://i.pinimg.com/originals/5f/12/21/5f12212ed4d94b0dafe0f18a8e55832b.jpg"
+                  src={user?.photoUrl}
                   alt=""
                 />
               </div>
-              <div className="header__auth__user__name">Nhật Trường</div>
+              <div className="header__auth__user__name">{user?.displayName}</div>
             </div>
           ) : (
 

@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User, UserInfo } from '../models/user';
+import { UserAuth } from './loginSlice';
 export interface Profile {
   loading: boolean;
   userInfo: UserProfile;
 }
 
-export type UserProfile = User & UserInfo;
+export type UserProfile = UserAuth & UserInfo;
 
 const initialState: Profile = {
   loading: false,
@@ -20,6 +21,7 @@ const initialState: Profile = {
     introduce: '',
     phone: '',
     type: -1,
+    photoUrl: ''
   },
 };
 

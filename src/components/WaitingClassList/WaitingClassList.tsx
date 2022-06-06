@@ -6,6 +6,7 @@ import { COURSE_PATH } from '../../constants/path';
 import '../WaitingClassList/style.scss';
 import { ClassItem } from './ClassItem';
 import { SelectedItem } from '../TutorList/TutorList';
+import Loading from '../Common/Loading';
 interface LearningDate {
   day: number;
   time: number;
@@ -38,7 +39,7 @@ export default function WaitingClassList() {
   const [isToogleFilter, setIsToogleFilter] = useState<boolean>(false);
   const [courses, setCourses] = useState<ClassItem[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalRows, setTotalRows] = useState<number>(100);
+  const [totalRows, setTotalRows] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [pageCount, setPageCount] = useState<number>(
     Math.ceil(totalRows / limit)
@@ -55,6 +56,9 @@ export default function WaitingClassList() {
       .getWaitingClass(params)
       .then((res) => {
         console.log(res);
+        const totalItems = res.data.totalItems;
+        setTotalRows(totalItems);
+        setPageCount(Math.ceil(totalItems / limit));
         setCourses(res.data.list);
         setIsLoading(false);
       })
@@ -148,8 +152,8 @@ export default function WaitingClassList() {
             // renderOnZeroPageCount={null}
           />
         </div>
-      )}
-      {isLoading && <h1 className='center'><img src="./imgs/loading.gif" alt="" /></h1>}
+      )}     
+      {isLoading && <Loading />}
     </div>
   );
 }

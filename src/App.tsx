@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import 'antd/dist/antd.css';
 import { useDispatch } from 'react-redux';
 import { Route, Switch, useLocation } from 'react-router';
 import DashBoard from './Admin/pages/Dashboard';

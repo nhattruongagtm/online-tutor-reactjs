@@ -69,5 +69,9 @@ export const authApi = {
     const url = `/profile/${user.id}`;
 
     return axiosClient.put(url,user);
+  },
+  loginAPI(id: string):Promise<ResponseData<UserAuth>>{
+    const url = `/loginAPI/${id}`
+    return axiosClient.post(url);
   }
 };

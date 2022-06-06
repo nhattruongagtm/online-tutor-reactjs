@@ -191,7 +191,7 @@ export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
         </div>
         <div className="profile__base__body__name">
           <div className="profile__item__label">Giới tính: </div>
-          <select {...register('gender')} defaultValue={info.gender}>
+          <select {...register('gender')} defaultValue={info.gender ? info.gender : -1}>
             <option value={0}>Nam</option>
             <option value={1}>Nữ</option>
             <option value={2}>Khác</option>

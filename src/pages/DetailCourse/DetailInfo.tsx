@@ -2,6 +2,7 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import { courseApi } from '../../api/CourseApi';
 import { ClassItem } from '../../components/WaitingClassList/WaitingClassList';
+import useUser from '../../hooks/useUser';
 
 interface DetailInfoProps {
   course: ClassItem;
@@ -23,7 +24,8 @@ const handleSaveCourse = () => {
 };
 
 export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
-  console.log(course.photo)
+  console.log(course.photo);
+  const [user] = useUser();
   return (
     <>
       <div className="detail__course__main">
@@ -43,7 +45,7 @@ export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
               </span>
               <span className="info__main__views">
                 <i className="fas fa-eye"></i> {course.views}
-              </span>   
+              </span>
             </div>
             <div className="content__subjects">
               <div className="content__subjects__item content__subjects__item--subject">
@@ -58,11 +60,15 @@ export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
             </div>
           </div>
           {!isRegister && (
-              <div className="course__intro__btn">
-              <button className="course__intro__btn--receive">Nhận lớp</button>
+            <div className="course__intro__btn">
+              {user && user.type === 1 && (
+                <button className="course__intro__btn--receive">
+                  Nhận lớp
+                </button>
+              )}
               <button
                 className="course__intro__btn--save"
-                  onClick={handleSaveCourse}
+                onClick={handleSaveCourse}
               >
                 Lưu
               </button>
@@ -133,7 +139,9 @@ export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
             </div>
             <div className="course__detail__item__info">
               <p>Thời lượng</p>
-              <p>Tuần {course.schedule && course.schedule.length} buổi (90p/buổi)</p>
+              <p>
+                Tuần {course.schedule && course.schedule.length} buổi (90p/buổi)
+              </p>
             </div>
           </div>
           <div className="course__detail__item">
@@ -161,7 +169,7 @@ export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
           <div className="course__general__content__title">
             Chi tiết nội dung khóa học
           </div>
-          <p>{course.content}</p>  
+          <p>{course.content}</p>
         </div>
         <div className="course__general__schedule">
           <div className="course__general__content__title">
@@ -172,12 +180,13 @@ export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
               <div className="schedule__item__date">Thứ ngày</div>
               <div className="schedule__item__time">giờ bắt đầu</div>
             </div>
-            {course.schedule && course.schedule.map((item, index) => (
-              <div className="course__general__schedule__item" key={index}>
-                <div className="schedule__item__date">Thứ {item.day}</div>
-                <div className="schedule__item__time">{item.time}</div>
-              </div>
-            ))}
+            {course.schedule &&
+              course.schedule.map((item, index) => (
+                <div className="course__general__schedule__item" key={index}>
+                  <div className="schedule__item__date">Thứ {item.day}</div>
+                  <div className="schedule__item__time">{item.time}</div>
+                </div>
+              ))}
           </div>
         </div>
       </div>

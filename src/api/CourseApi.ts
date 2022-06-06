@@ -16,7 +16,6 @@ export const courseApi = {
   getCourseByID(id: number): Promise<ResponseData<ClassItem>> {
     const url = `/post/${id}`;
     return axiosClient.get(url);
-  
   },
   // saveCourse(userID: number, courseID: number): Promise<ClassItem> {
   //   const url = '';
@@ -25,7 +24,7 @@ export const courseApi = {
   //   return this.getCourseByID(234);
   // },
   getAllSavedCourse(
-    userID: number,
+    userID: number | string,
     params: Params | null
   ): Promise<ClassItem[]> {
     const url = `courses/${userID}`;
@@ -124,7 +123,7 @@ export const courseApi = {
       }
     });
   },
-  getFinishedCoursesByCourseID(id: number): Promise<ClassItem[]> {
+  getFinishedCoursesByCourseID(id: number | string): Promise<ClassItem[]> {
     return new Promise((resolve, reject) => {
       // const list = [
       //   // {
@@ -206,13 +205,13 @@ export const courseApi = {
       //   },
       // ];
 
-      const list:ClassItem[] = []
+      const list: ClassItem[] = [];
 
       if (list && id === 234) {
         resolve(list);
       } else {
         reject('no courses');
-      }  
+      }
     });
   },
   getWaitingClass(params: Params): Promise<ResponseData<Resp<ClassItem>>> {
