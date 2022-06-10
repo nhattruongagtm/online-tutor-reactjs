@@ -5,7 +5,11 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { authApi } from '../../../api/authApi';
-import { requestForgotCheckCode, requestForgotPassword } from '../../../reducers/forgotPasswordSlice';
+import {
+  requestForgotCheckCode,
+  requestForgotPassword,
+} from '../../../reducers/forgotPasswordSlice';
+import { RootState } from '../../../store';
 import '../SignUp/signup.scss';
 import { ForgotSelector } from './ForgotPassword';
 interface SendMailProps {
@@ -15,18 +19,22 @@ interface FormValue {
   email: string;
   code: string;
 }
-interface ResultValue{
+interface ResultValue {
   userID: string;
   code: string;
 }
 export default function EmailValidation({ sendMail }: SendMailProps) {
-  const [status, setStatus] = useState<boolean>(false);
+  const status = useSelector(
+    (state: RootState) => state.forgotPassword.isCheckForm
+  );
   const [isSendMail, setIsSendMail] = useState<boolean>();
   const [isSendCode, setIsSendCode] = useState<boolean>();
   const [result, setResult] = useState<ResultValue>();
   const dispatch = useDispatch();
-  const forgotPasswordSelector = useSelector((state : ForgotSelector)=> state.forgotPassword);
-  const {loading} = forgotPasswordSelector;
+  const forgotPasswordSelector = useSelector(
+    (state: ForgotSelector) => state.forgotPassword
+  );
+  const { loading } = forgotPasswordSelector;
   const {
     register,
     handleSubmit,
@@ -34,32 +42,10 @@ export default function EmailValidation({ sendMail }: SendMailProps) {
   } = useForm<FormValue>();
 
   const handleSendMail = async (data: FormValue) => {
-
-    // const result = await authApi.sendMailToForgot(data.email);
-
-    // if (result.code) {
-    //   sendMail(result.userID)
-    //   setResult(result);
-    //   setStatus(true);
-    // }
-
     dispatch(requestForgotPassword(data.email));
   };
   const handleSendCode = (data: FormValue) => {
     dispatch(requestForgotCheckCode(data.code));
-    
-  //   setIsSendCode(true);
-
-  //  if(result){
-  //   if(data.code === result.code){
-  //     dispatch(updateStatusForgotPassword(1));
-  //   }
-  //   else{
-  //     console.log("Mã xác nhận không đúng, vui lòng thử lại!");
-  //   }
-  //  }
-  //   setIsSendCode(false);
-
   };
   return (
     <div className="signup__main__wrap__form">
@@ -79,7 +65,7 @@ export default function EmailValidation({ sendMail }: SendMailProps) {
           </div>
           <div className="signup__form__item signup__form__item--validate">
             <label className="signup__form__item__label "></label>
-            {errors.email?.type === 'pattern' && <span>Email không đúng!</span>}   
+            {errors.email?.type === 'pattern' && <span>Email không đúng!</span>}
             {errors.email?.type === 'required' && (
               <span>Vui lòng nhập email!</span>
             )}
@@ -100,7 +86,7 @@ export default function EmailValidation({ sendMail }: SendMailProps) {
               <Typography sx={{ mr: 1 }}>Gửi mã </Typography>
               {loading && (
                 <CircularProgress size={20} className="cirlce__progress" />
-              )}   
+              )}
             </Button>
           </div>
         </form>
@@ -109,7 +95,7 @@ export default function EmailValidation({ sendMail }: SendMailProps) {
           <div className="signup__form__item 22">
             <div className="signup__form__item__label ">Mã xác nhận:</div>
             <input
-              type="number"
+              type="text"
               placeholder="Nhập mã xác nhận"
               {...register('code')}
             />

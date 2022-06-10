@@ -1,4 +1,4 @@
-.container__detail__course{
+.container__detail__course {
   min-height: 90vh;
 }
 .detail__course {
@@ -66,7 +66,7 @@
       .course__intro__btn {
         width: 250px;
         display: flex;
-        justify-content: space-between;
+        justify-content: right  ;
         gap: 10%;
         button {
           width: 45%;
@@ -222,15 +222,16 @@
       }
     }
   }
-  &__concern{
+  &__concern {
     margin-top: 40px;
-    &__title,&__btn{
+    &__title,
+    &__btn {
       font-size: 22px;
       text-transform: uppercase;
       text-align: center;
       font-weight: bold;
     }
-    &__btn{
+    &__btn {
       width: fit-content;
       margin: auto;
       padding: 10px 15px;
@@ -239,14 +240,13 @@
       cursor: pointer;
       font-size: 18px;
       transition: 0.3s;
-      &:hover{
+      &:hover {
         transform: rotateX(10deg);
         box-shadow: 0 5px 5px 2px rgba(0, 197, 154, 0.432);
       }
-
     }
   }
-  .detail__tutor__cocern{
+  .detail__tutor__cocern {
     margin-top: 40px;
   }
 }
@@ -269,10 +269,9 @@
     cursor: pointer;
     transition: 0.3s;
 
-    &:hover{
+    &:hover {
       border: 1px solid #636363;
       box-shadow: 0px 5px 5px 5px rgba(233, 233, 233, 0.521);
-
     }
 
     &__uinfo {
@@ -397,13 +396,19 @@
   }
 }
 
-.class__list__tutors{
+.class__list__tutors {
   display: flex;
   justify-content: center;
-  margin: 20px 0 ;
+  margin: 20px 0;
   gap: 10px;
 
-  & > div{
+  & > div {
     width: 310px;
   }
+}
+.load__more {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }

@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 import { authApi } from '../../../api/authApi';
 import md5 from 'md5';
+import { requestForgotChangePassword } from '../../../reducers/forgotPasswordSlice';
 interface Validation {
   title: string;
   status: boolean;
@@ -67,17 +68,7 @@ export default function NewPassword({ onGetUserID }: NewPasswordProps) {
   const dispatch = useDispatch();
 
   const handleChangePassword = (data: FormInput) => {
-    // setIsLoading(true);
-
-    // if (onGetUserID) {
-    //   authApi.changePassword(onGetUserID, md5(data.password)).then((res) => {
-    //     setIsLoading(false);
-    //     dispatch(updateStatusForgotPassword(2));
-    //   });
-    // }
-
-    
-    // dispatch(requestChangePassword(data.password));      
+    dispatch(requestForgotChangePassword(data.password));      
   };
 
   return (

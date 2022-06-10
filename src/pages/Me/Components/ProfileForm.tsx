@@ -9,6 +9,7 @@ import { District } from '../../../components/Auth/SignUp/InfoValidation';
 import useUser from '../../../hooks/useUser';
 import { UserProfile } from '../../../reducers/profileSlice';
 import { useDispatch } from 'react-redux';
+import { UserAuth } from '../../../reducers/loginSlice';
 interface ProfileFormProps {
   onCloseForm: () => void;
   info: UserProfile;
@@ -22,16 +23,18 @@ interface ProfileForm {
   gender: number;
 }
 export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<UserAuth>();
   const dispatch = useDispatch();
   const [district, city] = useAddress();
-  const [chooseCity, setChooseCity] = useState<string>(user ? user.city : '');
+  const [chooseCity, setChooseCity] = useState<string>(
+    user && user.city ? user.city : ''
+  );   
   const [districts, setDistricts] = useState<District[]>();
   const [userInfo, setInfo] = useState<UserProfile>(info);
 
   const getCityID = (name: string) => {
     return city.find((item) => item.name_with_type === name)?.code;
-  };
+  };  
 
   const [u] = useUser();
 
@@ -63,9 +66,12 @@ export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
     district: yup.string().required(),
     city: yup.string().required(),
   });
-  const formOptions = {  defaultValues: validationSchema.cast({}),resolver: yupResolver(validationSchema) };
+  const formOptions = {
+    defaultValues: validationSchema.cast({}),
+    resolver: yupResolver(validationSchema),
+  };
 
-  const {  
+  const {
     register,
     handleSubmit,
     reset,
@@ -191,7 +197,10 @@ export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
         </div>
         <div className="profile__base__body__name">
           <div className="profile__item__label">Giới tính: </div>
-          <select {...register('gender')} defaultValue={info.gender ? info.gender : -1}>
+          <select
+            {...register('gender')}
+            defaultValue={info.gender ? info.gender : -1}
+          >
             <option value={0}>Nam</option>
             <option value={1}>Nữ</option>
             <option value={2}>Khác</option>

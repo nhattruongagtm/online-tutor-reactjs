@@ -15,26 +15,41 @@ import {
 } from '../../constants/path';
 import '../Header/header.scss';
 import { ACCESS_TOKEN } from '../../constants/auth';
-import {ClassItem} from '../../components/WaitingClassList/WaitingClassList';
-import {courseApi} from '../../api/CourseApi';
+import { ClassItem } from '../../components/WaitingClassList/WaitingClassList';
+import { courseApi } from '../../api/CourseApi';
 import useUser from '../../hooks/useUser';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { Params } from '../../api/tutorApi';
+import { loadCartList } from '../../reducers/cartSlice';
+import { updatePageData } from '../../reducers/cartSlice';
 interface IRoutes {
   path: string;
   title: string;
 }
 export default function Header() {
-  const [savedCourse,setSavedCourse] = useState<ClassItem[]>();
+  const dispatch = useDispatch();
+  const [savedCourse, setSavedCourse] = useState<ClassItem[]>();
   const [user] = useUser();
+  const cart = useSelector((state: RootState) => state.cart);
+  const { currentPage, list, totalItems, totalPages } = cart;
   // get saved courses (cart)
-  useEffect(()=>{
-    if(user){
-      courseApi.getAllSavedCourse(user.id,null).then(res=>{
-        if(res){
-          setSavedCourse(res);
-        }
-      })
-    }
-  },[]);
+  useEffect(() => {
+    const params: Params = {
+      page: currentPage,
+      limit: 4,
+    };
+    user &&
+      courseApi
+        .getCartList(user.id, params)
+        .then((res) => {
+          console.log(res);
+          dispatch(updatePageData(res.data));
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+  }, [user, currentPage]);
 
   const history = useHistory();
   const location = useLocation();
@@ -58,11 +73,11 @@ export default function Header() {
     },
     {
       path: `${NEWS_PATH}`,
-      title: 'Tin tức',   
+      title: 'Tin tức',
     },
     // {
     //   path: `${FAQ_PATH}`,
-    //   title: "Hỏi đáp",   
+    //   title: "Hỏi đáp",
     // },
   ];
 
@@ -105,7 +120,7 @@ export default function Header() {
           >
             {/* <i className="fas fa-shopping-cart"></i> */}
             <i className="fa-solid fa-book"></i>
-            <div className="header__auth__cart__number">{savedCourse?.length}</div>
+            <div className="header__auth__cart__number">{totalItems}</div>
           </div>
 
           {localStorage.getItem(ACCESS_TOKEN) ? (
@@ -116,18 +131,16 @@ export default function Header() {
               }}
             >
               <div className="header__auth__user__img">
-                <img
-                  src={user?.photoUrl}
-                  alt=""
-                />
+                <img src={user?.avatar} alt="" />
               </div>
-              <div className="header__auth__user__name">{user?.displayName}</div>
+              <div className="header__auth__user__name">
+                {user?.displayName}
+              </div>
             </div>
           ) : (
-
-          <Link to={LOGIN_PATH} className="header__auth__btn">
-            Đăng nhập
-          </Link>
+            <Link to={LOGIN_PATH} className="header__auth__btn">
+              Đăng nhập
+            </Link>
           )}
           <div className="header__auth__menu">
             <label htmlFor="header__menu">
@@ -138,7 +151,6 @@ export default function Header() {
             <ul className="navigation__responsive">
               <li>
                 <label htmlFor="header__menu">
-                
                   <i className="fas fa-times-circle menu__close__header"></i>
                 </label>
               </li>

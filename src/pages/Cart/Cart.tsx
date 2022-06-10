@@ -7,33 +7,20 @@ import { CartItem } from './CartItem';
 import './style.scss';
 import { SelectedItem } from '../../components/TutorList/TutorList';
 import ReactPaginate from 'react-paginate';
-
-const limit = 8;
-
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { Resp, Params } from '../../api/tutorApi';
+import { updatePageData } from '../../reducers/cartSlice';
+import useUser from '../../hooks/useUser';
+import Loading from '../../components/Common/Loading';
 export default function Cart() {
+  const [user] = useUser();
   const history = useHistory();
+  const dispatch = useDispatch();
   const [isToogleFilter, setIsToogleFilter] = useState<boolean>(false);
-  const [savedCourse, setSavedCourse] = useState<ClassItem[]>();
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPage, setTotalPage] = useState<number>(100);
-  const [pageCount, setPageCount] = useState<number>(
-    Math.ceil(totalPage / limit)
-  );
-  // get saved courses (cart)
-  useEffect(() => {
-    const params = { page: currentPage, limit: limit };
-    if (localStorage.getItem(ACCESS_TOKEN)) {
-      console.log('oke');
-      courseApi.getAllSavedCourse(1, params).then((res) => {
-        if (res) {
-          setSavedCourse(res);
-        }
-        console.log('res', res);
-      });
-    } else {
-      console.log('no');
-    }
-  }, [currentPage]);
+
+  const cart = useSelector((state: RootState) => state.cart);
+  const { currentPage, list, totalItems, totalPages } = cart;
 
   const ScrollToTop = () => {
     useEffect(() => {
@@ -43,8 +30,12 @@ export default function Cart() {
   };
 
   const handlePageClick = (data: SelectedItem) => {
-    const currentPage = data.selected + 1;
-    setCurrentPage(currentPage);
+    const pageData: Resp<ClassItem> = {
+      ...cart,
+      currentPage: data.selected + 1,
+    };
+
+    dispatch(updatePageData(pageData));
   };
 
   return (
@@ -86,36 +77,38 @@ export default function Cart() {
             <button>Tìm khóa học</button>
           </div>
         </div>
-        {savedCourse ? (
+        {list ? (
           <div className="waiting__class__main">
             <div className="class__list">
-              {savedCourse.map((item) => (
+              {list.map((item) => (
                 <CartItem classItem={item} key={item.id} />
               ))}
             </div>
-            <ReactPaginate
-              nextLabel=">>"
-              onPageChange={handlePageClick}
-              pageRangeDisplayed={3}
-              marginPagesDisplayed={2}
-              pageCount={pageCount}
-              previousLabel="<<"
-              pageClassName="page-item"
-              pageLinkClassName="page-link"
-              previousClassName="page-item"
-              previousLinkClassName="page-link"
-              nextClassName="page-item"
-              nextLinkClassName="page-link"
-              breakLabel="..."
-              breakClassName="page-item"
-              breakLinkClassName="page-link"
-              containerClassName="pagination"
-              activeClassName="active"
-              // renderOnZeroPageCount={null}
-            />
+            {list.length > 0 && (
+              <ReactPaginate
+                nextLabel=">"
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={3}
+                marginPagesDisplayed={2}
+                pageCount={totalPages}
+                previousLabel="<"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                breakLabel="..."
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
+                containerClassName="pagination"
+                activeClassName="active"
+                // renderOnZeroPageCount={null}
+              />
+            )}
           </div>
         ) : (
-          <h1>loading...</h1>
+          <Loading />
         )}
       </div>
     </div>

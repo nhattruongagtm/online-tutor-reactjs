@@ -248,6 +248,15 @@
     border-top: 1px solid rgb(223, 223, 223);
   }
 }
+.redirect__login{
+  width: 100%;
+  padding: 20px 10px;
+
+  .btn-login{
+    margin-left: 20px;
+  }
+
+}
 
 
 @media screen and (max-width: 1024px) {

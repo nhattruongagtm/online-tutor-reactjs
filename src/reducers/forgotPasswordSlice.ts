@@ -8,6 +8,7 @@ export interface InitialStateForgot {
   loading: boolean;
   error: string;
   progress: number;
+  isCheckForm: boolean;
 }
 const initialState: InitialStateForgot = {
   code: '',
@@ -16,6 +17,7 @@ const initialState: InitialStateForgot = {
   loading: false,
   error: '',
   progress: 0,
+  isCheckForm: false,
 };
 
 const forgotSlice = createSlice({
@@ -29,13 +31,11 @@ const forgotSlice = createSlice({
       state,
       action: PayloadAction<Partial<InitialStateForgot>>
     ) => {
-      if (state.id && state.code) {
-        state.id = action.payload.id as number;
-        state.loading = true;
-        state.code = action.payload.code as string;
-      }
+      state.id = action.payload.id as number;
+      state.loading = true;
+      state.code = action.payload.code as string;
     },
-    requestForgotPasswordSuccess: (state) => {
+    requestForgotPasswordSuccess: (state) => {  
       state.loading = false;
     },
     requestForgotSendMail: (state) => {
@@ -49,7 +49,7 @@ const forgotSlice = createSlice({
       state.loading = false;
       state.code = action.payload;
     },
-    requestForgotChangePassword: (state) => {
+    requestForgotChangePassword: (state, action: PayloadAction<string>) => {
       state.loading = true;
     },
     requestForgotChangePasswordSuccess: (state) => {
@@ -60,6 +60,9 @@ const forgotSlice = createSlice({
     },
     updateStatus: (state, action: PayloadAction<number>) => {
       state.progress = action.payload;
+    },
+    displayCheckForm: (state, action: PayloadAction<boolean>) => {
+      state.isCheckForm = action.payload;
     },
   },
 });
@@ -75,6 +78,7 @@ export const {
   requestForgotSendMailSuccess,
   requestForgotUpdateCodeID,
   updateStatus,
+  displayCheckForm,
 } = forgotSlice.actions;
 
 export default forgotSlice.reducer;

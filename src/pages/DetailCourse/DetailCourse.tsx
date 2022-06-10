@@ -1,6 +1,8 @@
 import { SnackbarOrigin } from '@mui/material/Snackbar';
+import { Button } from 'antd';
 import * as qs from 'query-string';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
 import { toast } from 'react-toastify';
 import { courseApi } from '../../api/CourseApi';
@@ -11,7 +13,10 @@ import '../DetailCourse/style.scss';
 import { Comment } from './Comment';
 import { DetailInfo } from './DetailInfo';
 import { Rate } from './Rate';
-
+import { RootState } from '../../store';
+import { commentApi } from '../../api/commentApi';
+import { Params } from '../../api/tutorApi';
+import { updatePage } from '../../reducers/detailCourseSlice';
 interface DetailInfo {
   icon: string;
   title: string;
@@ -31,13 +36,16 @@ export default function DetailCourse() {
   const [isFail, setIsFail] = useState<boolean>(false);
   const [relativeCourse, setRelativeCourse] = useState<IClassItem[]>();
   const [changePage, setChangePage] = useState<boolean>(false);
-
   const path = useLocation().search;
+  const dispatch = useDispatch();
 
   const params = qs.parse(path);
 
   const id = params.id as string;
 
+  const commentStore = useSelector(
+    (state: RootState) => state.detailCourse.pageInfo
+  );
   useEffect(() => {
     let isCancel = false;
     // call api to get detail data
@@ -77,6 +85,30 @@ export default function DetailCourse() {
     window.scrollTo(0, 0);
   }, [changePage]);
 
+  const handleMore = async () => {
+    const { currentPage: current, totalPages } = commentStore;
+    if (current < totalPages) {
+      const params: Params = {
+        page: current + 1,
+        limit: 5,
+      };
+      console.log(params.page);
+      const cmts = await commentApi.getCommentsByPost(Number(id), params);
+      const { data } = cmts;
+      const { currentPage, list, totalItems, totalPages } = data;
+
+      dispatch(
+        updatePage({
+          ...commentStore,
+          currentPage,
+          totalItems,
+          totalPages,
+          list: [...list, ...commentStore.list],
+        })
+      );
+    }
+  };
+
   return (
     <div className="container__detail__course">
       {!course ? (
@@ -102,7 +134,10 @@ export default function DetailCourse() {
               </span>
             </div>
             <div className="comment__main__content">
-              {tab === COMMENT_TAB ? <Comment /> : <Rate />}
+              {tab === COMMENT_TAB ? <Comment id={Number(id)} /> : <Rate />}
+              <div className="load__more">
+                <Button onClick={handleMore}>Xem thêm</Button>
+              </div>
             </div>
           </div>
           <div className="detail__course__concern">

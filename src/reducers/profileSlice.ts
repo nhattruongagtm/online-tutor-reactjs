@@ -21,7 +21,7 @@ const initialState: Profile = {
     introduce: '',
     phone: '',
     type: -1,
-    photoUrl: ''
+    avatar: ''   
   },
 };
 

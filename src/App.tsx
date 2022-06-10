@@ -42,10 +42,12 @@ import Tutor from './pages/Tutor/Tutor';
 import { updateStatus } from './reducers/forgotPasswordSlice';
 import { updateProgressSignUp } from './reducers/signUpSlice';
 import { courseApi } from './api/CourseApi';
+import useUser from './hooks/useUser';
 
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
+  const [user] = useUser();
 
   // const selectorSignUpFill = useSelector((state: IInitialState) => state.signUpInfo);
 
@@ -61,20 +63,6 @@ function App() {
       dispatch(updateStatus(0));
     }
   }, [location]);
-
-  // useEffect(() => {
-  //   courseApi
-  //     .getWaitingClass({
-  //       page: 1,
-  //       limit: 10,
-  //     })
-  //     .then((res) => {
-  //       console.log(res);
-  //     })
-  //     .catch((e) => {
-  //       console.log(e);
-  //     });
-  // }, []);
 
   const path = [
     `${LOGIN_PATH}`,
@@ -92,9 +80,6 @@ function App() {
 
   const isAdminPage = location.pathname.toString().indexOf('/admin') !== -1;
 
-  // const loginSelector = useSelector((state : LoginSelector) => state.loginUser);
-
-  // console.log("loginSelector",loginSelector);
 
   return (
     <div>

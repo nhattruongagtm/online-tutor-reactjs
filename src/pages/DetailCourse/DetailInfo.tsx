@@ -1,31 +1,38 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { courseApi } from '../../api/CourseApi';
 import { ClassItem } from '../../components/WaitingClassList/WaitingClassList';
 import useUser from '../../hooks/useUser';
-
+import { RootState } from '../../store';
+import { addCart } from '../../reducers/cartSlice';
 interface DetailInfoProps {
   course: ClassItem;
   isRegister: boolean;
 }
 
-const handleSaveCourse = () => {
-  // courseApi
-  //   .saveCourse(1, 1)
-  //   .then((res) => {
-  //     console.log('add a course success!');
-  //     setTimeout(() => {
-  //       toast.success("Thêm khóa học thành công!");
-  //     }, 1000);
-  //   })
-  //   .catch((e) => {
-  //     console.log('add a course fail!');
-  //   });
-};
-
 export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
-  console.log(course.photo);
+  const dispatch = useDispatch();
   const [user] = useUser();
+  const cartList = useSelector((state: RootState) => state.cart.list);
+
+  const handleSaveCourse = () => {
+    const index = cartList.findIndex((item) => item.id === course.id);
+    if (index === -1) {
+      user &&
+        courseApi
+          .saveCourse(user.id, course.id)
+          .then((res) => {
+            dispatch(addCart(course));
+            toast.success('Thêm khóa học thành công!');
+          })
+          .catch((e) => {
+            console.log('add a course fail!');
+          });
+    } else {
+      toast.warning('Khoá học này đã tồn tại!');
+    }
+  };
   return (
     <>
       <div className="detail__course__main">

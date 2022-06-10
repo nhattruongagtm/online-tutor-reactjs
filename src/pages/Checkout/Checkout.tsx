@@ -70,6 +70,7 @@ export const Checkout = (props: Props) => {
     courseApi
       .getCourseByID(Number(id))
       .then((res) => {
+        console.log("course",res);
         if (res) {
           setCourse(res.data);
         }

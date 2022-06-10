@@ -9,7 +9,7 @@ export interface UserAuth {
   district?: string;
   city?: string;
   type?: number;
-  photoUrl?: string;
+  avatar?: string;
   gender?: number;
 }
 export interface UserLogin {
@@ -47,8 +47,8 @@ const loginSlice = createSlice({
           JSON.stringify({
             ...action.payload,
             avatar:
-              action.payload.photoUrl !== ''
-                ? action.payload.photoUrl
+              action.payload.avatar !== ''
+                ? action.payload.avatar
                 : 'https://firebasestorage.googleapis.com/v0/b/t-tiktok.appspot.com/o/images%2F8weV3azFCSHLILWZlm72%2Ficon%20-%20Copy.PNG?alt=media&token=f7a62203-3f80-4ab6-95d9-f67112d6eb4e',
           })
         );
@@ -65,4 +65,4 @@ const loginSlice = createSlice({
 export const { requestLogin, requestLoginFail, requestLoginSuccess } =
   loginSlice.actions;
 
-export default loginSlice.reducer;
+export default loginSlice.reducer;  

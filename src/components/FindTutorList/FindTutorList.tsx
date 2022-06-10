@@ -11,7 +11,10 @@ import { addTimeList, TimePost } from '../../reducers/postSlice';
 import { City, District } from '../Auth/SignUp/InfoValidation';
 import '../FindTutorList/style.scss';
 import { TimeItem } from './TimeItem';
-
+import { Button } from 'antd';
+import { useHistory } from 'react-router';
+import { LOGIN_PATH } from '../../constants/path';
+import useUser from '../../hooks/useUser';
 export interface LearningTime {
   id: string;
   day: number;
@@ -51,6 +54,8 @@ interface PostSelector {
   post: TimeList;
 }
 export default function FindTutorList() {
+  const navigate = useHistory();
+  const [user] = useUser();
   const validateSchema = yup.object().shape({
     name: yup.string().required('Vui lòng nhập họ tên!'),
     phone: yup.number().required('Vui lòng nhập số điện thoại!'),
@@ -88,7 +93,6 @@ export default function FindTutorList() {
   const [subjects, setSubjects] = useState<string[]>();
   const [classes, setClasses] = useState<string[]>();
   const [isHomeFormality, setIsHomeFormality] = useState<boolean>(true);
-  const [postType, setPostType] = useState<number>(-1);
 
   const addtionalTimes = useSelector((state: TimeList) => state.timeList);
 
@@ -177,6 +181,17 @@ export default function FindTutorList() {
     );
   };
 
+  const RedirectLogin = () => {
+    return (
+      <div className="redirect__login">
+        Vui lòng đăng nhập để đăng bài viết!
+        <Button className="btn-login"type="primary" onClick={() => navigate.push(LOGIN_PATH)}>
+          Đăng nhập
+        </Button>
+      </div>
+    );
+  };
+
   return (
     <div className="tutor__list">
       <form
@@ -184,25 +199,13 @@ export default function FindTutorList() {
         onSubmit={handleSubmit(handleSubmitFindTutor)}
       >
         <div className="tutors__title">Đăng bài viết</div>
-        <div className="tutors__type">
-          <span>
-            <i className="fas fa-quote-right"></i>Loại bài viết:{' '}
-          </span>
-          <select onChange={(e) => setPostType(Number(e.target.value))}>
-            <option value={-1}>---- chọn loại bài viết -----</option>
-            <option value={0}>Tìm gia sư cho học viên</option>
-            <option value={1}>Đăng khóa học cho gia sư</option>
-          </select>
-        </div>
-        {postType !== -1 && (
+
+        {user ? (
           <>
-            <div className="tutors__title">
-              {postType === 0 ? 'Đăng ký tìm gia sư' : 'Đăng ký dạy học'}
-            </div>
             <div className="tutors__notify">
               <i className="fas fa-pencil-alt"></i>
               Điền đầy đủ các thông tin bên dưới để{' '}
-              {postType === 0 ? 'Đăng ký tìm gia sư' : 'Đăng ký dạy học'}
+              {user.type === 1 ? 'Đăng ký tìm gia sư' : 'Đăng ký dạy học'}
             </div>
 
             <h4>Đăng ký nhanh</h4>
@@ -277,16 +280,6 @@ export default function FindTutorList() {
                 Anh, quận 6 lớp 6.v.v..
               </div>
             </div>
-            {/* <label className="tutors__checkbox" htmlFor="more__info">
-              <input
-                type="checkbox"
-                name=""
-                id="more__info"
-                checked={isAddingForm}
-                onChange={(e) => setIsAddingForm(e.target.checked)}
-              />
-              Bổ sung thêm thông tin
-            </label> */}
 
             <div className="tutors__additional">
               <h4>Thông tin thêm</h4>
@@ -469,6 +462,8 @@ export default function FindTutorList() {
               </button>
             </div>
           </>
+        ) : (
+          <RedirectLogin />
         )}
       </form>
     </div>

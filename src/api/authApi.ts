@@ -37,7 +37,7 @@ export const authApi = {
 
   sendMailToSignUp(email: string) {
     const url = `/send-mail`;
-  
+
     const params = {
       email: email,
     };
@@ -56,22 +56,30 @@ export const authApi = {
     return axiosClient.post(url, user);
   },
   sendMailToForgot(email: string): Promise<ForgotData> {
-    const url = `/send-mail-to-forgot/${email}`;
+    const url = `/forgot/${email}`;
 
-    return axiosClient.post(url);  
+    return axiosClient.post(url);
   },
   changePassword(userID: number, newPassword: string): Promise<boolean> {
-    const url = `/users/${userID}`;
+    const url = `/forgot/${userID}`;
 
-    return axiosClient.put(url, { password: newPassword });
+    return axiosClient.put(url, newPassword);
   },
-  updateProfile(user: ISignUpInfo) : Promise<boolean>{
+  updateProfile(user: ISignUpInfo): Promise<boolean> {
     const url = `/profile/${user.id}`;
 
-    return axiosClient.put(url,user);
+    return axiosClient.put(url, user);
   },
-  loginAPI(id: string):Promise<ResponseData<UserAuth>>{
-    const url = `/loginAPI/${id}`
-    return axiosClient.post(url);
-  }
+  // loginAPI(id: string): Promise<ResponseData<UserAuth>> {
+  //   const url = `/loginAPI/${id}`;
+  //   return axiosClient.post(url);
+  // },
+  loginAPI(params : UserAuth): Promise<ResponseData<UserAuth>> {
+    const url = `/loginAPI`;
+    return axiosClient.post(url,params);
+  },
+  getIDFromApi(id: string): Promise<ResponseData<number>> {
+    const url = '/getAPI/' + id;
+    return axiosClient.get(url);
+  },
 };

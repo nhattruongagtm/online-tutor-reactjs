@@ -98,7 +98,7 @@ export default function WaitingClassList() {
             onClick={() => setIsToogleFilter(!isToogleFilter)}
           >
             Tìm khóa học
-          </div>
+          </div>  
         </div>
         <div
           className={
