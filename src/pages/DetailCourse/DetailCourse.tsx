@@ -85,30 +85,7 @@ export default function DetailCourse() {
     window.scrollTo(0, 0);
   }, [changePage]);
 
-  const handleMore = async () => {
-    const { currentPage: current, totalPages } = commentStore;
-    if (current < totalPages) {
-      const params: Params = {
-        page: current + 1,
-        limit: 5,
-      };
-      console.log(params.page);
-      const cmts = await commentApi.getCommentsByPost(Number(id), params);
-      const { data } = cmts;
-      const { currentPage, list, totalItems, totalPages } = data;
-
-      dispatch(
-        updatePage({
-          ...commentStore,
-          currentPage,
-          totalItems,
-          totalPages,
-          list: [...list, ...commentStore.list],
-        })
-      );
-    }
-  };
-
+ 
   return (
     <div className="container__detail__course">
       {!course ? (
@@ -134,10 +111,8 @@ export default function DetailCourse() {
               </span>
             </div>
             <div className="comment__main__content">
-              {tab === COMMENT_TAB ? <Comment id={Number(id)} /> : <Rate />}
-              <div className="load__more">
-                <Button onClick={handleMore}>Xem thêm</Button>
-              </div>
+              {tab === COMMENT_TAB ? <Comment id={Number(id)} /> : <Rate id={Number(id)}/>}
+             
             </div>
           </div>
           <div className="detail__course__concern">

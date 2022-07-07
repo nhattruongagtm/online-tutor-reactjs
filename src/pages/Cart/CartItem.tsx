@@ -9,13 +9,19 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import { useDispatch } from 'react-redux';
+import useUser from '../../hooks/useUser';
+import { courseApi } from '../../api/CourseApi';
+import { toast } from 'react-toastify';
+import { deleteCart } from '../../reducers/cartSlice';
 interface CartItemProps {
   classItem: IClassItem;
 }
 
 export const CartItem = ({ classItem }: CartItemProps) => {
-  const history = useHistory();   
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const [user] = useUser();
 
   const [open, setOpen] = React.useState(false);
 
@@ -25,10 +31,24 @@ export const CartItem = ({ classItem }: CartItemProps) => {
 
   const handleClose = () => {
     setOpen(false);
-  };      
-  const handleRegisterCourse = () =>{
-    history.push(`${CHECKOUT}?id=${classItem.id}`)
-  }                                                          
+  };
+  const handleRegisterCourse = () => {
+    history.push(`${CHECKOUT}?id=${classItem.id}`);
+  };
+  const handleDelete = () => {
+    user &&
+      courseApi
+        .deleteCart(classItem.id, user.id)
+        .then((res) => {
+          if (res) {
+            toast.success('Xóa khóa học thành công!');
+            dispatch(deleteCart(classItem.id));
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+  };
 
   return (
     <div className="class__items cart__item">
@@ -39,7 +59,10 @@ export const CartItem = ({ classItem }: CartItemProps) => {
           </span>
           <span>Xóa</span>
         </div>
-        <div className="cart__item__layer--detail" onClick={() => history.push(`${COURSE_PATH}?id=${classItem.id}`)}>  
+        <div
+          className="cart__item__layer--detail"
+          onClick={() => history.push(`${COURSE_PATH}?id=${classItem.id}`)}
+        >
           <span>
             <i className="fas fa-info-circle"></i>
           </span>
@@ -49,7 +72,7 @@ export const CartItem = ({ classItem }: CartItemProps) => {
           <span>
             <i className="fas fa-wallet"></i>
           </span>
-          <span onClick={handleRegisterCourse}>Đăng ký</span>           
+          <span onClick={handleRegisterCourse}>Đăng ký</span>
         </div>
       </div>
 
@@ -59,9 +82,7 @@ export const CartItem = ({ classItem }: CartItemProps) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Xóa khóa học"}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{'Xóa khóa học'}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Bạn chắc chắn muốn xóa khóa học này chứ?
@@ -69,14 +90,19 @@ export const CartItem = ({ classItem }: CartItemProps) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Hủy</Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button
+            onClick={() => {
+              handleDelete();
+              handleClose();
+            }}
+            autoFocus
+          >
             Đồng ý
           </Button>
-        </DialogActions>
+        </DialogActions>  
       </Dialog>
-     
-        <ClassItem classItem={classItem} />  
-       
+
+      <ClassItem classItem={classItem} />
     </div>
   );
 };

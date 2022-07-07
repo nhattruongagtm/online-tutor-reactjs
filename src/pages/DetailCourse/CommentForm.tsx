@@ -1,12 +1,11 @@
-import React, { useContext, useState } from 'react';
+import qs from 'query-string';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router';
 import { commentApi } from '../../api/commentApi';
 import useUser from '../../hooks/useUser';
-import { CommentContext } from './Comment';
+import { addComment } from '../../reducers/detailCourseSlice';
 import { Comment } from './CommentItem';
-import qs from 'query-string';
-import { useDispatch } from 'react-redux';
-import { addComment, updatePage } from '../../reducers/detailCourseSlice';
 interface CommentFormProps {}
 
 export const CommentForm = (props: CommentFormProps) => {
@@ -38,6 +37,7 @@ export const CommentForm = (props: CommentFormProps) => {
         createdDate: new Date(),
         avatar: user.avatar + '',
         like: 0,
+        
       };
 
       commentApi

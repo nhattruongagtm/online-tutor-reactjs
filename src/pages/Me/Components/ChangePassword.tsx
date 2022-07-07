@@ -9,6 +9,7 @@ import md5 from 'md5';
 import React, { useState } from 'react';
 import { authApi } from '../../../api/authApi';
 import NewPassword from '../../../components/Auth/ForgotPassword/NewPassword';
+import useUser from '../../../hooks/useUser';
 
 interface ChangePasswordProps {}
 
@@ -25,6 +26,7 @@ export const ChangePassword = (props: ChangePasswordProps) => {
     newPassword: '',
     retype: '',
   });
+  const [user] = useUser();
   const [code, setCode] = useState<string>('');
 
   const handleOpen = () => {
@@ -36,17 +38,22 @@ export const ChangePassword = (props: ChangePasswordProps) => {
   };
   const handleSendCode = () => {
     setIsSending(true);
-    authApi.sendMailToSignUp('nhattruongagtm@gmail.com').then((res) => {
-      if (res) {
-        setTimeout(() => {
-          // setCode(res);
-          setIsSending(false);
-          setStep(1);
-        }, 2000);
-      } else {
-        console.log('Không thể gửi mã, vui lòng thử lại!');
-      }
-    });  
+    user &&
+      authApi
+        .sendMailToSignUp(user.email)
+        .then((res) => {
+          if (res) {
+            console.log(res);
+            setCode(res);
+            setIsSending(false);
+            setStep(1);
+          } else {
+            console.log('Không thể gửi mã, vui lòng thử lại!');
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
   };
   const handleSendAgain = () => {
     setStep(0);
@@ -64,7 +71,6 @@ export const ChangePassword = (props: ChangePasswordProps) => {
     }
   };
   const handleChangePassword = () => {
-
     if (inputStep2.newPassword === '') {
       console.log('Vui lòng nhập mật khẩu!');
     } else if (inputStep2.newPassword.length < 8) {
@@ -75,22 +81,21 @@ export const ChangePassword = (props: ChangePasswordProps) => {
       console.log('Mật khẩu không khớp!');
     } else {
       setIsSending(true);
-      authApi.changePassword(5, md5(inputStep2.newPassword)).then((res) => {
-        if (res) {
-          // if (res.status === 200) {
-          //   setTimeout(() => {
-          //     setStep(3);
-          //     setIsSending(false);
-          //   }, 2000);
-          // } else {
-          //   console.log('Đã xảy lỗi, vui lòng thử lại!');
-          //   setIsSending(false);
-          // }
-        }
-      }).catch(e=>{
-        console.log(e);
-        setIsSending(false);
-      });
+      user &&
+        authApi
+          .changePassword(user.id, md5(inputStep2.newPassword))
+          .then((res) => {
+            if (res) {
+              setStep(3);
+            } else {
+              console.log('Đã xảy lỗi, vui lòng thử lại!');
+            }
+            setIsSending(false);
+          })
+          .catch((e) => {
+            console.log(e);
+            setIsSending(false);
+          });
     }
   };
 

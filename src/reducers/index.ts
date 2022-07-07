@@ -8,17 +8,24 @@ import postSlice from './postSlice';
 import profileSlice from './profileSlice';
 import signUpSlice from './signUpSlice';
 import cartSlice from './cartSlice';
+import loadingSlice from './loadingSlice';
+import rateSlice from './rateSlice';
+import waitingClass from './waitingClass';
+import tutorSlice from './tutorSlice';
 
 const rootReducer = combineReducers({
-    router: connectRouter(history),
-    signUpUser: signUpSlice,
-    forgotPassword: forgotPasswordSlice,
-    loginUser: loginSlice,
-    post: postSlice,
-    profile: profileSlice,
-    detailCourse: detailCourseSlice,
-    cart: cartSlice
-})
+  router: connectRouter(history),
+  signUpUser: signUpSlice,
+  forgotPassword: forgotPasswordSlice,
+  loginUser: loginSlice,
+  post: postSlice,
+  profile: profileSlice,
+  detailCourse: detailCourseSlice,
+  cart: cartSlice,
+  loading: loadingSlice,
+  rate: rateSlice,
+  waitingClass: waitingClass,
+  tutors: tutorSlice,
+});
 
-export default rootReducer;   
-  
+export default rootReducer;

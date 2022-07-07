@@ -1,60 +1,40 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import useAddress from '../../../hooks/useAddress';
-import { User } from '../../../models/user';
 import { userApi } from '../../../api/userApi';
 import { District } from '../../../components/Auth/SignUp/InfoValidation';
+import useAddress from '../../../hooks/useAddress';
 import useUser from '../../../hooks/useUser';
-import { UserProfile } from '../../../reducers/profileSlice';
-import { useDispatch } from 'react-redux';
 import { UserAuth } from '../../../reducers/loginSlice';
+import { loadUserInfo, UserProfile } from '../../../reducers/profileSlice';
+import { RootState } from '../../../store';
+
 interface ProfileFormProps {
   onCloseForm: () => void;
   info: UserProfile;
 }
 interface ProfileForm {
-  name: string;
+  displayName: string;
   email: string;
   phone: string;
   district: string;
   city: string;
   gender: number;
 }
-export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
-  const [user, setUser] = useState<UserAuth>();
+export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
   const dispatch = useDispatch();
   const [district, city] = useAddress();
-  const [chooseCity, setChooseCity] = useState<string>(
-    user && user.city ? user.city : ''
-  );   
-  const [districts, setDistricts] = useState<District[]>();
-  const [userInfo, setInfo] = useState<UserProfile>(info);
-
-  const getCityID = (name: string) => {
-    return city.find((item) => item.name_with_type === name)?.code;
-  };  
-
-  const [u] = useUser();
-
-  useEffect(() => {
-    u &&
-      userApi
-        .getUserByID(u.id)
-        .then((res) => {
-          setUser(res.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-  }, []);
-
+  const [chooseCity, setChooseCity] = useState<string>('');
+  const [districts, setDistricts] = useState<District[]>([]);
+  const info = useSelector((state: RootState) => state.profile.userInfo);
   const [avatar, setAvatar] = useState<string>(
     'https://i.pinimg.com/originals/5f/12/21/5f12212ed4d94b0dafe0f18a8e55832b.jpg'
   );
   const validationSchema = yup.object().shape({
-    name: yup.string().required().default(info.displayName),
+    displayName: yup.string().required().default(info.displayName),
     phone: yup
       .string()
       .required('Vui lòng nhập sô điện thoại!')
@@ -79,24 +59,25 @@ export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
   } = useForm<ProfileForm>(formOptions);
 
   useEffect(() => {
-    reset(user);
-  }, [user]);
+    reset(info);
+  }, [info]);
+
+  useEffect(() => {
+    const a = district.filter((item) => item.parent_code === chooseCity);
+    setDistricts(a);
+  }, [district, chooseCity]);
+
+  useEffect(() => {
+    info && setChooseCity(info.city as string);
+  }, [info]);
 
   const handleChangeAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const file = e.target.files[0];
-
       const blob = URL.createObjectURL(file);
       setAvatar(blob);
     }
   };
-
-  useEffect(() => {
-    const districts: District[] = district.filter(
-      (item) => item.parent_code === getCityID(chooseCity)
-    );
-    setDistricts(districts);
-  }, [chooseCity, district]);
 
   useEffect(() => {
     return () => {
@@ -106,10 +87,25 @@ export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
     };
   }, [avatar]);
 
-  const handleChangeInfo = (data: ProfileForm) => {
+  const handleChangeInfo = (data: UserAuth) => {
     console.log(data);
+
+    userApi
+      .updateProfile(data.id, data)
+      .then((res) => {
+        if (res.data) {
+          toast.success('Cập nhật thông tin thành công!');
+          dispatch(loadUserInfo(res.data as UserProfile));
+          onCloseForm();
+        } else {
+          toast.error('Cập nhật thông tin thành công!');
+        }
+      })
+      .catch((e) => {
+        toast.error('Đã xảy ra lỗi! Vui lòng thử lại!');
+      });
   };
-  // console.log(errors);
+  console.log(errors);
 
   return (
     <form
@@ -137,7 +133,7 @@ export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
           <input
             type="text"
             placeholder="Nhập họ tên..."
-            {...register('name')}
+            {...register('displayName')}
           />
         </div>
         <div className="profile__base__body__name">
@@ -164,12 +160,12 @@ export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
           >
             <option value="city">Chọn thành phố</option>
             {city &&
-              user &&
+              info &&
               city.map((item) => (
                 <option
                   key={item.slug}
-                  value={item.name_with_type}
-                  selected={item.name_with_type === user.city ? true : false}
+                  value={item.code}
+                  selected={item.code === info.city ? true : false}
                 >
                   {item.name_with_type}
                 </option>
@@ -181,14 +177,12 @@ export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
           <select {...register('district')}>
             <option value="district">Chọn quận/huyện</option>
             {districts &&
-              user &&
+              info &&
               districts.map((district) => (
                 <option
                   key={district.slug}
-                  value={district.name_with_type}
-                  selected={
-                    district.name_with_type === user.district ? true : false
-                  }
+                  value={district.slug}
+                  selected={district.slug === info.district ? true : false}
                 >
                   {district.name_with_type}
                 </option>
@@ -207,7 +201,11 @@ export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
           </select>
         </div>
         <div className="profile__base__footer">
-          <button onClick={onCloseForm} className="profile__close">
+          <button
+            onClick={onCloseForm}
+            className="profile__close"
+            type="button"
+          >
             Thoát
           </button>
           <button type="submit">Thay đổi</button>

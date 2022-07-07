@@ -35,68 +35,72 @@ export default function RecommendedList() {
     autoplaySpeed: 3000,
     cssEase: 'linear',
   };
-  const recommendList: Item[] = [
-    {
-      avatar:
-        'https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg',
-      name: 'Nguyễn Đô Ra Ê Môn',
-      education: 'Sinh viên',
-      experience:
-        'Sinh viên Học viện Hàng không Việt Nam Chuyên ngành Kỹ thuật hàng không',
-      subject: ['Toán học', 'Tiếng Anh', 'Vật lí'],
-      address: 'Quận 9, Tp. Thủ Đức, Tp. HCM',
-      rate: 4,
-      description: '',
-      createdDate: new Date(),
-      id: 1,
-    },
-    {
-      avatar:
-        'https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg',
-      name: 'Nguyễn Đô La',
-      education: 'Sinh viên',
-      experience: 'Sinh viên Học viện tài chính HN',
-      subject: [
-        'Toán học',
-        'Vật lí',
-        'Toán học',
-        'Vật lí',
-        'Toán học',
-        'Vật lí',
-      ],
-      address: 'Phường A, Quận Cầu Giấy, Tp. Hà Nội',
-      rate: 4,
-      description: '',
-      createdDate: new Date(),
-      id: 1,
-    },
-    {
-      avatar:
-        'https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg',
-      name: 'Nguyễn Tiến Đồng',
-      education: 'Sinh viên',
-      experience: 'Sinh viên Đại học kinh tế Tp. HCM',
-      subject: ['Toán học', 'Vật lí'],
-      address: 'Quận 3, Tp. HCM',
-      rate: 4,
-      description: '',
-      createdDate: new Date(),
-      id: 1,
-    },
-    {
-      avatar:
-        'https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg',
-      name: 'Nguyễn An Nhiên',
-      education: 'Sinh viên',
-      experience: 'Sinh viên Đại học kinh tế Tp. HCM',
-      subject: ['Toán học', 'Vật lí'],
-      address: 'Quận 10, Tp. HCM',
-      rate: 4,
-      description: '',
-      createdDate: new Date(),
-      id: 1,
-    },
-  ];
+  // const recommendList: Item[] = [
+  //   {
+  //     avatar:
+  //       'https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg',
+  //     name: 'Nguyễn Đô Ra Ê Môn',
+  //     education: 'Sinh viên',
+  //     experience:
+  //       'Sinh viên Học viện Hàng không Việt Nam Chuyên ngành Kỹ thuật hàng không',
+  //     subject: ['Toán học', 'Tiếng Anh', 'Vật lí'],
+  //     address: 'Quận 9, Tp. Thủ Đức, Tp. HCM',
+  //     rate: 4,
+  //     description: '',
+  //     createdDate: new Date(),
+  //     id: 1,
+  //     areas: [],
+  //   },
+  //   {
+  //     avatar:
+  //       'https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg',
+  //     name: 'Nguyễn Đô La',
+  //     education: 'Sinh viên',
+  //     experience: 'Sinh viên Học viện tài chính HN',
+  //     subject: [
+  //       'Toán học',
+  //       'Vật lí',
+  //       'Toán học',
+  //       'Vật lí',
+  //       'Toán học',
+  //       'Vật lí',
+  //     ],
+  //     address: 'Phường A, Quận Cầu Giấy, Tp. Hà Nội',
+  //     rate: 4,
+  //     description: '',
+  //     createdDate: new Date(),
+  //     id: 1,
+  //     areas: [],
+  //   },
+  //   {
+  //     avatar:
+  //       'https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg',
+  //     name: 'Nguyễn Tiến Đồng',
+  //     education: 'Sinh viên',
+  //     experience: 'Sinh viên Đi học kinh tế Tp. HCM',
+  //     subject: ['Toán học', 'Vật lí'],
+  //     address: 'Quận 3, Tp. HCM',
+  //     rate: 4,
+  //     description: '',
+  //     createdDate: new Date(),
+  //     id: 1,
+  //     areas: [],
+  //   },
+  //   {
+  //     avatar:
+  //       'https://thuthuatnhanh.com/wp-content/uploads/2020/09/anh-avatar-doremon-chat-ngau-nhat.jpg',
+  //     name: 'Nguyễn An Nhiên',
+  //     education: 'Sinh viên',
+  //     experience: 'Sinh viên Đại học kinh tế Tp. HCM',
+  //     subject: ['Toán học', 'Vật lí'],
+  //     address: 'Quận 10, Tp. HCM',
+  //     rate: 4,
+  //     description: '',
+  //     createdDate: new Date(),
+  //     id: 1,
+  //     areas: [],
+  //   },
+  // ];
   return (
     <div id="recommend" className="recommend">
       <RecommendTilte>Gợi ý gia sư cho bạn</RecommendTilte>
@@ -104,9 +108,9 @@ export default function RecommendedList() {
         <div className="waiting__class__main">
           <div className="class__list__tutor">
             {/* <Slider {...settings} className="carousel_recommend"> */}
-            {recommendList.map((tutor, index) => (
+            {/* {recommendList.map((tutor, index) => (
               <TutorItem tutor={tutor} key={index} />
-            ))}
+            ))} */}
           </div>
         </div>
         {/* </Slider> */}

@@ -32,18 +32,19 @@ $primary: #0481f7;
       border: 2px solid white;
       border-radius: 5px;
 
-      input,select{
+      input,
+      select {
         height: 100% !important;
         outline: none;
         border: 0;
         padding-left: 10px;
-        
+
         &:focus {
           outline: none;
           border: 0;
         }
       }
-      
+
       i {
         color: white;
         width: 30px;
@@ -53,7 +54,7 @@ $primary: #0481f7;
         cursor: pointer;
         border-radius: 5px;
 
-        &:hover{
+        &:hover {
           opacity: 0.8;
         }
       }
@@ -76,11 +77,9 @@ $primary: #0481f7;
           border: 0;
         }
       }
-      
     }
     &__filter,
     &__sort {
-      
     }
     &__filter {
     }
@@ -303,4 +302,13 @@ table {
 }
 .dashboard__users__profile {
   padding-left: 0px !important;
+}
+
+.tutor__tab__admin {
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td,
+  .ant-table tfoot > tr > th,
+  .ant-table tfoot > tr > td {
+    padding: 10px!important;
+  }
 }

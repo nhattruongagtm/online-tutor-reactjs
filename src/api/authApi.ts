@@ -35,16 +35,14 @@ export const authApi = {
     return axiosClient.post(url, { email: email });
   },
 
-  sendMailToSignUp(email: string) {
+  sendMailToSignUp(email: string):Promise<string> {
     const url = `/send-mail`;
 
     const params = {
       email: email,
     };
 
-    return axiosClient.post(url, params).catch((e) => {
-      console.log(e);
-    });
+    return axiosClient.post(url, params);
   },
   signUp(input: SignUpInput): Promise<ResponseData<ISignUpInfo>> {
     const url = '/sign-up';

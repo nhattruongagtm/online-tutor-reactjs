@@ -124,6 +124,7 @@
       cursor: pointer;
     }
     .comment__reply {
+      // height: 0%;
       margin-top: 7px;
       &__item {
         margin-top: 7px;
@@ -132,7 +133,13 @@
         margin-top: 10px;
         margin-bottom: 5px;
       }
+
+      &.display {
+        transition: 0.2s;
+        height: 100%;
+      }
     }
+
     .comment__form__main {
       display: flex;
       align-items: flex-start;

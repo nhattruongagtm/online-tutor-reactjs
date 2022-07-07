@@ -1,72 +1,107 @@
-import React, { useEffect, useState } from 'react';
+import { CaretLeftOutlined, CaretRightOutlined } from '@ant-design/icons';
+import { current } from '@reduxjs/toolkit';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import { useHistory, useLocation } from 'react-router';
-import axiosClient from '../../api/axiosClient';
+import { useDispatch, useSelector } from 'react-redux';
 import { Params, tutorApi } from '../../api/tutorApi';
-import { TUTOR_LIST_PATH } from '../../constants/path';
-import { TutorItem as Item } from '../Home/TutorItem';
-import qs from 'query-string';
+import {
+  loadTutorList,
+  TutorSlice,
+  updatePage,
+} from '../../reducers/tutorSlice';
+import { RootState } from '../../store';
+import Loading from '../Common/Loading';
 import '../TutorList/style.scss';
 import { TutorItem } from './TutorItem';
+import useAddress, { City } from '../../hooks/useAddress';
+import { subjectApi } from '../../api/subjectApi';
+import { Subject } from '../../models/subject';
+import { Grade } from '../../models/grade';
 
 export interface SelectedItem {
   selected: number;
 }
 
-const limit = 8;
-
 export default function TutorList() {
   const [isToogleFilter, setIsToogleFilter] = useState<boolean>(false);
-  const history = useHistory();
-  // const location = useLocation().search;
-  // const q = qs.parse(location);
+  const dispatch = useDispatch();
+  const store = useSelector((state: RootState) => state.tutors);
+  const { limit, list, page, totalItems, totalPages } = store;
+  const [loading, setLoading] = useState<boolean>(false);
+  const [district, city] = useAddress();
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [grades, setGrades] = useState<Grade[]>([]);
 
-  // const routePath = {
-  //   _limit: Number(q._limit),
-  //   _page: Number(q._page),
-  // };
-
-  const [tutorList, setTutorList] = useState<Item[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPage, setTotalPage] = useState<number>(100);
-  const [pageCount, setPageCount] = useState<number>(
-    Math.ceil(totalPage / limit)
-  );
-  // const [params,setParams] = useState<Params>(routePath);
+  // const cities = useRef<City[]>([]);
+  // cities.current = city;
 
   const handlePageClick = (data: SelectedItem) => {
     const currentPage = data.selected + 1;
-
-    setCurrentPage(currentPage);
-
-    // const q = qs.stringify(params);
-
-    // console.log(q)
-
-    // history.push(`${TUTOR_LIST_PATH}?${q}`);
+    dispatch(updatePage(currentPage));
+    setFilters({ ...filters, page: currentPage });
   };
 
-  useEffect(() => {
-    const params = { limit: limit, page: currentPage };
-    const getPostsFromApi = () => {
-      const resp = tutorApi.getAllTutor(params);
-      setTutorList(resp.list);
-    };
-    // const getPost = async () => {
-    //   const list = await getPostsFromApi();
-    //   setTutorList(list);
-    // };
-    // getPost();
-    getPostsFromApi();
-  }, [currentPage]);
+  const [filters, setFilters] = useState<Params>({
+    page,
+    limit,
+  });
 
-  console.log(tutorList[tutorList.length - 1]);
-  
+  useEffect(() => {
+    const getAllSubject = async () => {
+      try {
+        const res = await subjectApi.getAllSubject({ page: 1, limit: 500 });
+        const resp = await subjectApi.getAllGrade();
+        setSubjects(res.data.list);
+        setGrades(resp.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getAllSubject();
+  }, []);
+
+  useEffect(() => {
+    const getAllTutor = async () => {
+      try {
+        setLoading(true);
+        const resp = await tutorApi.getAllTutor(filters);
+        const { data } = resp;
+        const { currentPage, list, totalItems, totalPages } = data;
+        const pageData: TutorSlice = {
+          page: currentPage,
+          limit,
+          list,
+          totalItems,
+          totalPages,
+        };  
+        console.log(list)
+        dispatch(loadTutorList(pageData));
+      } catch (error) {
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getAllTutor();
+  }, [page, filters]);
+
   const ScrollToTop = () => {
     useEffect(() => {
       window.scrollTo(0, 0);
-    }, [currentPage]);
+    }, [page]);
     return null;
+  };
+
+  const handleOnChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setFilters({
+      ...filters,
+      [name]: value,
+    });
   };
 
   return (
@@ -92,65 +127,102 @@ export default function TutorList() {
           <input
             type="text"
             placeholder="Tên gia sư"
+            name="search"
+            onChange={handleOnChange}
+            value={filters.search}
             className="class__features__tutor__input"
           />
-          <select name="city" id="" className="class__features__item">
+          <select
+            name="city"
+            id=""
+            className="class__features__item"
+            onChange={handleOnChange}
+          >
             <option value="">Tất cả tỉnh/thành</option>
+            {city.map((item) => (
+              <option key={item.code} value={item.code}>
+                {item.name_with_type}
+              </option>
+            ))}
           </select>
-          <select name="district" id="" className="class__features__item">
+          <select
+            name="district"
+            id=""
+            className="class__features__item"
+            onChange={handleOnChange}
+          >
             <option value="">Tất cả quận/huyện</option>
+            {filters.city &&
+              district
+                .filter((item) => item.parent_code === filters.city + '')
+                .map((item) => (
+                  <option key={item.slug} value={item.slug}>
+                    {item.name_with_type}
+                  </option>
+                ))}
           </select>
-          <select name="subject" id="" className="class__features__item">
+          <select
+            name="subject"
+            id=""
+            className="class__features__item"
+            onChange={handleOnChange}
+          >
             <option value="">Chọn môn học</option>
+            {subjects.map((item) => (
+              <option value={item.id} key={item.id}>
+                {item.name}
+              </option>
+            ))}
           </select>
-          <select name="class" id="" className="class__features__item">
+          <select
+            name="class"
+            id=""
+            className="class__features__item"
+            onChange={handleOnChange}
+          >
             <option value="">Chọn lớp học</option>
+            {grades.map((item) => (
+              <option value={item.id} key={item.id}>
+                {item.name}
+              </option>
+            ))}
           </select>
-          <button>Tìm gia sư</button>
+          {/* <button>Tìm gia sư</button> */}
         </div>
       </div>
-      <div className="waiting__class__main">
-        <div className="class__list__tutor">
-          {tutorList.map((tutor, index) => (
-            <TutorItem tutor={tutor} key={index} />
-          ))}
+      {!loading ? (
+        <div className="waiting__class__main">
+          <div className="class__list__tutor">
+            {list.map((tutor, index) => (
+              <TutorItem tutor={tutor} key={index} />
+            ))}
+          </div>
+          {list.length > 0 && totalPages > 1 && (
+            <ReactPaginate
+              nextLabel={<CaretRightOutlined />}
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={3}
+              marginPagesDisplayed={2}
+              pageCount={totalPages}
+              previousLabel={<CaretLeftOutlined />}
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item"
+              previousLinkClassName="page-link"
+              nextClassName="page-item"
+              nextLinkClassName="page-link"
+              breakLabel="..."
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              activeClassName="active"
+              // renderOnZeroPageCount={null}
+            />
+          )}
         </div>
-        <ReactPaginate
-          nextLabel=">>"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={3}
-          marginPagesDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="<<"
-          pageClassName="page-item"
-          pageLinkClassName="page-link"
-          previousClassName="page-item"
-          previousLinkClassName="page-link"
-          nextClassName="page-item"
-          nextLinkClassName="page-link"
-          breakLabel="..."
-          breakClassName="page-item"
-          breakLinkClassName="page-link"
-          containerClassName="pagination"
-          activeClassName="active"
-          // renderOnZeroPageCount={null}
-        />
-        {/* <div className="class__pagination">
-          <div className="class__pagination__item class__pagination__item--nav">
-            <i className="fas fa-chevron-left"></i>
-          </div>
-          <div className="class__pagination__item">1</div>
-          <div className="class__pagination__item">2</div>
-          <div className="class__pagination__item class__pagination__item--checked">
-            3
-          </div>
-          <div className="class__pagination__item">...</div>
-          <div className="class__pagination__item">10</div>
-          <div className="class__pagination__item class__pagination__item--nav">
-            <i className="fas fa-chevron-right"></i>
-          </div>
-        </div> */}   
-      </div>
+      ) : (
+        <Loading />
+      )}
     </div>
   );
 }

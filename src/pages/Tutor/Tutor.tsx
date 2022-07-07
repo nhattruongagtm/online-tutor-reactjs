@@ -3,133 +3,180 @@ import { useHistory, useLocation } from 'react-router';
 import { COURSE_PATH } from '../../constants/path';
 import './style.scss';
 import * as qs from 'query-string';
-import {TutorItem} from '../../components/Home/TutorItem';
+import { TutorItem } from '../../components/Home/TutorItem';
 import { tutorApi } from '../../api/tutorApi';
+import Loading from '../../components/Common/Loading';
+import useAddress from '../../hooks/useAddress';
 
+interface RegisterSubject {
+  id: number;
+  name: string;
+  grades: string[];
+}
 export default function Tutor() {
   const history = useHistory();
   const location = useLocation().search;
-  const [tutor,setTutor] = useState<TutorItem>();
-
-  const params = qs.parse(location);    
+  const [tutor, setTutor] = useState<TutorItem>();
+  const [district, city] = useAddress();
+  const params = qs.parse(location);
 
   const id = params.id as string;
 
   useEffect(() => {
-
-    tutorApi.getTutorByID(Number(id)).then(res=>{
-      if(res){
-        setTutor(res);
+    tutorApi.getTutorByID(Number(id)).then((res) => {
+      if (res) {
+        setTutor(res.data);
       }
-    })
+    });
   }, []);
 
-  console.log(tutor)
+  const renderRegister = () => {
+    const subjects = tutor?.subjects;
+    let list: RegisterSubject[] = [];
+    if (subjects) {
+      subjects.forEach((subject) => {
+        const index = list.findIndex(
+          (item) => item.name === subject.subjectName
+        );
+        if (index > -1) {
+          list[index].grades.push(subject.gradeName);
+        } else {
+          list.push({
+            id: subject.id,
+            name: subject.subjectName,
+            grades: [subject.gradeName],
+          });
+        }
+      });
+    }
+    return (
+      <>
+        {list.map((item) => (
+          <span key={item.id}>
+            <strong>{item.name}:</strong>
+            <span>{item.grades.join(', ')}</span>
+          </span>
+        ))}
+      </>
+    );
+  };
 
   return (
     <div className="tutor__detail__main">
       {!tutor ? (
-        <h1>Loading...</h1>
+        <Loading />
       ) : (
         <div className="tutor__info">
           <div className="tutor__info__main">
-          <div className="tutor__info__general">
-            <div className="tutor__general__cv">
-              <img
-                src="https://vtv1.mediacdn.vn/thumb_w/650/2020/8/29/chadwick-boseman-elle-man-feature-1598674387430539628601.jpg"
-                alt=""
-                className="tutor__img"
-              />
-              <div className="tutor__general__cv__main">
-                <div className="tutor__general__name">Nguyễn Đô Ra Ê Môn</div>
-                <div className="tutor__general__identify">
-                  <span>
-                    <strong> MS:</strong> <span>18130261</span>
-                  </span>
-                  <span>
-                    <i className="fas fa-pen"></i> <span>10:09,</span>{' '}
-                    <span>17/08/2020</span>
-                  </span>
-                </div>
-                <div className="tutor__general__education">Sinh Viên</div>
-                <div className="tutor__general__fee">200.000/buổi</div>
-              </div>
-            </div>
-            <div className="tutor__info__follow">
-              <div className="tutor__info__follow__course">
-                <div className="tutor__info__course__icon">
-                  <i className="fab fa-leanpub"></i>
-                </div>
-                <div className="tutor__info__course__content">
-                  <span>Số khóa học đã dạy</span>
-                  <span>1</span>
-                </div>
-              </div>
-              <div className="tutor__info__follow__course">
-                <div className="tutor__info__course__icon">
-                  <i className="fab fa-acquisitions-incorporated"></i>
-                </div>
-                <div className="tutor__info__course__content">
-                  <span>Lượt đánh giá</span>
-                  <span>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="far fa-star"></i>
-                  </span>
+            <div className="tutor__info__general">
+              <div className="tutor__general__cv">
+                <img
+                  src={
+                    tutor.avatar ||
+                    `https://avatars.dicebear.com/api/avataaars/${tutor.id}
+              }.jpg`
+                  }
+                  alt=""
+                  className="tutor__img"
+                />
+                <div className="tutor__general__cv__main">
+                  <div className="tutor__general__name">{tutor.name}</div>
+                  <div className="tutor__general__identify">
+                    <span>
+                      <strong> MS:</strong> <span>1813026{tutor.id}</span>
+                    </span>
+                    <span>
+                      <i className="fas fa-pen"></i>{' '}
+                      <span>
+                        {tutor.createdDate &&
+                          new Date(tutor.createdDate)
+                            .toLocaleTimeString()
+                            .split('')
+                            .slice(0, 5)}
+                        ,
+                      </span>{' '}
+                      <span>
+                        {new Date(tutor.createdDate).toLocaleDateString()}
+                      </span>
+                    </span>
+                  </div>
+                  <div className="tutor__general__education">
+                    {tutor.education}
+                  </div>
+                  <div className="tutor__general__fee">200.000/buổi</div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div className="tutor__info__detail">
-            <div className="tutor__info__detail__item">
-              <div className="tutor__info__item__title">
-                Mô tả chi tiết gia sư
-              </div>
-              <div className="tutor__info__item__content">
-                Cấp 3 em là học sinh chuyên Toán trường Đại học Khoa học Tự
-                nhiên, Đại học Quốc gia Tp.HCM. Hiện em là sinh viên chuyên
-                ngành Kiểm Toán, Trường Đại học Kinh Tế Tp.HCM. Em có thể dạy
-                gia sư Toán cấp 2, gia sư Toán ôn thi học sinh giỏi, gia sư
-                tiếng Anh giao tiếp cơ bản.
-              </div>
-            </div>
-            <div className="tutor__info__location">
-            <div className="tutor__info__detail__item">
-              <div className="tutor__info__item__title">Các môn đã đăng ký</div>
-              <div className="tutor__info__item__content">
-                <span>
-                  <strong>Toán học:</strong>
-                  <span>Lớp 6,</span>
-                  <span>Lớp 7</span>
-                </span>
-                <span>
-                  <strong>Tiếng anh:</strong>
-                  <span>Lớp 8,</span>
-                  <span>Lớp 9</span>
-                </span>
+              <div className="tutor__info__follow">
+                <div className="tutor__info__follow__course">
+                  <div className="tutor__info__course__icon">
+                    <i className="fab fa-leanpub"></i>
+                  </div>
+                  <div className="tutor__info__course__content">
+                    <span>Số khóa học đã dạy</span>
+                    <span>1</span>
+                  </div>
+                </div>
+                <div className="tutor__info__follow__course">
+                  <div className="tutor__info__course__icon">
+                    <i className="fab fa-acquisitions-incorporated"></i>
+                  </div>
+                  <div className="tutor__info__course__content">
+                    <span>Lượt đánh giá</span>
+                    <span>
+                      <i className="fas fa-star"></i>
+                      <i className="fas fa-star"></i>
+                      <i className="fas fa-star"></i>
+                      <i className="fas fa-star"></i>
+                      <i className="far fa-star"></i>
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="tutor__info__detail__item">
-              <div className="tutor__info__item__title">Khu vực đăng ký</div>
-              <div className="tutor__info__item__content">
-                <span>
-                  <strong>Quận Gò Vấp </strong>
-                  <span>- Thành phố Hồ Chí Minh</span>
-                </span>
-                <span>
-                  <strong>Thành phố Thủ Đức </strong>
-                  <span>- Thành phố Hồ Chí Minh</span>
-                </span>
-                <span>
-                  <strong>Quận Bình Thạnh </strong>
-                  <span>- Thành phố Hồ Chí Minh</span>
-                </span>
+            <div className="tutor__info__detail">
+              <div className="tutor__info__detail__item">
+                <div className="tutor__info__item__title">
+                  Mô tả chi tiết gia sư
+                </div>
+                <div className="tutor__info__item__content">
+                  {tutor.description}
+                </div>
+              </div>
+              <div className="tutor__info__location">
+                <div className="tutor__info__detail__item">
+                  <div className="tutor__info__item__title">
+                    Các môn đã đăng ký
+                  </div>
+                  <div className="tutor__info__item__content">
+                    {renderRegister()}
+                  </div>
+                </div>
+                <div className="tutor__info__detail__item">
+                  <div className="tutor__info__item__title">
+                    Khu vực đăng ký
+                  </div>
+                  <div className="tutor__info__item__content">
+                    {tutor.areas.map((i) => (
+                      <span key={i.id}>
+                        <strong>
+                          {
+                            district.find((item) => item.slug === i.districtID)
+                              ?.name_with_type
+                          }
+                        </strong>
+                        <span>
+                          -{' '}
+                          {
+                            city.find((item) => Number(item.code) === i.cityID)
+                              ?.name_with_type
+                          }
+                        </span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
-            </div>
-          </div>
           </div>
           <div className="tutor__info__classes">
             <div className="tutor__info__classes__title">
@@ -145,7 +192,11 @@ export default function Tutor() {
                 <div className="class__item__uinfo">
                   <div className="uinfo__img">
                     <img
-                      src="https://img.vn/uploads/version/img24-png-20190726133727cbvncjKzsQ.png"
+                      src={
+                        tutor.avatar ||
+                        `https://avatars.dicebear.com/api/avataaars/${tutor.id}
+                    }.jpg`
+                      }
                       alt=""
                     />
                   </div>

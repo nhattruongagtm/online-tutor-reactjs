@@ -66,7 +66,7 @@
       .course__intro__btn {
         width: 250px;
         display: flex;
-        justify-content: right  ;
+        justify-content: right;
         gap: 10%;
         button {
           width: 45%;
@@ -411,4 +411,14 @@
   width: 100%;
   display: flex;
   justify-content: center;
+}
+.register__popup {
+  width: 450px !important;
+  .register__modal {
+    p {
+      font-weight: 500;
+      font-size: 18px;
+      margin-bottom: 10px!important;
+    }
+  }
 }

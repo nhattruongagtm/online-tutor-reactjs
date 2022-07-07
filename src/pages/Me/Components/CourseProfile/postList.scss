@@ -1,0 +1,16 @@
+.offer__list {
+  flex-wrap: wrap;
+  gap: 15px;
+  max-width: 300px;
+  width: fit-content;
+  display: flex;
+  gap: 15px;
+}
+.offer__modal {
+  width: fit-content !important;
+  transition: 0.3s;
+  top: 50% !important;
+  transform: translateY(-50%);
+  .ant-modal {
+  }
+}

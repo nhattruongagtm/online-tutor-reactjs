@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { courseApi } from '../../api/CourseApi';
@@ -6,6 +6,11 @@ import { ClassItem } from '../../components/WaitingClassList/WaitingClassList';
 import useUser from '../../hooks/useUser';
 import { RootState } from '../../store';
 import { addCart } from '../../reducers/cartSlice';
+import { Button, Modal } from 'antd';
+import { converLearningDate } from '../../utils/date';
+import { Input } from 'antd';
+import OfferForm from './OfferForm';
+const { TextArea } = Input;
 interface DetailInfoProps {
   course: ClassItem;
   isRegister: boolean;
@@ -33,6 +38,7 @@ export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
       toast.warning('Khoá học này đã tồn tại!');
     }
   };
+
   return (
     <>
       <div className="detail__course__main">
@@ -69,9 +75,10 @@ export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
           {!isRegister && (
             <div className="course__intro__btn">
               {user && user.type === 1 && (
-                <button className="course__intro__btn--receive">
-                  Nhận lớp
-                </button>
+                // <button className="course__intro__btn--receive">
+                //   Nhận lớp
+                // </button>
+                <OfferForm user={user} courseId={course.id} />
               )}
               <button
                 className="course__intro__btn--save"
@@ -157,7 +164,7 @@ export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
             </div>
             <div className="course__detail__item__info">
               <p>Ngày học dự kiến</p>
-              {/* <p>{course.learningDate.toLocaleDateString()}</p> */}
+              <p>{new Date(course.learningDate).toLocaleDateString()}</p>
             </div>
           </div>
           <div className="course__detail__item">
@@ -191,7 +198,9 @@ export const DetailInfo = ({ course, isRegister }: DetailInfoProps) => {
               course.schedule.map((item, index) => (
                 <div className="course__general__schedule__item" key={index}>
                   <div className="schedule__item__date">Thứ {item.day}</div>
-                  <div className="schedule__item__time">{item.time}</div>
+                  <div className="schedule__item__time">
+                    {converLearningDate(item.time)}
+                  </div>
                 </div>
               ))}
           </div>

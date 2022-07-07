@@ -122,21 +122,33 @@ const Avatar = styled.div`
 interface TutorItemProps {
   tutor: TutorItem;
 }
+interface RegisterArea {
+  id: number;
+  cityID:number;
+  districtID: string;
+}
+export interface RegisterSubject {
+  id: number;
+  gradeName:string;
+  subjectName: string;
+}
+
 export interface TutorItem {
   id: number;
   avatar: string;
   name: string;
   education: string;
   experience: string;
-  subject: string[];
+  subjects: RegisterSubject[];
   address: string;
   createdDate: Date,
   rate: number;
   description: string;
+  areas: RegisterArea[];     
 }
 export const TutorItem = ({ tutor }: TutorItemProps) => {
   const history = useHistory();
-  return (
+  return (  
     <div>
       <RecommendedItem>
         <Avatar>
@@ -148,7 +160,13 @@ export const TutorItem = ({ tutor }: TutorItemProps) => {
         <div className="subjects">
           <div className="subjects__title">Môn:</div>
           <div className="subjects__list">
-            <p>{tutor.subject.toString()}</p>
+            {/* <p>{tutor.subject.toString()}</p> */}
+            <p>
+            {tutor.subjects.map(item=>(
+              <span key={item.id}>{item.subjectName}</span>
+            ))}
+            </p>
+          
           </div>
         </div>
         <div className="address">
@@ -166,7 +184,7 @@ export const TutorItem = ({ tutor }: TutorItemProps) => {
               } else {
                 return <i className="fas fa-star star--border"></i>;
               }
-            })}
+            })}  
           </div>
         </div>
         <button className="tutor__detail">Xem chi tiết</button>

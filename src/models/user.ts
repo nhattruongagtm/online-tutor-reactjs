@@ -10,6 +10,10 @@ export interface User {
 }
 
 export interface UserInfo{
-  introduce: string;
-  info: string;
+  introduction: string;
+  addition: string;
+}
+
+export interface Tutor{
+  
 }

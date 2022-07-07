@@ -1,5 +1,6 @@
 import { resolve } from 'dns';
 import { ClassItem } from '../components/WaitingClassList/WaitingClassList';
+import { Offer } from '../models/offer';
 import { ResponseData } from '../models/response';
 import axiosClient from './axiosClient';
 import { Params, Resp } from './tutorApi';
@@ -260,4 +261,22 @@ export const courseApi = {
     const url = '/carts/' + id;
     return axiosClient.get(url, { params });
   },
+  deleteCart(postId: number, accountID: number): Promise<ResponseData<number>> {
+    const url = `/cart?postId=${postId}&accId=${accountID}`;
+    return axiosClient.delete(url);
+  },
+  offerPost(userID: number, postID: number, text: string): Promise<ResponseData<Offer>> {
+    const url = '/offer';
+    const params = {
+      post: {
+        id: postID,
+      },
+      tutor: {
+        id: userID,
+      },
+      content: text,
+    };
+    return axiosClient.post(url, params);
+  },
+ 
 };

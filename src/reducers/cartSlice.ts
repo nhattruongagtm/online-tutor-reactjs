@@ -18,9 +18,11 @@ const cartSlice = createSlice({
     },
     addCart: (state, action: PayloadAction<ClassItem>) => {
       state.list.push(action.payload);
+      state.totalItems = state.totalItems + 1;
     },
     deleteCart: (state, action: PayloadAction<number>) => {
-      state.list.filter((item) => item.id !== action.payload);
+      state.list = state.list.filter((item) => item.id !== action.payload);
+      state.totalItems = state.totalItems - 1;
     },
     updatePageData: (state, action: PayloadAction<Resp<ClassItem>>) => {
       state.currentPage = action.payload.currentPage;

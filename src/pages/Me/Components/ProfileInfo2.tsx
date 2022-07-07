@@ -13,24 +13,9 @@ import { loadUserInfo, UserProfile } from '../../../reducers/profileSlice';
 import { Button, Input } from 'antd';
 import { EditFilled, CheckOutlined } from '@ant-design/icons';
 import AdditionalInfo from './AdditionalInfo';
+import useAddress from '../../../hooks/useAddress';
+import { postApi } from '../../../api/postApi';
 const { TextArea } = Input;
-const rows = [
-  createData('India', 'IN', 1324171354, 3287263),
-  createData('China', 'CN', 1403500365, 9596961),
-  createData('Italy', 'IT', 60483973, 301340),
-  createData('United States', 'US', 327167434, 9833520),
-  createData('Canada', 'CA', 37602103, 9984670),
-  createData('Australia', 'AU', 25475400, 7692024),
-  createData('Germany', 'DE', 83019200, 357578),
-  createData('Ireland', 'IE', 4857000, 70273),
-  createData('Mexico', 'MX', 126577691, 1972550),
-  createData('Japan', 'JP', 126317000, 377973),
-  createData('France', 'FR', 67022000, 640679),
-  createData('United Kingdom', 'GB', 67545757, 242495),
-  createData('Russia', 'RU', 146793744, 17098246),
-  createData('Nigeria', 'NG', 200962417, 923768),
-  createData('Brazil', 'BR', 210147125, 8515767),
-];
 
 export default function ProfileInfo2() {
   const dispatch = useDispatch();
@@ -39,7 +24,7 @@ export default function ProfileInfo2() {
   const [user] = useUser();
   const [introduce, setIntroduce] = useState<boolean>(false);
   const userInfo = useSelector((state: RootState) => state.profile.userInfo);
-
+  const [districts, cities] = useAddress();
   useEffect(() => {
     user &&
       userApi
@@ -114,14 +99,23 @@ export default function ProfileInfo2() {
           <div className="profile__base__body__name">
             <div className="profile__item__label">Tỉnh/thành phố: </div>
             <select disabled={!isEdit}>
-              <option value="la">Long An</option>
+              <option value="la">
+                {
+                  cities.find((item) => item.code === userInfo.city)
+                    ?.name_with_type
+                }
+              </option>
             </select>
           </div>
           <div className="profile__base__body__name">
             <div className="profile__item__label">Quận/huyện: </div>
             <select disabled={!isEdit}>
-              <option value="hcm">Quận 1</option>
-              <option value="la">Tp Thủ Đức</option>
+              <option value="la">
+                {
+                  districts.find((item) => item.slug === userInfo.district)
+                    ?.name_with_type
+                }
+              </option>
             </select>
           </div>
           <div className="profile__base__body__name">
@@ -156,7 +150,7 @@ export default function ProfileInfo2() {
             <div className="profile__more__item">
               <div className="more__item__header">
                 <div className="icon">
-                <i className="fa-solid fa-book-open-cover"></i>   
+                  <i className="fa-solid fa-book-open-cover"></i>
                 </div>
               </div>
               <div className="more__item__number">

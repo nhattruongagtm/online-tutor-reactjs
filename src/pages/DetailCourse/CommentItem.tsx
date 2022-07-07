@@ -9,6 +9,9 @@ import { Params } from '../../api/tutorApi';
 import { PHOTO_URL } from '../../constants/auth';
 import { UserAuth } from '../../reducers/loginSlice';
 import { userApi } from '../../api/userApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadReply } from '../../reducers/detailCourseSlice';
+import { RootState } from '../../store';
 
 export interface Comment {
   id: number;
@@ -19,36 +22,28 @@ export interface Comment {
   content: string;
   avatar: string;
   name: string;
+  relies?: Reply[];
 }
 interface CommentItemProps {
   cmt: Comment;
 }
-const replysList: Reply[] = [];
-
-const setReplyList = (comment: Reply): void => {
-  console.log(comment);
-};
-
-export const ReplyCommentContext = createContext({ replysList, setReplyList });
-
 export const CommentItem = ({ cmt }: CommentItemProps) => {
-  const [isDisplayMore, setIsDisplayMore] = useState<boolean>(false);
-  const [replyList, setReplysList] = useState<Reply[]>([]);
+  const [isDisplayMore, setIsDisplayMore] = useState<boolean>(true);
   const [isReply, setIsReply] = useState<boolean>(false);
   const dateRef = useRef<Date>(new Date());
   const [own, setOwn] = useState<UserAuth>();
+  const replyList = useSelector(
+    (state: RootState) => state.detailCourse.pageInfo.list
+  ).find((item) => item.id === cmt.id)?.relies;
+
+  console.log(replyList);
+  const dispatch = useDispatch();
   useEffect(() => {
     // get reply comments
     const params: Params = {
       page: 1,
       limit: 5,
     };
-    commentApi
-      .getReplyByCommentID(cmt.id, params)
-      .then((res) => {
-        setReplysList(res.data.list);
-      })
-      .catch((e) => console.log(e));
     userApi
       .getUserByID(cmt.userID)
       .then((res) => {
@@ -63,76 +58,61 @@ export const CommentItem = ({ cmt }: CommentItemProps) => {
     setOwn(user);
   };
 
-  const setReplyList = (comment: Reply) => {
-    commentApi
-      .replyComment(comment)
-      .then((res) => {
-        setReplysList([comment, ...replyList]);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
   const onGetDisplayForm = () => {
     setIsReply(true);
   };
   return (
-    <ReplyCommentContext.Provider value={{ replysList, setReplyList }}>
-      <div className="comment__item">
-        <div className="comment__body">
-          <div className="comment__item__avatar">
-            <img src={cmt.avatar ? cmt.avatar : PHOTO_URL} alt="" />
-          </div>
-          <div className="comment__item__main">
-            <div className="content__item__name">
-              <p>{cmt.name}</p>
-            </div>
-            <div className="content__item__comment">
-              <p>{cmt.content}</p>
-            </div>
-          </div>
-          <i className="fas fa-ellipsis-h"></i>
+    <div className="comment__item">
+      <div className="comment__body">
+        <div className="comment__item__avatar">
+          <img src={cmt.avatar ? cmt.avatar : PHOTO_URL} alt="" />
         </div>
-        <div className="comment__footer">
-          {/* <span>Thích</span> */}
-          <span onClick={() => setIsReply(!isReply)}>Trả lời</span>
-          <span>{convertDate(dateRef.current, new Date(cmt.createdDate))}</span>
+        <div className="comment__item__main">
+          <div className="content__item__name">
+            <p>{cmt.name}</p>
+          </div>
+          <div className="content__item__comment">
+            <p>{cmt.content}</p>
+          </div>
         </div>
-        {isReply && (
-          <div className="comment__reply__form">
-            <ReplyForm cmt={cmt} own={own} />
-          </div>
-        )}
-        {replyList.length > 0 && (
-          <div
-            className="comment__addition"
-            onClick={() => setIsDisplayMore(!isDisplayMore)}
-          >
-            {isDisplayMore
-              ? 'Ẩn câu trả lời'
-              : `Xem ${replyList.length} câu trả lời`}{' '}
-            {isDisplayMore ? (
-              <i className="fas fa-chevron-up"></i>
-            ) : (
-              <i className="fas fa-chevron-down"></i>
-            )}
-          </div>
-        )}
-        {isDisplayMore && (
-          <div className="comment__reply">
-            {replyList &&
-              replyList.map((cm, index) => (
-                <ReplayItem
-                  cmt={cm}
-                  key={index}
-                  isDisplay={onGetDisplayForm}
-                  onGetOwn={handleChangeUser}
-                />
-              ))}
-          </div>
-        )}
+        <i className="fas fa-ellipsis-h"></i>
       </div>
-    </ReplyCommentContext.Provider>
+      <div className="comment__footer">
+        {/* <span>Thích</span> */}
+        <span onClick={() => setIsReply(!isReply)}>Trả lời</span>
+        <span>{convertDate(dateRef.current, new Date(cmt.createdDate))}</span>
+      </div>
+      {isReply && (
+        <div className="comment__reply__form">
+          <ReplyForm cmt={cmt} own={own} onClose={() => setIsReply(false)} />
+        </div>
+      )}
+      {replyList && replyList.length > 0 && (
+        <div
+          className="comment__addition"
+          onClick={() => setIsDisplayMore(!isDisplayMore)}
+        >
+          {!isDisplayMore
+            ? 'Ẩn câu trả lời'
+            : `Xem ${replyList.length} câu trả lời`}{' '}
+          {!isDisplayMore ? (
+            <i className="fas fa-chevron-up"></i>
+          ) : (
+            <i className="fas fa-chevron-down"></i>
+          )}
+        </div>
+      )}
+      <div className={`comment__reply ${isDisplayMore ? 'display' : ''}`}>
+        {replyList &&
+          replyList.map((cm, index) => (
+            <ReplayItem
+              cmt={cm}
+              key={index}
+              isDisplay={onGetDisplayForm}
+              onGetOwn={handleChangeUser}
+            />
+          ))}
+      </div>
+    </div>
   );
 };

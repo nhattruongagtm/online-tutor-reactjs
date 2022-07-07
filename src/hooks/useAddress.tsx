@@ -1,10 +1,11 @@
+import { RSA_SSLV23_PADDING } from 'constants';
 import React, { useEffect, useState } from 'react';
-interface District {
+export interface District {
   name_with_type: string;
   parent_code: string;
   slug: string;
 }
-interface City {
+export interface City {
   name_with_type: string;
   code: string;
   slug: string;
@@ -14,11 +15,12 @@ export default function useAddress(): [District[], City[]] {
   const [city, setCitys] = useState<City[]>([]);
   // get citys data
   useEffect(() => {
-    fetch(
-      'https://raw.githubusercontent.com/madnh/hanhchinhvn/master/dist/tinh_tp.json'
-    )
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchCities = async () => {
+      try {
+        const data = await fetch(
+          'https://raw.githubusercontent.com/madnh/hanhchinhvn/master/dist/tinh_tp.json'
+        ).then((res) => res.json());
+
         let list: City[] = [];
         Object.keys(data).map((item) => {
           const name = data[item].name_with_type;
@@ -30,17 +32,22 @@ export default function useAddress(): [District[], City[]] {
           list.push(newCity);
         });
         setCitys(list);
-      })
-      .catch((e) => console.log(e));
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchCities();
   }, []);
 
   // get districts data
   useEffect(() => {
-    fetch(
-      'https://raw.githubusercontent.com/madnh/hanhchinhvn/master/dist/quan_huyen.json'
-    )
-      .then((response) => response.json())
-      .then((data) => {
+  
+    const fetchCities = async () => {
+      try {
+        const data = await fetch(
+          'https://raw.githubusercontent.com/madnh/hanhchinhvn/master/dist/quan_huyen.json'
+        ).then((res) => res.json());
+
         let list: District[] = [];
         Object.keys(data).map((item) => {
           const name = data[item].name_with_type;
@@ -56,8 +63,11 @@ export default function useAddress(): [District[], City[]] {
           list.push(newDistrict);
         });
         setDistricts(list);
-      })
-      .catch((e) => console.log(e));
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchCities();
   }, []);
   return [district, city];
 }

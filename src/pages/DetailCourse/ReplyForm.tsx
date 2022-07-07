@@ -1,19 +1,21 @@
 import React, { useContext, useState } from 'react';
 import { commentApi } from '../../api/commentApi';
 import useUser from '../../hooks/useUser';
-import { CommentContext } from './Comment';
-import { Comment, ReplyCommentContext } from './CommentItem';
+import { Comment } from './CommentItem';
 import { Reply } from './ReplyItem';
 import { UserAuth } from '../../reducers/loginSlice';
 import { PHOTO_URL } from '../../constants/auth';
+import { useDispatch } from 'react-redux';
+import { addReply } from '../../reducers/detailCourseSlice';
 interface ReplyFormProps {
   cmt: Comment;
   own: UserAuth | undefined;
+  onClose: () => void
 }
 
-export const ReplyForm = ({ cmt, own }: ReplyFormProps) => {
-  const commentUtils = useContext(ReplyCommentContext);
+export const ReplyForm = ({ cmt, own, onClose }: ReplyFormProps) => {
   const [user] = useUser();
+  const dispatch = useDispatch();
   const [comment, setComment] = useState<string>('');
   const [isDisplayButton, setIsDisplayButton] = useState<boolean>(false);
 
@@ -39,8 +41,16 @@ export const ReplyForm = ({ cmt, own }: ReplyFormProps) => {
         ownID: 1,
       };
 
-      commentUtils.setReplyList(commentItem);
-      setComment('');
+      commentApi
+        .replyComment(commentItem)
+        .then((res) => {
+          onClose();
+          dispatch(addReply(commentItem));
+          setComment('');
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     }
   };
   return (

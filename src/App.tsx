@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import 'antd/dist/antd.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useLocation } from 'react-router';
 import DashBoard from './Admin/pages/Dashboard';
 import './App.scss';
@@ -14,6 +14,7 @@ import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import Home from './components/Home/Home';
 import News from './components/News/News';
+import Spin from './components/Common/Spin';
 import TutorList from './components/TutorList/TutorList';
 import WaitingClassList from './components/WaitingClassList/WaitingClassList';
 import { ACCESS_TOKEN } from './constants/auth';
@@ -26,6 +27,7 @@ import {
   FIND_TUTOR_PATH,
   FORGET_PASSWORD_PATH,
   HOME_PATH,
+  LOGIN_ADMIN,
   LOGIN_PATH,
   ME_PATH,
   NEWS_PATH,
@@ -43,11 +45,15 @@ import { updateStatus } from './reducers/forgotPasswordSlice';
 import { updateProgressSignUp } from './reducers/signUpSlice';
 import { courseApi } from './api/CourseApi';
 import useUser from './hooks/useUser';
+import LoginAdmin from './Admin/pages/Login/LoginAdmin';
+import { RootState } from './store';
 
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
   const [user] = useUser();
+
+  const loading = useSelector((state: RootState) => state.loading.loading);
 
   // const selectorSignUpFill = useSelector((state: IInitialState) => state.signUpInfo);
 
@@ -80,13 +86,15 @@ function App() {
 
   const isAdminPage = location.pathname.toString().indexOf('/admin') !== -1;
 
-
   return (
-    <div>
+    <div className="app">
       <Toast />
       {isAdminPage ? (
         <Switch>
-          <Route path="/admin">
+          <Route path="/admin/login">
+            <LoginAdmin />
+          </Route>
+          <Route path="*">
             <DashBoard />
           </Route>
         </Switch>
@@ -159,6 +167,7 @@ function App() {
           </Route>
         </Switch>
       )}
+      {loading && <Spin />}
     </div>
   );
 }

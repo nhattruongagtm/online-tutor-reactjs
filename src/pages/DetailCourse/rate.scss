@@ -1,11 +1,33 @@
-.see__more{
-    margin-top: 20px;
-    width: fit-content;
-    padding: 5px;
-    border-radius: 5px;
-    background-color: rgb(238, 238, 238);
-    font-size: 14px;
-    cursor: pointer;
+.see__more {
+  margin-top: 20px;
+  width: fit-content;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: rgb(238, 238, 238);
+  font-size: 14px;
+  cursor: pointer;
+}
+.rate__form {
+  display: flex;
+  margin-bottom: 30px;
+  flex-direction: column;
 
+  .rate__main {
+    display: flex;
+  }
+  .rate__title {
+    margin-bottom: 15px;
+  }
 
+  .rate__star {
+    margin-bottom: 20px;
+  }
+
+  .rate__send {
+    align-self: end;
+  }
+  .rate__text {
+    width: 400px;
+    margin-right: 15px;
+  }
 }

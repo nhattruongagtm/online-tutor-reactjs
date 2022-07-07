@@ -1,13 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { courseApi } from '../../api/CourseApi';
-import { COURSE_PATH } from '../../constants/path';
+import { subjectApi } from '../../api/subjectApi';
+import { Params } from '../../api/tutorApi';
+import { Grade } from '../../models/grade';
+import { Subject } from '../../models/subject';
+import {
+  IWaitingClass,
+  loadWaitingList,
+  updatePage,
+} from '../../reducers/waitingClass';
+import { RootState } from '../../store';
+import Loading from '../Common/Loading';
+import { SelectedItem } from '../TutorList/TutorList';
 import '../WaitingClassList/style.scss';
 import { ClassItem } from './ClassItem';
-import { SelectedItem } from '../TutorList/TutorList';
-import Loading from '../Common/Loading';
-interface LearningDate {
+export interface LearningDate {
+  ids?: number;
   day: number;
   time: number;
 }
@@ -34,32 +45,64 @@ export interface ClassItem {
 }
 export interface FilterWaiting {}
 export default function WaitingClassList() {
-  const limit = 2;
   const history = useHistory();
+  const dispatch = useDispatch();
+  const store = useSelector((state: RootState) => state.waitingClass);
+  const { limit, list, page, totalItems, totalPages } = store;
   const [isToogleFilter, setIsToogleFilter] = useState<boolean>(false);
-  const [courses, setCourses] = useState<ClassItem[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalRows, setTotalRows] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [pageCount, setPageCount] = useState<number>(
-    Math.ceil(totalRows / limit)
-  );
+  const [filters, setFilters] = useState<Params>({
+    page,
+    limit,
+  });
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [grades, setGrades] = useState<Grade[]>([]);
+  useEffect(() => {
+    const params: Params = {
+      page: 1,
+      limit: 100,
+    };
+    subjectApi
+      .getAllSubject(params)
+      .then((res) => {
+        const { data } = res;
+        data && setSubjects(data.list);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
+  useEffect(() => {
+    subjectApi
+      .getAllGrade()
+      .then((res) => {
+        console.log(res.data);
+        setGrades(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
   useEffect(() => {
     // get data from api
     let isCancel = false;
-    const params = {
-      limit: limit,
-      page: currentPage,
-    };
+
     setIsLoading(true);
     courseApi
-      .getWaitingClass(params)
+      .getWaitingClass(filters)
       .then((res) => {
-        console.log(res);
-        const totalItems = res.data.totalItems;
-        setTotalRows(totalItems);
-        setPageCount(Math.ceil(totalItems / limit));
-        setCourses(res.data.list);
+        const { data } = res;
+        const { currentPage, list, totalItems, totalPages } = data;
+        const pageData: IWaitingClass = {
+          page,
+          list,
+          totalItems,
+          totalPages,
+          limit,
+        };
+
+        console.log(pageData.page, list);
+        dispatch(loadWaitingList(pageData));
         setIsLoading(false);
       })
       .catch((e) => {
@@ -75,16 +118,29 @@ export default function WaitingClassList() {
     return () => {
       isCancel = true;
     };
-  }, [currentPage]);
+  }, [page, filters]);
   const handlePageClick = (data: SelectedItem) => {
     const currentPage = data.selected + 1;
-    setCurrentPage(currentPage);
+    dispatch(updatePage(currentPage));
+    setFilters({ ...filters, page: currentPage });
   };
   const ScrollToTop = () => {
     useEffect(() => {
       window.scrollTo(0, 0);
-    }, [currentPage]);
+    }, [page]);
     return null;
+  };
+
+  const handleOnChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setFilters({
+      ...filters,
+      [name]: name !== 'search' ? Number(value) : value,
+    });
   };
 
   return (
@@ -98,7 +154,7 @@ export default function WaitingClassList() {
             onClick={() => setIsToogleFilter(!isToogleFilter)}
           >
             Tìm khóa học
-          </div>  
+          </div>
         </div>
         <div
           className={
@@ -107,27 +163,61 @@ export default function WaitingClassList() {
               : 'class__features'
           }
         >
-          <input type="text" placeholder="Tên khóa học" />
-          <select name="address" id="" className="class__features__item">
+          <input
+            type="text"
+            placeholder="Tên khóa học"
+            onChange={handleOnChange}
+            value={filters.search}
+            name="search"
+          />
+          <select name="location" id="" className="class__features__item">
             <option value="">Chọn địa điểm</option>
           </select>
-          <select name="subject" id="" className="class__features__item">
+          <select
+            name="subjectID"
+            id=""
+            className="class__features__item"
+            onChange={handleOnChange}
+          >
             <option value="">Chọn môn học</option>
+            {subjects.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.name}
+              </option>
+            ))}
           </select>
-          <select name="class" id="" className="class__features__item">
+          <select
+            name="class"
+            id=""
+            className="class__features__item"
+            onChange={handleOnChange}
+          >
             <option value="">Chọn lớp</option>
+            {grades.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.name}
+              </option>
+            ))}
           </select>
-          <select name="format" id="" className="class__features__item">
+          <select
+            name="formality"
+            id=""
+            className="class__features__item"
+            onChange={handleOnChange}
+          >
             <option value="">Hình thức dạy</option>
+            <option value="0">Online</option>
+            <option value="1">Tại trung tâm</option>
+            <option value="2">Tại nhà</option>
           </select>
-          <button>Tìm khóa học</button>
+          {/* <button>Tìm khóa học</button> */}
         </div>
       </div>
-      {courses.length > 0 && (
+      {list.length > 0 && (
         <div className="waiting__class__main">
           <div className="class__list">
-            {courses &&
-              courses.map((course) => (
+            {list &&
+              list.map((course) => (
                 <ClassItem classItem={course} key={course.id} />
               ))}
           </div>
@@ -136,7 +226,7 @@ export default function WaitingClassList() {
             onPageChange={handlePageClick}
             pageRangeDisplayed={3}
             marginPagesDisplayed={2}
-            pageCount={pageCount}
+            pageCount={totalPages}
             previousLabel="<<"
             pageClassName="page-item"
             pageLinkClassName="page-link"
@@ -152,7 +242,7 @@ export default function WaitingClassList() {
             // renderOnZeroPageCount={null}
           />
         </div>
-      )}     
+      )}
       {isLoading && <Loading />}
     </div>
   );
