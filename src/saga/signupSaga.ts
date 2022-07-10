@@ -8,6 +8,8 @@ import {
 } from '@redux-saga/core/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
+import { AdditionalInfo } from '../models/user';
+import { userApi } from '../api/userApi';
 
 import { authApi, ResponseData } from '../api/authApi';
 
@@ -40,7 +42,21 @@ function* signUp() {
     const resp: ResponseData<ISignUpInfo> = yield call(authApi.signUp, user);
     if (resp.data.id) {
       yield put(requestSignUpSuccess());
-      yield put(updateProgressSignUp(3));
+
+      const info: AdditionalInfo = {
+        addition: '',
+        introduction: '',
+        account: {
+          id: resp.data.id,
+        },
+      };
+      const res: ResponseData<AdditionalInfo> = yield call(
+        userApi.createAdditionalInfo,
+        info
+      );
+      if (res.data) {
+        yield put(updateProgressSignUp(3));
+      }
     } else {
       toast.error('Đã xảy ra lỗi, vui lòng thử lại!');
       yield put(requestSignUpFail('error!'));
@@ -55,7 +71,7 @@ function* validateCode({ payload }: PayloadAction<string>) {
     (state: SignUpSelector) => state.signUpUser
   );
 
-  const { code } = signUpSelector;  
+  const { code } = signUpSelector;
 
   if (code === payload) {
     // go to sign up
@@ -63,7 +79,7 @@ function* validateCode({ payload }: PayloadAction<string>) {
 
     yield takeLatest(requestSignUpProfile, signUp);
   } else {
-    toast.error('Mã xác nhận không đúng!');  
+    toast.error('Mã xác nhận không đúng!');
   }
 }
 

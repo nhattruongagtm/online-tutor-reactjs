@@ -1,5 +1,6 @@
 import { MuiThemeProvider } from '@material-ui/core';
 import moment from 'moment';
+import { listenerCount } from 'process';
 import {
   ClassItem,
   LearningDate,
@@ -22,9 +23,14 @@ export interface TimeTable {
   Subject: String;
   IsReadonly: boolean;
 }
+
+const formatToString = (number: number) => {
+  return number < 10 ? '0' + number : number;
+};
 export const getFinishedTime = (
   time: number,
   numberOfMonth: number,
+  subjectName: string,
   //   schedule {day,time}
   days: LearningDate[]
 ) => {
@@ -39,7 +45,7 @@ export const getFinishedTime = (
 
   const endTime = startTime.clone().add(totalDaysOfMonths, 'days');
 
-  return getDateListFromTwoDates(startTime, endTime, days);
+  return getDateListFromTwoDates(startTime, endTime, days, subjectName);
 };
 export const getDateTimeFromNumberChain = (chain: number): String => {
   const date = new Date(chain);
@@ -60,7 +66,7 @@ export const getDateListFromTwoDates = (
   startDate: moment.Moment,
   endTime: moment.Moment,
   days: LearningDate[],
-  post?: ClassItem
+  subjectName?: string
 ) => {
   let rs: TimeTable[] = [];
   let now = startDate.clone();
@@ -83,12 +89,39 @@ export const getDateListFromTwoDates = (
           EndTime: now.clone().add(90, 'minutes').toDate(),
           IsReadonly: false,
           Id: now.clone().toDate().toISOString(),
-          Subject: post?.subject || '',
+          Subject: subjectName || '',
         };
         rs.push(data);
       }
     });
     now.add(1, 'days');
+  }
+  return rs;
+};
+
+export const getDaysInMonth = (
+  month: number = new Date().getMonth() + 1,
+  year: number = new Date().getFullYear()
+) => {
+  let rs: string[] = [];
+  const startDate = moment(
+    `${year}-${formatToString(month)}-01`,
+    'YYYY-MM-DD'
+  ).set('day', 1);
+  const daysInMonth = moment(
+    `${year}-${formatToString(month)}`,
+    'YYYY-MM'
+  ).daysInMonth();
+  const endDate = moment(
+    `${year}-${formatToString(month)}-01`,
+    'YYYY-MM-DD'
+  ).set('day', daysInMonth);
+
+  const current = startDate.clone();
+  while (current.isSameOrBefore(endDate)) {
+    const item = current.format('YYYY-MM-DD');
+    rs.push(item);
+    current.add(1, 'days');
   }
   return rs;
 };

@@ -1,16 +1,13 @@
+import Dialog from '@mui/material/Dialog';
+import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { courseApi } from '../../api/CourseApi';
 import { ClassItem } from '../../components/WaitingClassList/WaitingClassList';
-import './checkout.scss';
-import qs from 'query-string';
 import { DetailInfo } from '../DetailCourse/DetailInfo';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import './checkout.scss';
+import { classroomApi } from '../../api/classroom';
+import { Register } from '../../models/classroom';
 interface Props {}
 
 interface Payment {
@@ -70,7 +67,7 @@ export const Checkout = (props: Props) => {
     courseApi
       .getCourseByID(Number(id))
       .then((res) => {
-        console.log("course",res);
+        console.log('course', res);
         if (res) {
           setCourse(res.data);
         }
@@ -84,16 +81,38 @@ export const Checkout = (props: Props) => {
       });
   }, []);
 
-  const handleCheckout = (value: boolean) => {
-    handleClickOpen();
-    setPaymentStatus(value);
+  const handleCheckout = async (value: boolean) => {
+    // handleClickOpen();
+    // setPaymentStatus(value);
+    if (course) {
+      const data: Register = {
+        post: {
+          id: course.id,
+        },
+        tutor: {
+          id: 1,
+        },
+        quantity: 0,
+        status: 0,
+      };
+      try {
+        const classroom = await classroomApi.createClass(data);
+        console.log(classroom);
+        if (classroom.data) {
+          handleClickOpen();
+          setPaymentStatus(value);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   const CheckoutDialog = () => {
     return (
       <div className="checkout__dialog">
         <div className="checkout__notify__icon">
-        <i className="fas fa-check-circle"></i>
+          <i className="fas fa-check-circle"></i>
         </div>
         <div className="checkout__notify__title">
           {paymentStatus
@@ -105,7 +124,9 @@ export const Checkout = (props: Props) => {
             ? notifyModals.checkoutNow.content
             : notifyModals.checkoutLater.content}
         </div>
-        <div className="checkout__notify__close" onClick={handleClose}>Đóng</div>
+        <div className="checkout__notify__close" onClick={handleClose}>
+          Đóng
+        </div>
       </div>
     );
   };
@@ -238,9 +259,8 @@ export const Checkout = (props: Props) => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
               >
-                <CheckoutDialog/>
+                <CheckoutDialog />
               </Dialog>
-
             </div>
           </div>
         </div>

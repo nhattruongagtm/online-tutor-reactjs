@@ -1,3 +1,4 @@
+import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { useDispatch, useSelector } from 'react-redux';
@@ -42,6 +43,9 @@ export interface ClassItem {
   learningDate: Date;
   offer: number;
   schedule: LearningDate[];
+  post: {
+    learningDate: number;
+  };
 }
 export interface FilterWaiting {}
 export default function WaitingClassList() {
@@ -139,10 +143,10 @@ export default function WaitingClassList() {
 
     setFilters({
       ...filters,
-      [name]: name !== 'search' ? Number(value) : value,
+      [name]: isNaN(Number(value)) ? value : Number(value),
     });
   };
-
+   
   return (
     <div className="waiting__class">
       <ScrollToTop />
@@ -209,6 +213,27 @@ export default function WaitingClassList() {
             <option value="0">Online</option>
             <option value="1">Tại trung tâm</option>
             <option value="2">Tại nhà</option>
+          </select>
+          <select
+            name="sort"
+            id=""
+            className="class__features__item"
+            onChange={handleOnChange}
+          >
+            <option value="">sắp xếp theo</option>
+            <option value="title">Tiêu đề</option>
+            <option value="tuition">Học phí</option>
+            <option value="createdDate">Ngày đăng</option>
+          </select>
+          <select
+            name="orderBy"
+            id=""
+            className="class__features__item"
+            onChange={handleOnChange}
+          >
+            <option value="">theo thứ tự</option>
+            <option value="asc">Tăng dần</option>
+            <option value="desc">Giảm dần</option>
           </select>
           {/* <button>Tìm khóa học</button> */}
         </div>

@@ -8,10 +8,11 @@ import { ClassItem } from '../../../../components/WaitingClassList/WaitingClassL
 import { userApi } from '../../../../api/userApi';
 import useUser from '../../../../hooks/useUser';
 import { converLearningDate } from '../../../../utils/date';
+import { Classroom } from '../../../../models/classroom';
 interface LearningCourseProps {}
 
 export const LearningCourse = (props: LearningCourseProps) => {
-  const [classes, setClasses] = useState<ClassItem[]>([]);
+  const [classes, setClasses] = useState<Classroom[]>([]);
   const [user] = useUser();
   useEffect(() => {
     user &&
@@ -31,7 +32,7 @@ export const LearningCourse = (props: LearningCourseProps) => {
       title: 'STT',
       dataIndex: 'stt',
       key: 'stt',
-      render: (text: any, item: ClassItem) => (
+      render: (text: any, item: Classroom) => (
         <a>{classes.indexOf(item) + 1}</a>
       ),
     },
@@ -49,7 +50,7 @@ export const LearningCourse = (props: LearningCourseProps) => {
       title: 'Thời gian học',
       dataIndex: 'classes',
       key: 'classes',
-      render: (_: any, record: any) => (
+      render: (_: any, record: Classroom) => (
         <>
           {record.schedules.map((item: any) => (
             <p key={item.ids}>
@@ -62,7 +63,7 @@ export const LearningCourse = (props: LearningCourseProps) => {
     {
       title: '',
       key: 'go',
-      render: (_: any, record: ClassItem) => <Button>Vào lớp học</Button>,
+      render: (_: any, record: Classroom) => <Button>Vào lớp học</Button>,
     },
   ];
 

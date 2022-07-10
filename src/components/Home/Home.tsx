@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../Home/style.scss';
 import Banner from './Banner';
 import ContactForm from './ContactForm';
+import NewPosts from './NewPosts';
 import RecommendedList from './RecommendedList';
 
 export default function Home() {

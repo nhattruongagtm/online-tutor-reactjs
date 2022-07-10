@@ -7,13 +7,14 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import md5 from 'md5';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import { authApi } from '../../../api/authApi';
 import NewPassword from '../../../components/Auth/ForgotPassword/NewPassword';
 import useUser from '../../../hooks/useUser';
 
 interface ChangePasswordProps {}
 
-interface ChangePassword {
+interface Change {
   newPassword: string;
   retype: string;
 }
@@ -22,7 +23,7 @@ export const ChangePassword = (props: ChangePasswordProps) => {
   const [isSending, setIsSending] = useState<boolean>(false);
   const [step, setStep] = useState<number>(0);
   const [inputStep1, setInputStep1] = useState<string>('');
-  const [inputStep2, setInputStep2] = useState<ChangePassword>({
+  const [inputStep2, setInputStep2] = useState<Change>({
     newPassword: '',
     retype: '',
   });
@@ -48,7 +49,7 @@ export const ChangePassword = (props: ChangePasswordProps) => {
             setIsSending(false);
             setStep(1);
           } else {
-            console.log('Không thể gửi mã, vui lòng thử lại!');
+            toast.error('Không thể gửi mã, vui lòng thử lại!');
           }
         })
         .catch((e) => {
@@ -64,21 +65,21 @@ export const ChangePassword = (props: ChangePasswordProps) => {
       if (inputStep1 === code) {
         setStep(2);
       } else {
-        console.log('Sai mã!');
+        toast.error('Mã xác nhận không đúng! Vui lòng thử lại!');
       }
     } else {
-      console.log('Vui lòng nhập mã!');
+      toast.warning('Vui lòng nhập mã xác nhận!');
     }
   };
   const handleChangePassword = () => {
     if (inputStep2.newPassword === '') {
-      console.log('Vui lòng nhập mật khẩu!');
+      toast.error('Vui lòng nhập mật khẩu!');
     } else if (inputStep2.newPassword.length < 8) {
-      console.log('Mật khẩu phải chứa tối thiểu 8 ký tự!');
+      toast.error('Mật khẩu phải chứa tối thiểu 8 ký tự!');
     } else if (inputStep2.retype === '') {
-      console.log('Vui lòng xác nhận mật khẩu!');
+      toast.error('Vui lòng xác nhận mật khẩu!');
     } else if (inputStep2.newPassword !== inputStep2.retype) {
-      console.log('Mật khẩu không khớp!');
+      toast.error('Mật khẩu không khớp!');
     } else {
       setIsSending(true);
       user &&
@@ -88,7 +89,7 @@ export const ChangePassword = (props: ChangePasswordProps) => {
             if (res) {
               setStep(3);
             } else {
-              console.log('Đã xảy lỗi, vui lòng thử lại!');
+              toast.error('Đã xảy lỗi, vui lòng thử lại!');
             }
             setIsSending(false);
           })

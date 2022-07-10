@@ -39,7 +39,7 @@ export const ChartZoom = ({ type, name, options }: ChartZoomProps) => {
   return (
     <>
       <i className="fas fa-search-plus" onClick={handleClickOpen}></i>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} className="chart__popup">
         <DialogTitle>{name}</DialogTitle>
         <DialogContent className="chart">
           {type === 1 ? (

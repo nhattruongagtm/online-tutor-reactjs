@@ -9,11 +9,18 @@ export interface User {
   type: number;
 }
 
-export interface UserInfo{
+export interface UserInfo {
   introduction: string;
   addition: string;
 }
 
-export interface Tutor{
-  
+export interface Tutor {}
+
+export interface AdditionalInfo {
+  id?: number;
+  introduction: string;
+  addition: string;
+  account?: {
+    id: number;
+  };
 }

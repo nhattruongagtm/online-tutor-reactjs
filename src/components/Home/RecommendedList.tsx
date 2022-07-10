@@ -5,6 +5,7 @@ import '../Home/recommend.scss';
 import { tutorApi } from '../../api/tutorApi';
 import { TutorItem as Item } from './TutorItem';
 import { TutorItem } from '../TutorList/TutorItem';
+import NewPosts from './NewPosts';
 export const galaxy = '#e3fff9';
 const RecommendedMain = styled.div`
   margin-top: 10px !important;
@@ -103,17 +104,9 @@ export default function RecommendedList() {
   // ];
   return (
     <div id="recommend" className="recommend">
-      <RecommendTilte>Gợi ý gia sư cho bạn</RecommendTilte>
+      <RecommendTilte>Bài đăng mới nhất</RecommendTilte>
       <RecommendedMain>
-        <div className="waiting__class__main">
-          <div className="class__list__tutor">
-            {/* <Slider {...settings} className="carousel_recommend"> */}
-            {/* {recommendList.map((tutor, index) => (
-              <TutorItem tutor={tutor} key={index} />
-            ))} */}
-          </div>
-        </div>
-        {/* </Slider> */}
+        <NewPosts />
       </RecommendedMain>
     </div>
   );

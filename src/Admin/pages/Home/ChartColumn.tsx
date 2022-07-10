@@ -11,6 +11,7 @@ import {
 import React, { createContext, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { ChartZoom } from './ChartZoom';
+import ColumnChart from './ColumnChart';
 
 interface HomeProps {}
 
@@ -50,18 +51,20 @@ export const dataColumn = {
 };
 
 interface ChartColumnProps {
-    isOpen: boolean
+  isOpen: boolean;
 }
 
 export const ChartColumnContext = createContext(dataColumn);
 
-
 export const ChartColumn = () => {
   return (
     <ChartColumnContext.Provider value={dataColumn}>
-      <Bar options={options} data={dataColumn} />
+      {/* <Bar options={options} data={dataColumn} /> */}
+      <div className="chart--column">
+      <ColumnChart type={0}/>
+      </div>
 
-      <ChartZoom type={1} name="Thống kê doanh thu" options={options}/>
+      <ChartZoom type={1} name="Thống kê doanh thu" options={options} />
     </ChartColumnContext.Provider>
-  );
+  );  
 };

@@ -1,20 +1,15 @@
 import Dialog from '@mui/material/Dialog';
+import { Input } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { ChangePassword } from './ChangePassword';
+import { useDispatch, useSelector } from 'react-redux';
+import { userApi } from '../../../api/userApi';
+import useAddress from '../../../hooks/useAddress';
+import useUser from '../../../hooks/useUser';
+import { loadUserInfo, UserProfile } from '../../../reducers/profileSlice';
+import { RootState } from '../../../store';
+import AdditionalInfo from './AdditionalInfo';
 import { ProfileForm } from './ProfileForm';
 import './profileInfo2.scss';
-import ProfileRegister, { createData } from './ProfileRegister';
-import { User } from '../../../models/user';
-import useUser from '../../../hooks/useUser';
-import { userApi } from '../../../api/userApi';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../store';
-import { loadUserInfo, UserProfile } from '../../../reducers/profileSlice';
-import { Button, Input } from 'antd';
-import { EditFilled, CheckOutlined } from '@ant-design/icons';
-import AdditionalInfo from './AdditionalInfo';
-import useAddress from '../../../hooks/useAddress';
-import { postApi } from '../../../api/postApi';
 const { TextArea } = Input;
 
 export default function ProfileInfo2() {
@@ -25,6 +20,7 @@ export default function ProfileInfo2() {
   const [introduce, setIntroduce] = useState<boolean>(false);
   const userInfo = useSelector((state: RootState) => state.profile.userInfo);
   const [districts, cities] = useAddress();
+  
   useEffect(() => {
     user &&
       userApi
@@ -165,7 +161,7 @@ export default function ProfileInfo2() {
               <div className="more__item__number">
                 <span>Đang diễn ra</span>
                 <span>1</span>
-              </div>
+              </div>   
             </div>
             <div className="profile__more__item">
               <div className="more__item__header">

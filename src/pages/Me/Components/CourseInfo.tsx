@@ -28,7 +28,7 @@ export default function CourseInfo() {
           onClick={() => setCourseTab(FINISHED__TAB)}
           className={courseTab === FINISHED__TAB ? 'course__tab--active' : ''}
         >
-          Khóa học đã hoàn thành
+          Khóa học sắp diễn ra
         </span>
       </div>
       <Col xs={12} className="courses__info__tab">
