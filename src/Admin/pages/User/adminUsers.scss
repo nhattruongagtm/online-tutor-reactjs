@@ -103,7 +103,7 @@ $primary: #0481f7;
       color: white;
     }
 
-    a {
+    a.tab-link {
       @extend .flex;
       height: 35px;
       gap: 20px;
@@ -305,10 +305,19 @@ table {
 }
 
 .tutor__tab__admin {
-  .ant-table-thead > tr > th,
+  // .ant-table-thead > tr > th,
   .ant-table-tbody > tr > td,
   .ant-table tfoot > tr > th,
   .ant-table tfoot > tr > td {
-    padding: 10px!important;
+    padding: 5px !important;
+  }
+
+  .ant-table-thead > tr > th {
+    padding: 10px !important;
+  }
+}
+.dashboard__users__main__list__item {
+  .ant-table {
+    height: 400px;
   }
 }

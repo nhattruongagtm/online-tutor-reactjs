@@ -45,7 +45,8 @@ export const ReplayItem = ({ cmt, isDisplay, onGetOwn }: ReplyItemProps) => {
         <div className="comment__item comment__reply__item">
           <div className="comment__body">
             <div className="comment__item__avatar">
-              <img src={own && own.avatar ? own.avatar : PHOTO_URL} alt="" />
+              <img src={own && own.avatar ? own.avatar : `https://avatars.dicebear.com/api/avataaars/${own.id}
+              }.jpg`} alt="" />
             </div>
             <div className="comment__item__main">
               <div className="content__item__name">

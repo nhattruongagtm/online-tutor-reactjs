@@ -24,7 +24,7 @@ export const userApi = {
     return axiosClient.get(url, { params });
   },
   getAllTutor(params: Params): Promise<ResponseData<Resp<UserAuth>>> {
-    const url = '/account/tutors';
+    const url = '/tutors';
     return axiosClient.get(url, { params });
   },
   createAdditionalInfo(
@@ -42,6 +42,6 @@ export const userApi = {
   },
   getAdditionalInfo(id: number): Promise<ResponseData<AdditionalInfo>> {
     const url = '/info/' + id;
-    return axiosClient.post(url);
+    return axiosClient.get(url);
   },
 };

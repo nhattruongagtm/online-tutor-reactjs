@@ -1,4 +1,4 @@
-import { LearningDate } from "../components/WaitingClassList/WaitingClassList";
+import { ClassItem, LearningDate } from "../components/WaitingClassList/WaitingClassList";
 
 export interface Register {
   tutor: {
@@ -9,6 +9,7 @@ export interface Register {
   };
   quantity: number;
   status: number;
+
 }
 export interface Classroom {
   id: number;
@@ -18,4 +19,5 @@ export interface Classroom {
   status: number;
   duration: number;
   learningDate: number;
+  post: ClassItem
 }

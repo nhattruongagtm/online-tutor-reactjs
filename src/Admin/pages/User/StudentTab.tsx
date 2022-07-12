@@ -4,9 +4,11 @@ import { UserAuth } from '../../../reducers/loginSlice';
 import { userApi } from '../../../api/userApi';
 import { Params } from '../../../api/tutorApi';
 import { MoreOutlined } from '@ant-design/icons';
-interface StudentTabProps {}
+interface StudentTabProps {
+  params: Params;
+}
 
-export const StudentTab = (props: StudentTabProps) => {
+export const StudentTab = ({ params }: StudentTabProps) => {
   const [studentList, setStudentList] = useState<UserAuth[]>([]);
 
   const columns = [
@@ -92,7 +94,9 @@ export const StudentTab = (props: StudentTabProps) => {
           placement="right"
           content={
             <>
-              <Button danger style={{marginBottom: '8px'}}>Khóa tài khoản</Button>
+              <Button danger style={{ marginBottom: '8px' }}>
+                Khóa tài khoản
+              </Button>
               <br />
               <Button danger>Khóa bình luận</Button>
             </>
@@ -130,7 +134,7 @@ export const StudentTab = (props: StudentTabProps) => {
         dataSource={studentList}
         onChange={onChange}
         className="tutor__tab__admin"
-        pagination={false}
+        pagination={{ defaultPageSize: 6 }}
       />
     </>
   );

@@ -1,16 +1,20 @@
 import React from 'react';
 
 import { Col, Row } from 'react-bootstrap';
+import { Params } from '../../../api/tutorApi';
 import { Header } from '../User/Header';
 import { Profile } from '../User/Profile';
 import { DetailCourse } from './DetailCourse';
 interface CoursesProps {}
 
 export const Courses = (props: CoursesProps) => {
+  const handleGetParams = (params: Params) =>{
+
+  }
   return (
     <>
       <Col sm={8} className="dashboard__users">  
-        <Header/>
+        <Header onGetParams={handleGetParams}/>
         <div className="dashboard__users__main">
           <div className="dashboard__users__main__list">
             <div className="dashboard__users__main__list__item">
@@ -35,7 +39,7 @@ export const Courses = (props: CoursesProps) => {
                       Học phí<i className="fas fa-chevron-down"></i>{' '}
                     </td>
                   </tr>
-                </thead>
+                </thead>  
               </table>
               <div className="table__courses__scroll">
                 <table>

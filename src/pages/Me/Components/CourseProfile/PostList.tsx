@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ProfileRegister, { createData } from '../ProfileRegister';
 import './learningCourse.scss';
 import './postList.scss';
@@ -15,9 +15,11 @@ import PostDetailItem from './PostDetailItem';
 interface LearningCourseProps {}
 
 export const PostList = (props: LearningCourseProps) => {
-  const [posts, setPosts] = useState<ClassItem[]>([]);
+  const [post, setPost] = useState<ClassItem[]>([]);
   const [user] = useUser();
   const history = useHistory();
+
+  const posts = useRef<ClassItem[]>([]);
 
   const columns = [
     {
@@ -25,7 +27,7 @@ export const PostList = (props: LearningCourseProps) => {
       dataIndex: 'stt',
       key: 'stt',
       render: (text: any, record: ClassItem) => (
-        <a>{posts.indexOf(record) + 1}</a>
+        <a>{posts.current.indexOf(record) + 1}</a>
       ),
     },
     {
@@ -83,7 +85,10 @@ export const PostList = (props: LearningCourseProps) => {
           const { data, message, status } = res;
           const { currentPage, list, totalItems, totalPages } = data;
 
-          !isCancel && setPosts(list);
+          if (!isCancel) {
+            posts.current = list;
+            setPost(list);
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -93,11 +98,21 @@ export const PostList = (props: LearningCourseProps) => {
       isCancel = true;
     };
   }, [user]);
+
+  const handleGetSearchValue = (text: string) => {
+    const newPosts = [...posts.current];
+    if (text.trim() !== '') {
+      const clone = newPosts.filter((item) => item.title.indexOf(text) > -1);
+      setPost(clone);
+    } else {
+      setPost(newPosts);
+    }
+  };  
   return (
     <div className="learning__courses">
       <div className="learning__courses__list">
-        <Filter />
-        <Table columns={columns} dataSource={posts} />
+        <Filter onGetSearch={handleGetSearchValue} />
+        <Table columns={columns} dataSource={post} />
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ const AdditionalInfo = (props: Props) => {
   const [addition, setAddition] = useState<boolean>(false);
   const [user] = useUser();
   const [input, setInput] = useState<Info>({
-    id: (user?.id as number) || 0,
+    id: -1,
     addition: '',
     introduction: '',
   });
@@ -24,7 +24,7 @@ const AdditionalInfo = (props: Props) => {
       if (user) {
         try {
           const resp = await userApi.getAdditionalInfo(user.id);
-          setInput(resp.data);
+          setInput({...resp.data,account:{id:user.id}});
         } catch (error) {}
       }
     };
@@ -33,8 +33,8 @@ const AdditionalInfo = (props: Props) => {
 
   const handleUpdate = async () => {
     try {
-      if (user) {
-        const resp = await userApi.updateAdditionalInfo(user.id, input);
+      if (user && input.id) {
+        const resp = await userApi.updateAdditionalInfo(input.id, input);
         if (resp.data) {
           toast.success('Thay đổi thông tin thành công!');
         } else {

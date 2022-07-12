@@ -10,7 +10,6 @@ interface RateItemProps {
 export const RateItem = ({ rate }: RateItemProps) => {
   const [user] = useUser();
   const dateRef = useRef<Date>(new Date());
-  console.log('rendering...');
   return (
     <div className="comment__item">
       <div className="comment__body">
@@ -39,10 +38,10 @@ export const RateItem = ({ rate }: RateItemProps) => {
             }
           })}
         </div>
-      </div>
+      </div>  
       <div className="comment__footer">
-        <span>{rate.createDate}</span>
-        {/* <span>{convertDate(dateRef.current,rate.createdDate)}</span> */}
+        {/* <span>{rate.createdDate}</span> */}
+        <span>{rate.createdDate && convertDate(dateRef.current,new Date(rate.createdDate))}</span>
       </div>
     </div>
   );

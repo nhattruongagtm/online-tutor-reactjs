@@ -111,7 +111,7 @@ export default function DetailCourse() {
               </span>
             </div>
             <div className="comment__main__content">
-              {tab === COMMENT_TAB ? <Comment id={Number(id)} /> : <Rate id={Number(id)}/>}
+              {tab === COMMENT_TAB ? <Comment id={Number(id)} /> : <Rate course={course}/>}
              
             </div>
           </div>

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface Rate {
   id?: number;
-  createDate?: number;
+  createdDate?: number;
   courseID: number;
   star: number;
   comment: string;

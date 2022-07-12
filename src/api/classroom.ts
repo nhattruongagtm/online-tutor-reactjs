@@ -1,13 +1,13 @@
 import { ResponseData } from '../models/response';
-import { Register } from '../models/classroom';
+import { Classroom, Register } from '../models/classroom';
 import axiosClient from './axiosClient';
 import { ClassItem } from '../components/WaitingClassList/WaitingClassList';
 export const classroomApi = {
-  createClass(params: Register): Promise<ResponseData<Register>> {
+  createClass(params: Register): Promise<ResponseData<Classroom>> {
     const url = '/class';
     return axiosClient.post(url, params);
   },
-  getAllWaitingClass(id: number): Promise<ResponseData<ClassItem[]>> {
+  getAllWaitingClass(id: number): Promise<ResponseData<Classroom[]>> {
     const url = '/classes/waiting/' + id;
     return axiosClient.get(url);
   },

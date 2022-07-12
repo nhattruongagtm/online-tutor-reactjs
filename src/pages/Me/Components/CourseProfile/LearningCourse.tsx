@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ProfileRegister, { createData } from '../ProfileRegister';
 import './learningCourse.scss';
 
@@ -14,6 +14,7 @@ interface LearningCourseProps {}
 export const LearningCourse = (props: LearningCourseProps) => {
   const [classes, setClasses] = useState<Classroom[]>([]);
   const [user] = useUser();
+  const clazzes = useRef<Classroom[]>([])
   useEffect(() => {
     user &&
       userApi
@@ -21,6 +22,7 @@ export const LearningCourse = (props: LearningCourseProps) => {
         .then((res) => {
           const { data } = res;
           console.log(data);
+          clazzes.current = data.classes
           setClasses(data.classes);
         })
         .catch((e) => {
@@ -44,7 +46,7 @@ export const LearningCourse = (props: LearningCourseProps) => {
     {
       title: 'Môn học',
       dataIndex: 'subjectName',
-      key: 'subjectNam',
+      key: 'subjectName',
     },
     {
       title: 'Thời gian học',
@@ -67,10 +69,20 @@ export const LearningCourse = (props: LearningCourseProps) => {
     },
   ];
 
+  const handleGetSearchValue = (text: string) => {
+    const newPosts = [...clazzes.current];
+    if (text.trim() !== '') {
+      const clone = newPosts.filter((item) => item.name.indexOf(text) > -1);
+      setClasses(clone);
+    } else {
+      setClasses(newPosts);
+    }
+  };  
+
   return (
     <div className="learning__courses">
       <div className="learning__courses__list">
-        <Filter />
+        <Filter onGetSearch={handleGetSearchValue} />
         <Table columns={columns} dataSource={classes} />
       </div>
     </div>

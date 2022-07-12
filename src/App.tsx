@@ -47,6 +47,7 @@ import { courseApi } from './api/CourseApi';
 import useUser from './hooks/useUser';
 import LoginAdmin from './Admin/pages/Login/LoginAdmin';
 import { RootState } from './store';
+import Bill from './pages/Checkout/Bill';
 
 function App() {
   const location = useLocation();
@@ -75,7 +76,7 @@ function App() {
     `${SIGNUP_PATH}`,
     `${FORGET_PASSWORD_PATH}`,
     `${ADMIN_PATH}`,
-    `${CHECKOUT}`,
+    `${CHECKOUT}`,`${CHECKOUT}/bill`,
   ];
   const isAuth = () => {
     if (path.includes(location.pathname)) {
@@ -162,8 +163,11 @@ function App() {
       ) : (
         // <Redirect to={HOME_PATH} />
         <Switch>
-          <Route path={CHECKOUT}>
+          <Route path={CHECKOUT} exact>
             <Checkout />
+          </Route>
+          <Route path="/thanh-toan/bill">
+            <Bill />
           </Route>
         </Switch>
       )}

@@ -1,13 +1,24 @@
 import Dialog from '@mui/material/Dialog';
 import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+import { Route, Switch, useLocation, useRouteMatch } from 'react-router';
 import { courseApi } from '../../api/CourseApi';
+import { checkoutApi } from '../../api/checkoutApi';
 import { ClassItem } from '../../components/WaitingClassList/WaitingClassList';
 import { DetailInfo } from '../DetailCourse/DetailInfo';
 import './checkout.scss';
 import { classroomApi } from '../../api/classroom';
+import {
+  CheckoutReq,
+  CheckoutResp,
+  CheckoutSuccess,
+} from '../../models/response';
+import { loading } from '../../reducers/loadingSlice';
 import { Register } from '../../models/classroom';
+import useUser from '../../hooks/useUser';
+import Bill from './Bill';
+import { RootState } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
 interface Props {}
 
 interface Payment {
@@ -20,8 +31,13 @@ export const Checkout = (props: Props) => {
   const [isFail, setIsFail] = useState<boolean>();
   const [paymentMethod, setPaymentMethod] = useState<number>(0);
   const [paymentStatus, setPaymentStatus] = useState<boolean>(true);
-
+  const [user] = useUser();
   const [open, setOpen] = React.useState(false);
+
+  const match = useRouteMatch();
+  console.log(match);
+  const dispatch = useDispatch();
+  const loadingState = useSelector((state: RootState) => state.loading.loading);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -63,6 +79,7 @@ export const Checkout = (props: Props) => {
   const id = objectPath.id;
 
   useEffect(() => {
+    dispatch(loading(true));
     // call api to get detail data
     courseApi
       .getCourseByID(Number(id))
@@ -78,6 +95,9 @@ export const Checkout = (props: Props) => {
             setIsFail(true);
           }, 10000);
         }
+      })
+      .finally(() => {
+        dispatch(loading(false));
       });
   }, []);
 
@@ -99,8 +119,27 @@ export const Checkout = (props: Props) => {
         const classroom = await classroomApi.createClass(data);
         console.log(classroom);
         if (classroom.data) {
-          handleClickOpen();
-          setPaymentStatus(value);
+          // handleClickOpen();
+          // setPaymentStatus(value);
+
+          if (value) {
+            if (user) {
+              const checkoutData: CheckoutReq = {
+                accountId: user.id,
+                classId: classroom.data.id,
+                amount: course.tuition,
+                formal: true,
+                node: 'thanh toán học phí buổi 1',
+              };
+              console.log(checkoutData);
+              const checkoutResp = await checkoutApi.checkout(checkoutData);
+              const { data } = checkoutResp;
+              window.location.href = data;
+            }
+          } else {
+            handleClickOpen();
+            setPaymentStatus(value);
+          }
         }
       } catch (error) {
         console.log(error);
@@ -132,10 +171,12 @@ export const Checkout = (props: Props) => {
   };
 
   return (
-    <div className="checkout__container">
-      <div className="checkout__main">
-        <div className="checkout__main__left">
-          {/* <div className="main__left__title">
+    <>
+      {course && (
+        <div className="checkout__container">
+          <div className="checkout__main">
+            <div className="checkout__main__left">
+              {/* <div className="main__left__title">
                         <div className="left__title__name"></div>
                         <div className="left__title__price"></div>
                     </div>
@@ -147,124 +188,131 @@ export const Checkout = (props: Props) => {
                             
                         </div>
                     </div> */}
-          {course && <DetailInfo course={course} isRegister={true} />}
-        </div>
-        <div className="checkout__main__right">
-          <div className="main__right__title">
-            <p>Thanh toán</p>
-          </div>
-          <div className="main__right__info">
-            <div className="main__right__info__title">
-              <p>Phương thức thanh toán</p>
+              <DetailInfo course={course} isRegister={true} />
             </div>
-            <div className="checkout__form">
-              <div className="main__right__payments">
-                {payments.map((payment) => (
+            <div className="checkout__main__right">
+              <div className="main__right__title">
+                <p>Thanh toán</p>
+              </div>
+              <div className="main__right__info">
+                <div className="main__right__info__title">
+                  <p>Phương thức thanh toán</p>
+                </div>
+                <div className="checkout__form">
+                  <div className="main__right__payments">
+                    {payments.map((payment) => (
+                      <div
+                        className={
+                          paymentMethod !== payment.type
+                            ? 'main__right__payments__item'
+                            : `main__right__payments__item payments__items--active`
+                        }
+                        onClick={() => setPaymentMethod(payment.type)}
+                      >
+                        <div className={payment.className}></div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="main__right__item__detail">
+                    <div className="checkout__form__item">
+                      <div className="checkout__form__title">Số tài khoản</div>
+                      <div className="checkout__form__input">
+                        <div className="checkout__form__input__main">
+                          <input type="text" />
+                          <div className="checkout__input__validate none">
+                            <i className="fas fa-check-circle"></i>
+                            {/* <i className="fas fa-times-circle"></i> */}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="checkout__form__item__main">
+                      <div className="checkout__form__item">
+                        <div className="checkout__form__title">
+                          Ngày hết hạn
+                        </div>
+                        <div className="checkout__form__input">
+                          <div className="checkout__form__input__main">
+                            <input type="text" />
+                            <div className="checkout__input__validate none">
+                              <i className="fas fa-check-circle"></i>
+                              {/* <i className="fas fa-times-circle"></i> */}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="checkout__form__item">
+                        <div className="checkout__form__title">CVV</div>
+                        <div className="checkout__form__input">
+                          <div className="checkout__form__input__main">
+                            <input type="text" />
+                            <div className="checkout__input__validate none">
+                              <i className="fas fa-check-circle"></i>
+                              {/* <i className="fas fa-times-circle"></i> */}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="checkout__form__item">
+                      <div className="checkout__form__title">Tên chủ thẻ</div>
+                      <div className="checkout__form__input">
+                        <div className="checkout__form__input__main">
+                          <input type="text" />
+                          <div className="checkout__input__validate none">
+                            <i className="fas fa-check-circle"></i>
+                            {/* <i className="fas fa-times-circle"></i> */}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="checkout__total">
+                      <div className="checkout__total__title">Thành tiền</div>
+                      <div className="checkout__total__price">
+                        {course.tuition} VND
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="checkout__form__item checkout__form__item__discount">
+                  <div className="checkout__form__title">
+                    Nhập mã giảm giá (nếu có):{' '}
+                  </div>
+                  <div className="checkout__form__input">
+                    <div className="checkout__form__input__main">
+                      <input type="text" />
+                      <button>Kiểm tra</button>
+                    </div>
+                  </div>
+                </div>
+                <div className="checkout__buttons">
                   <div
-                    className={
-                      paymentMethod !== payment.type
-                        ? 'main__right__payments__item'
-                        : `main__right__payments__item payments__items--active`
-                    }
-                    onClick={() => setPaymentMethod(payment.type)}
+                    className="checkout__now"
+                    onClick={() => handleCheckout(true)}
                   >
-                    <div className={payment.className}></div>
+                    Thanh toán ngay
                   </div>
-                ))}
-              </div>
-              <div className="main__right__item__detail">
-                <div className="checkout__form__item">
-                  <div className="checkout__form__title">Số tài khoản</div>
-                  <div className="checkout__form__input">
-                    <div className="checkout__form__input__main">
-                      <input type="text" />
-                      <div className="checkout__input__validate none">
-                        <i className="fas fa-check-circle"></i>
-                        {/* <i className="fas fa-times-circle"></i> */}
-                      </div>
-                    </div>
+                  <div
+                    className="checkout__later"
+                    onClick={() => handleCheckout(false)}
+                  >
+                    Thanh toán sau
                   </div>
-                </div>
-                <div className="checkout__form__item__main">
-                  <div className="checkout__form__item">
-                    <div className="checkout__form__title">Ngày hết hạn</div>
-                    <div className="checkout__form__input">
-                      <div className="checkout__form__input__main">
-                        <input type="text" />
-                        <div className="checkout__input__validate none">
-                          <i className="fas fa-check-circle"></i>
-                          {/* <i className="fas fa-times-circle"></i> */}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="checkout__form__item">
-                    <div className="checkout__form__title">CVV</div>
-                    <div className="checkout__form__input">
-                      <div className="checkout__form__input__main">
-                        <input type="text" />
-                        <div className="checkout__input__validate none">
-                          <i className="fas fa-check-circle"></i>
-                          {/* <i className="fas fa-times-circle"></i> */}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="checkout__form__item">
-                  <div className="checkout__form__title">Tên chủ thẻ</div>
-                  <div className="checkout__form__input">
-                    <div className="checkout__form__input__main">
-                      <input type="text" />
-                      <div className="checkout__input__validate none">
-                        <i className="fas fa-check-circle"></i>
-                        {/* <i className="fas fa-times-circle"></i> */}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="checkout__total">
-                  <div className="checkout__total__title">Thành tiền</div>
-                  <div className="checkout__total__price">2.500.000 VND</div>
+                  <Dialog
+                    className="notify__checkout"
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <CheckoutDialog />
+                  </Dialog>
                 </div>
               </div>
-            </div>
-            <div className="checkout__form__item checkout__form__item__discount">
-              <div className="checkout__form__title">
-                Nhập mã giảm giá (nếu có):{' '}
-              </div>
-              <div className="checkout__form__input">
-                <div className="checkout__form__input__main">
-                  <input type="text" />
-                  <button>Kiểm tra</button>
-                </div>
-              </div>
-            </div>
-            <div className="checkout__buttons">
-              <div
-                className="checkout__now"
-                onClick={() => handleCheckout(true)}
-              >
-                Thanh toán ngay
-              </div>
-              <div
-                className="checkout__later"
-                onClick={() => handleCheckout(false)}
-              >
-                Thanh toán sau
-              </div>
-              <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-              >
-                <CheckoutDialog />
-              </Dialog>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };

@@ -45,6 +45,9 @@ export interface ClassItem {
   schedule: LearningDate[];
   post: {
     learningDate: number;
+  }
+  clazz: {
+    id:number;
   };
 }
 export interface FilterWaiting {}
@@ -65,6 +68,7 @@ export default function WaitingClassList() {
     const params: Params = {
       page: 1,
       limit: 100,
+      search:''
     };
     subjectApi
       .getAllSubject(params)
@@ -143,10 +147,10 @@ export default function WaitingClassList() {
 
     setFilters({
       ...filters,
-      [name]: isNaN(Number(value)) ? value : Number(value),
+      [name]: (value === "" || isNaN(Number(value))) ? value : Number(value),
     });
   };
-   
+
   return (
     <div className="waiting__class">
       <ScrollToTop />

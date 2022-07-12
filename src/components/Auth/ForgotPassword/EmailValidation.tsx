@@ -98,6 +98,7 @@ export default function EmailValidation({ sendMail }: SendMailProps) {
               type="text"
               placeholder="Nhập mã xác nhận"
               {...register('code')}
+              name='code'
             />
           </div>
           <div className="signup__form__item forgot__email">

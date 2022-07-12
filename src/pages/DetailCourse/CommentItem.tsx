@@ -65,7 +65,15 @@ export const CommentItem = ({ cmt }: CommentItemProps) => {
     <div className="comment__item">
       <div className="comment__body">
         <div className="comment__item__avatar">
-          <img src={cmt.avatar ? cmt.avatar : PHOTO_URL} alt="" />
+          <img
+            src={
+              cmt.avatar
+                ? cmt.avatar
+                : `https://avatars.dicebear.com/api/avataaars/${cmt.userID}
+              }.jpg`
+            }
+            alt=""
+          />
         </div>
         <div className="comment__item__main">
           <div className="content__item__name">

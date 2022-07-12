@@ -55,8 +55,9 @@ export const CommentForm = (props: CommentFormProps) => {
   return (
     <form className="comment__form__main" onSubmit={handleSendComment}>
       <div className="comment__item__avatar">
-        <img src={user ? user.avatar : ''} alt="" />
-      </div>
+        <img src={(user && user.avatar) ? user.avatar : `https://avatars.dicebear.com/api/avataaars/${user?.id}
+              }.jpg`} alt="" />
+      </div>  
       <div className="comment__form">
         <div className="comment__form__boundary">
           <input

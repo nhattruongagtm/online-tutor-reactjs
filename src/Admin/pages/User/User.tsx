@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './adminUsers.scss';
 
 import { Col, Row } from 'react-bootstrap';
@@ -10,6 +10,7 @@ import { NavLink } from 'react-router-dom';
 import { Profile } from './Profile';
 import { Header } from './Header';
 import { DetailProfile } from './DetailProfile';
+import { Params as Filters } from '../../../api/tutorApi';
 interface UserProps {}
 
 interface TabRoute {
@@ -24,11 +25,13 @@ export const User = (props: UserProps) => {
   const routeMatch = useRouteMatch();
   const { params, url, path } = routeMatch;
   const { slug } = params as Params;
+  const [paramss, setParams] = useState<Filters>({
+    search: '',  
+  });
 
   // console.log(slug)
   // console.log(url)
   // console.log("path",path)
-
 
   const tabs: TabRoute[] = [
     {
@@ -43,20 +46,23 @@ export const User = (props: UserProps) => {
     },
   ];
 
+  const onGetParams = (params: Filters) => {
+    setParams(params);
+  };
   return (
     <>
       <Switch>
         <Route exact path={`/admin/users/${slug}/:id`}>
-          <DetailProfile/>
+          <DetailProfile />
         </Route>
-        <Route exact path={url}>  
+        <Route exact path={url}>
           <>
             <Col sm={8} className="dashboard__users">
-              <Header />
+              <Header onGetParams={onGetParams} />
               <div className="dashboard__users__main">
                 <div className="dashboard__users__main__title">
                   {tabs.map((tab) => (
-                    <NavLink to={tab.path} key={tab.path}>
+                    <NavLink to={tab.path} key={tab.path} className="tab-link">
                       <div className="dashboard__users__main__title__item">
                         <i className={tab.icon}></i>
                         <span>{tab.title}</span>
@@ -68,15 +74,15 @@ export const User = (props: UserProps) => {
                   <div className="dashboard__users__main__list__item">
                     <Switch>
                       <Route path={ADMIN__USER__TUTOR}>
-                        <TutorTab />
+                        <TutorTab params={paramss}/>
                       </Route>
                       <Route path={ADMIN__USER__STUDENT}>
-                        <StudentTab />
+                        <StudentTab params={paramss} />
                       </Route>
                     </Switch>
                   </div>
                 </div>
-                <div className="dashboard__users__main__pagination">
+                {/* <div className="dashboard__users__main__pagination">
                   <ul className="dashboard__pagination">
                     <li>
                       <i className="fas fa-chevron-left"></i>
@@ -90,7 +96,7 @@ export const User = (props: UserProps) => {
                       <i className="fas fa-chevron-right"></i>
                     </li>
                   </ul>
-                </div>
+                </div> */}
               </div>
             </Col>
             <Col className="dashboard__users__profile">

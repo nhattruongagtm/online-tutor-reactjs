@@ -131,7 +131,14 @@ export default function Header() {
               }}
             >
               <div className="header__auth__user__img">
-                <img src={user?.avatar} alt="" />
+                <img
+                  src={
+                    user?.avatar ||
+                    `https://avatars.dicebear.com/api/avataaars/${user?.id}
+              }.jpg`
+                  }
+                  alt=""
+                />
               </div>
               <div className="header__auth__user__name">
                 {user?.displayName}

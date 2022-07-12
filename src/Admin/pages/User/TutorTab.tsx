@@ -6,9 +6,11 @@ import { userApi } from '../../../api/userApi';
 import { Button } from 'antd';
 import { Popover } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
-interface TutorTabProps {}
+interface TutorTabProps {
+  params: Params;
+}
 
-export const TutorTab = (props: TutorTabProps) => {
+export const TutorTab = ({ params }: TutorTabProps) => {
   const [tutorList, setTutorList] = useState<UserAuth[]>([]);
 
   const onChange = (pagination: any, filters: any, sorter: any, extra: any) => {
@@ -20,69 +22,28 @@ export const TutorTab = (props: TutorTabProps) => {
       dataIndex: 'stt',
       render: (_: string, record: UserAuth) => tutorList.indexOf(record) + 1,
     },
-    {
-      title: 'STT',
-      dataIndex: 'stt',
-      filters: [
-        {
-          text: 'Joe',
-          value: 'Joe',
-        },
-        {
-          text: 'Category 1',
-          value: 'Category 1',
-          children: [
-            {
-              text: 'Yellow',
-              value: 'Yellow',
-            },
-            {
-              text: 'Pink',
-              value: 'Pink',
-            },
-          ],
-        },
-        {
-          text: 'Category 2',
-          value: 'Category 2',
-          children: [
-            {
-              text: 'Green',
-              value: 'Green',
-            },
-            {
-              text: 'Black',
-              value: 'Black',
-            },
-          ],
-        },
-      ],
-      filterMode: 'tree',
-      filterSearch: true,
-      onFilter: (value: any, record: any) => record.name.includes(value),
-      width: '30%',
-    },
+
     {
       title: 'Name',
-      dataIndex: 'displayName',
-      sorter: (a: any, b: any) => a.age - b.age,
+      dataIndex: 'name',
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      filters: [
-        {
-          text: 'London',
-          value: 'London',
-        },
-        {
-          text: 'New York',
-          value: 'New York',
-        },
-      ],
-      onFilter: (value: any, record: any) => record.address.startsWith(value),
-      filterSearch: true,
-      width: '40%',
+      title: 'Thời gian học',
+      dataIndex: 'learningDate',
+      key: 'learningDate',
+      render: (_: any, record: any) => (
+        <>{new Date(record.createdDate).toLocaleDateString()}</>
+      ),  
+    },
+    {
+      title: 'Vai trò',
+      dataIndex: 'education',
+    },
+
+    {
+      title: 'Học phí',
+      dataIndex: 'tuition',
+      render: (_: string, record: any) => <>{record.tuition}</>,
     },
     {
       title: '',
@@ -106,18 +67,18 @@ export const TutorTab = (props: TutorTabProps) => {
   ];
 
   useEffect(() => {
-    const params: Params = {
+    const par: Params = {
+      ...params,
       page: 1,
       limit: 10,
-      search: '',
     };
-    userApi.getAllTutor(params).then((res) => {
+    userApi.getAllTutor(par).then((res) => {
       const { data } = res;
       const { list, currentPage, totalItems, totalPages } = data;
 
       setTutorList(list);
     });
-  }, []);
+  }, [params]);
 
   return (
     <>
@@ -126,7 +87,7 @@ export const TutorTab = (props: TutorTabProps) => {
         dataSource={tutorList}
         onChange={onChange}
         className="tutor__tab__admin"
-        pagination={false}
+        pagination={{defaultPageSize: 2}}
       />
     </>
   );

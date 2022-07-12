@@ -10,7 +10,7 @@ export interface Params {
   page?: number;
   limit?: number;
   sort?: string;
-  order?: string;
+  orderBy?: string;
   city?: number;
   district?: string;
 }
@@ -28,6 +28,10 @@ export const tutorApi = {
   },
   getTutorByID(id: number): Promise<ResponseData<TutorItem>> {
     const url = '/tutor/' + id;
+    return axiosClient.get(url);
+  },
+  getStudentByID(id: number): Promise<ResponseData<TutorItem>> {
+    const url = '/student/' + id;
     return axiosClient.get(url);
   },
   getAllTutor(params: Params): Promise<ResponseData<Resp<TutorItem>>> {

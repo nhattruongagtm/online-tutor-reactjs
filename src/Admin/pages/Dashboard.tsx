@@ -3,23 +3,30 @@ import * as React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { Route, Switch, useLocation } from 'react-router';
 import { Courses } from './Courses/Courses';
-import { ADMIN__COURSE, ADMIN__HOME, ADMIN__PROFILE, ADMIN__SETTINGS, ADMIN__USER, ADMIN__USER__TUTOR } from '../routes/path';
+import {
+  ADMIN__COURSE,
+  ADMIN__HOME,
+  ADMIN__PROFILE,
+  ADMIN__SETTINGS,
+  ADMIN__USER,
+  ADMIN__USER__TUTOR,
+} from '../routes/path';
 import './dashboard.scss';
 import { Home } from './Home/Home';
 import Navigation from './Navigation';
 import Profile from './Profile/Profile';
 import { Settings } from './Settings/Settings';
 import { User } from './User/User';
-
+import useUser from '../../hooks/useUser';
 export interface DashBoardProps {}
 
 export default function DashBoard(props: DashBoardProps) {
-  
+  const [user] = useUser();
   return (
     <div className="dashboard">
       <Container className="dashboard__main dashboard__container">
         <Row className="dashboard__main__page">
-          <Navigation/>
+          <Navigation />
           <Col className="dashboard__page">
             <div className="dashboard__header">
               <div className="dashboard__header__title">Dashboard</div>
@@ -37,11 +44,15 @@ export default function DashBoard(props: DashBoardProps) {
                   <div className="header__info__contain">
                     <div className="header__info__contain__avatar">
                       <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Angelina_Jolie_2_June_2014_%28cropped%29.jpg"
+                        src={
+                          user?.avatar ||
+                          `https://avatars.dicebear.com/api/avataaars/${user?.id}
+                      }.jpg`
+                        }
                         alt=""
                       />
                     </div>
-                    <span>Angelia Joli</span>
+                    <span>{"Admin"}</span>
                     <i className="fas fa-chevron-down"></i>
                   </div>
                 </div>
@@ -50,25 +61,25 @@ export default function DashBoard(props: DashBoardProps) {
             <Row className="dashboard__main__work">
               <Switch>
                 <Route exact path={ADMIN__HOME}>
-                    <Home/>
+                  <Home />
                 </Route>
-                <Route path={`${ADMIN__USER}/:slug`} >
-                    <User/>
+                <Route path={`${ADMIN__USER}/:slug`}>
+                  <User />
                 </Route>
                 <Route path={ADMIN__PROFILE}>
-                    <Profile/>  
+                  <Profile />
                 </Route>
-                <Route path={ADMIN__SETTINGS}>  
-                    <Settings/>    
+                <Route path={ADMIN__SETTINGS}>
+                  <Settings />
                 </Route>
                 <Route path={ADMIN__COURSE}>
-                    <Courses/>    
+                  <Courses />
                 </Route>
               </Switch>
-             </Row>
+            </Row>
           </Col>
         </Row>
-      </Container>  
+      </Container>
     </div>
   );
 }

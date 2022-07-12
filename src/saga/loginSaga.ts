@@ -27,16 +27,21 @@ interface LoginInput {
   type: number;
 }
 
-function* loginWatcher({payload : user}: PayloadAction<LoginInput>) {
+function* loginWatcher({ payload: user }: PayloadAction<LoginInput>) {
   yield delay(500);
   user.password = md5(user.password);
 
   try {
     const data: ResponseData<UserAuth> = yield call(authApi.login, user);
     if (data.data) {
-      toast.success('Đăng nhập thành công!');
-      yield put(requestLoginSuccess(data.data));
-      yield put(push(HOME_PATH));
+      if (data.data.type === -1) {
+        toast.warning('Tài khoản của bạn đã bị khóa!');
+        yield put(requestLoginFail());
+      } else {
+        toast.success('Đăng nhập thành công!');
+        yield put(requestLoginSuccess(data.data));
+        yield put(push(HOME_PATH));
+      }
     } else {
       if (data.status === 'WRONG') {
         toast.error('Sai mật khẩu! Vui lòng thử lại!');
@@ -52,7 +57,7 @@ function* loginWatcher({payload : user}: PayloadAction<LoginInput>) {
     toast.error(ERROR_EXCUTE);
   }
 }
-  
+
 export default function* loginSaga() {
   yield takeLatest(requestLogin, loginWatcher);
 }
