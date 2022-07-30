@@ -14,7 +14,7 @@ import {
   WAITING_CLASS_PATH,
 } from '../../constants/path';
 import '../Header/header.scss';
-import { ACCESS_TOKEN } from '../../constants/auth';
+import { ACCESS_TOKEN, TOKEN } from '../../constants/auth';
 import { ClassItem } from '../../components/WaitingClassList/WaitingClassList';
 import { courseApi } from '../../api/CourseApi';
 import useUser from '../../hooks/useUser';
@@ -54,7 +54,7 @@ export default function Header() {
   const history = useHistory();
   const location = useLocation();
   const pathName = location.pathname;
-  const routes: IRoutes[] = [
+  let routes: IRoutes[] = [
     {
       path: `${HOME_PATH}`,
       title: 'Trang chủ',
@@ -79,7 +79,11 @@ export default function Header() {
     //   path: `${FAQ_PATH}`,
     //   title: "Hỏi đáp",
     // },
-  ];
+  ];   
+   
+  if(user && user.roles && user.roles.includes("ROLE_TUTOR")){
+    routes = routes.filter(item=>item.path !== TUTOR_LIST_PATH)
+  }
 
   useEffect(() => {
     routes.forEach((route) => {
@@ -123,7 +127,7 @@ export default function Header() {
             <div className="header__auth__cart__number">{totalItems}</div>
           </div>
 
-          {localStorage.getItem(ACCESS_TOKEN) ? (
+          {localStorage.getItem(TOKEN) ? (
             <div
               className="header__auth__user"
               onClick={() => {

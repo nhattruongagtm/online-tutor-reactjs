@@ -6,13 +6,15 @@ import { userApi } from '../../../api/userApi';
 import { Button } from 'antd';
 import { Popover } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
+import { displayUserDetail } from '../../../reducers/tutorSlice';
 interface TutorTabProps {
   params: Params;
 }
 
 export const TutorTab = ({ params }: TutorTabProps) => {
   const [tutorList, setTutorList] = useState<UserAuth[]>([]);
-
+  const dispatch = useDispatch();
   const onChange = (pagination: any, filters: any, sorter: any, extra: any) => {
     console.log('params', pagination, filters, sorter, extra);
   };
@@ -25,7 +27,7 @@ export const TutorTab = ({ params }: TutorTabProps) => {
 
     {
       title: 'Name',
-      dataIndex: 'name',
+      dataIndex: 'displayName',
     },
     {
       title: 'Thời gian học',
@@ -33,7 +35,7 @@ export const TutorTab = ({ params }: TutorTabProps) => {
       key: 'learningDate',
       render: (_: any, record: any) => (
         <>{new Date(record.createdDate).toLocaleDateString()}</>
-      ),  
+      ),
     },
     {
       title: 'Vai trò',
@@ -48,7 +50,11 @@ export const TutorTab = ({ params }: TutorTabProps) => {
     {
       title: '',
       dataIndex: 'detail',
-      render: (_: string, record: UserAuth) => <Button>Chi tiết</Button>,
+      render: (_: string, record: UserAuth) => (
+        <Button onClick={() => dispatch(displayUserDetail(record))}>
+          Chi tiết
+        </Button>
+      ),
     },
     {
       title: '',
@@ -87,7 +93,7 @@ export const TutorTab = ({ params }: TutorTabProps) => {
         dataSource={tutorList}
         onChange={onChange}
         className="tutor__tab__admin"
-        pagination={{defaultPageSize: 2}}
+        pagination={{ defaultPageSize: 2 }}
       />
     </>
   );

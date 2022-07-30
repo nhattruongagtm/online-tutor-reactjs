@@ -13,11 +13,11 @@ export interface TimeInput {
 }
 export const TimeItem = ({ timeProps }: TimeItemProps) => {
   const dispatch = useDispatch();
-  const { day, time, id } = timeProps;
+  const { day, time, ids } = timeProps;
   const [dateTime, setDateTime] = useState<LearningTime>({
-    id: id,
-    day: day,
-    time: time,
+    ids,
+    day,
+    time
   });
   const dates = [2, 3, 4, 5, 6, 7, 8];
   const times = [
@@ -42,7 +42,7 @@ export const TimeItem = ({ timeProps }: TimeItemProps) => {
     const name = e.target.name;
     const value = e.target.value;
     const newDateTime = {
-      id,
+      ids,
       day: name === 'day' ? Number(value) : dateTime.day,
       time: name === 'time' ? Number(value) : dateTime.time,
     };

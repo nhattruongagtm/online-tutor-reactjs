@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 import md5 from 'md5';
 import Login from '../components/Auth/Login/Login';
+import { LoginResp } from '../models/user';
 import { UserAuth } from '../reducers/loginSlice';
 import { ISignUpInfo } from '../reducers/signUpSlice';
 import axiosClient from './axiosClient';
@@ -17,7 +18,7 @@ interface SignUpInput {
 export interface LoginInput {
   email: string;
   password: string;
-  type: number;
+  type?: number;
 }
 export interface ResponseData<T> {
   message: string;
@@ -35,7 +36,7 @@ export const authApi = {
     return axiosClient.post(url, { email: email });
   },
 
-  sendMailToSignUp(email: string):Promise<string> {
+  sendMailToSignUp(email: string): Promise<string> {
     const url = `/send-mail`;
 
     const params = {
@@ -46,12 +47,28 @@ export const authApi = {
   },
   signUp(input: SignUpInput): Promise<ResponseData<ISignUpInfo>> {
     const url = '/sign-up';
-    return axiosClient.post(url, input);
+    return axiosClient.post(url, input, { headers: { ROLE: input.type + '' } });
   },
-  login(user: LoginInput): Promise<ResponseData<UserAuth>> {
+  login(user: LoginInput): Promise<LoginResp> {
     const url = '/login';
 
-    return axiosClient.post(url, user);
+    const input: Omit<LoginInput, 'type'> = {
+      email: user.email,
+      password: user.password,
+    };
+
+    let s = new URLSearchParams(Object.entries(input)).toString();
+
+    return axiosClient.post(url, s, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        ROLE: user.type === 0
+        ? 'ROLE_STUDENT'
+        : user.type === 1
+        ? 'ROLE_TUTOR'
+        : 'ROLE_ADMIN',
+      },
+    });
   },
   sendMailToForgot(email: string): Promise<ForgotData> {
     const url = `/forgot/${email}`;
@@ -72,9 +89,9 @@ export const authApi = {
   //   const url = `/loginAPI/${id}`;
   //   return axiosClient.post(url);
   // },
-  loginAPI(params : UserAuth): Promise<ResponseData<UserAuth>> {
+  loginAPI(params: UserAuth): Promise<ResponseData<UserAuth>> {
     const url = `/loginAPI`;
-    return axiosClient.post(url,params);
+    return axiosClient.post(url, params);
   },
   getIDFromApi(id: string): Promise<ResponseData<number>> {
     const url = '/getAPI/' + id;

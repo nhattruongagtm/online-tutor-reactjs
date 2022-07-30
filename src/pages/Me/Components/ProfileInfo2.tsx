@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userApi } from '../../../api/userApi';
 import useAddress from '../../../hooks/useAddress';
 import useUser from '../../../hooks/useUser';
+import { UserAuth } from '../../../reducers/loginSlice';
 import { loadUserInfo, UserProfile } from '../../../reducers/profileSlice';
 import { RootState } from '../../../store';
 import AdditionalInfo from './AdditionalInfo';
@@ -18,22 +19,8 @@ export default function ProfileInfo2() {
   const [open, setOpen] = React.useState(false);
   const [user] = useUser();
   const [introduce, setIntroduce] = useState<boolean>(false);
-  const userInfo = useSelector((state: RootState) => state.profile.userInfo);
+  const userInfo = useSelector((state: RootState) => state.loginUser.user);
   const [districts, cities] = useAddress();
-  
-  useEffect(() => {
-    user &&
-      userApi
-        .getUserByID(user.id)
-        .then((res) => {
-          console.log(res.data);
-          const userInfo = res.data as UserProfile;
-          dispatch(loadUserInfo(userInfo));
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-  }, [user]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -60,17 +47,24 @@ export default function ProfileInfo2() {
         </div>
         <div className="profile__base__body">
           <div className="profile__base__body__avatar">
-            <img
-              src="https://i.pinimg.com/originals/5f/12/21/5f12212ed4d94b0dafe0f18a8e55832b.jpg"
-              alt=""
-            />
+            {user && (
+              <img
+                src={
+                  user?.avatar
+                    ? user.avatar
+                    : `https://avatars.dicebear.com/api/avataaars/${user.id}
+            }.jpg`
+                }
+                alt=""
+              />
+            )}
           </div>
           <div className="profile__base__body__name">
             <div className="profile__item__label">Họ tên: </div>
             <input
               type="text"
               placeholder="Nhập họ tên..."
-              value={userInfo.displayName}
+              value={userInfo?.displayName}
               disabled={!isEdit}
             />
           </div>
@@ -79,7 +73,7 @@ export default function ProfileInfo2() {
             <input
               type="email"
               placeholder="Nhập email..."
-              value={userInfo.email}
+              value={userInfo?.email}
               disabled={!isEdit}
             />
           </div>
@@ -88,7 +82,7 @@ export default function ProfileInfo2() {
             <input
               type="number"
               placeholder="Nhập số điện thoại..."
-              value={userInfo.phone}
+              value={userInfo?.phone}
               disabled={!isEdit}
             />
           </div>
@@ -97,7 +91,7 @@ export default function ProfileInfo2() {
             <select disabled={!isEdit}>
               <option value="la">
                 {
-                  cities.find((item) => item.code === userInfo.city)
+                  cities.find((item) => item.code === userInfo?.city)
                     ?.name_with_type
                 }
               </option>
@@ -108,16 +102,16 @@ export default function ProfileInfo2() {
             <select disabled={!isEdit}>
               <option value="la">
                 {
-                  districts.find((item) => item.slug === userInfo.district)
+                  districts.find((item) => item.slug === userInfo?.district)
                     ?.name_with_type
                 }
               </option>
             </select>
-          </div>
+          </div>  
           <div className="profile__base__body__name">
             <div className="profile__item__label">Giới tính: </div>
             <select disabled={!isEdit}>
-              <option value={0}>{userInfo.gender === 0 ? 'Nam' : 'Nữ'}</option>
+              <option value={0}>{userInfo?.gender === 0 ? 'Nam' : 'Nữ'}</option>
             </select>
           </div>
           <div className="profile__base__footer">
@@ -131,7 +125,7 @@ export default function ProfileInfo2() {
               aria-describedby="alert-dialog-description"
               className="profile__change__info"
             >
-              <ProfileForm onCloseForm={handleClose} info={userInfo} />
+              <ProfileForm onCloseForm={handleClose} info={userInfo as UserAuth} />
             </Dialog>
           </div>
         </div>
@@ -161,7 +155,7 @@ export default function ProfileInfo2() {
               <div className="more__item__number">
                 <span>Đang diễn ra</span>
                 <span>1</span>
-              </div>   
+              </div>
             </div>
             <div className="profile__more__item">
               <div className="more__item__header">

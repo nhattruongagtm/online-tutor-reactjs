@@ -4,10 +4,13 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { Route, Switch, useLocation } from 'react-router';
 import { Courses } from './Courses/Courses';
 import {
+  ADMIN__BLOG,
+  ADMIN__BLOG__CREATE,
   ADMIN__COURSE,
   ADMIN__HOME,
   ADMIN__PROFILE,
   ADMIN__SETTINGS,
+  ADMIN__SUBJECT,
   ADMIN__USER,
   ADMIN__USER__TUTOR,
 } from '../routes/path';
@@ -18,6 +21,10 @@ import Profile from './Profile/Profile';
 import { Settings } from './Settings/Settings';
 import { User } from './User/User';
 import useUser from '../../hooks/useUser';
+import Blog from './Blog/Blog';
+import NewBlog from './Blog/NewBlog';
+import { SUBJECT_PATH } from '../../constants/path';
+import Subject from './Subject/Subject';
 export interface DashBoardProps {}
 
 export default function DashBoard(props: DashBoardProps) {
@@ -52,7 +59,7 @@ export default function DashBoard(props: DashBoardProps) {
                         alt=""
                       />
                     </div>
-                    <span>{"Admin"}</span>
+                    <span>{'Admin'}</span>
                     <i className="fas fa-chevron-down"></i>
                   </div>
                 </div>
@@ -74,6 +81,17 @@ export default function DashBoard(props: DashBoardProps) {
                 </Route>
                 <Route path={ADMIN__COURSE}>
                   <Courses />
+                </Route>
+                <Route path={ADMIN__SUBJECT}>
+                  <Subject />
+                </Route>
+                <Route path={ADMIN__BLOG}>
+                  <Route path={ADMIN__BLOG__CREATE}>
+                    <NewBlog />
+                  </Route>
+                  <Route path="*">
+                    <Blog />
+                  </Route>
                 </Route>
               </Switch>
             </Row>

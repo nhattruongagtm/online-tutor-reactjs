@@ -1,5 +1,5 @@
 import React from 'react'
-
+import '../Profile/profile.scss'
 interface DetailCourseProps {
     
 }

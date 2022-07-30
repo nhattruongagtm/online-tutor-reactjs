@@ -24,3 +24,12 @@ export interface AdditionalInfo {
     id: number;
   };
 }
+export interface LoginResp {
+  access_token: string;
+  refresh_token: string;
+  status?: string
+}
+export interface LoginRespData {
+  sub: string;
+  roles: string[];
+}

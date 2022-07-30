@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { ACCESS_TOKEN } from '../../constants/auth';
-import { COURSE_INFO_PATH, HOME_PATH, ME_PATH, PROFILE_PATH, SCHEDULE_PATH } from '../../constants/path';
+import { ACCESS_TOKEN, TOKEN } from '../../constants/auth';
+import {
+  COURSE_INFO_PATH,
+  HOME_PATH,
+  ME_PATH,
+  PROFILE_PATH,
+  SCHEDULE_PATH,
+} from '../../constants/path';
 import { useHistory } from 'react-router';
 import './style.scss';
 import Button from '@mui/material/Button';
@@ -21,7 +27,7 @@ const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement<any, any>;
   },
-  ref: React.Ref<unknown>,
+  ref: React.Ref<unknown>
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -37,7 +43,7 @@ export default function Navigation() {
   };
 
   const history = useHistory();
-  const [isSignOut,setIsSignOut] = useState<boolean>(false);
+  const [isSignOut, setIsSignOut] = useState<boolean>(false);
 
   const navigationList: NavigationList[] = [
     {
@@ -57,10 +63,10 @@ export default function Navigation() {
     },
   ];
 
-  const handleSignOut = () =>{
-    localStorage.removeItem(ACCESS_TOKEN);
-    !localStorage.getItem(ACCESS_TOKEN) && history.push(HOME_PATH);
-  }
+  const handleSignOut = () => {
+    localStorage.removeItem(TOKEN);
+    !localStorage.getItem(TOKEN) && history.push(HOME_PATH);
+  };
   return (
     <div className="me__nav">
       <div className="me__nav__body">
@@ -76,7 +82,7 @@ export default function Navigation() {
         })}
         <label className="me__nav__item" onClick={handleClickOpen}>
           <i className="fas fa-sign-out-alt"></i>
-          <span >Đăng xuất</span>
+          <span>Đăng xuất</span>
         </label>
       </div>
       <Dialog

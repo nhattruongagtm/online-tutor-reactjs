@@ -1,18 +1,23 @@
 import React from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
-
+import './style.scss';
 const FooterMain = styled.div`
   width: 100%;
   /* height: 500px; */
   background-color: black;
+  a {
+    text-decoration: none;
+    /* display: b */
+    margin-bottom: 10px;
+  }
 `;
 export default function Footer() {
   const history = useHistory();
   return (
     <FooterMain>
       <footer
-        className="text-center text-lg-start text-white"
+        className="text-center text-lg-start text-white footer"
         style={{ backgroundColor: '#3e4551' }}
       >
         <div className="container p-4 pb-0">
@@ -33,22 +38,76 @@ export default function Footer() {
               </div>
 
               <div className="col-lg-2 col-md-6 mb-4 mb-md-0">
-                <h5 className="text-uppercase">Links</h5>
+                <h5 className="text-uppercase link-title">Thống kê</h5>
 
-                <ul className="list-unstyled mb-0">
+                <ul className="list-unstyled mb-0 list-link">
                   <li>
                     <a href="#!" className="text-white">
-                      Link 1
+                      Gia sư mới: 1249
                     </a>
                   </li>
                   <li>
                     <a href="#!" className="text-white">
-                      Link 2
+                      Lớp đã tạo: 481
                     </a>
                   </li>
                   <li>
                     <a href="#!" className="text-white">
-                      Link 3
+                      Lớp đã nhận: 236
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#!" className="text-white">
+                      Phản hồi tích cực: 97%
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="col-lg-2 col-md-6 mb-4 mb-md-0">
+                <h5 className="text-uppercase link-title">giasu-nlu</h5>
+
+                <ul className="list-unstyled mb-0 list-link">
+                  <li>
+                    <a href="#!" className="text-white">
+                      Về chúng tôi
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#!" className="text-white">
+                      Chính sách bảo mật
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#!" className="text-white">
+                      Lớp gia sư mới
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#!" className="text-white">
+                      Tin tức gia sư
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="col-lg-2 col-md-6 mb-4 mb-md-0">
+                <h5 className="text-uppercase link-title">Hỏi và đáp</h5>
+
+                <ul className="list-unstyled mb-0 list-link">
+                  <li>
+                    <a href="#!" className="text-white">
+                      Trang chủ
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#!" className="text-white">
+                      Quy định đăng tìm gia sư
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#!" className="text-white">
+                      Tin tức giáo dục
                     </a>
                   </li>
                   <li>
@@ -60,81 +119,27 @@ export default function Footer() {
               </div>
 
               <div className="col-lg-2 col-md-6 mb-4 mb-md-0">
-                <h5 className="text-uppercase">Links</h5>
+                <h5 className="text-uppercase link-title">Dành cho gia sư</h5>
 
-                <ul className="list-unstyled mb-0">
+                <ul className="list-unstyled mb-0 list-link">
                   <li>
                     <a href="#!" className="text-white">
-                      Link 1
+                      Chính sách gia sư
                     </a>
                   </li>
                   <li>
                     <a href="#!" className="text-white">
-                      Link 2
+                      Chính sách phí
                     </a>
                   </li>
                   <li>
                     <a href="#!" className="text-white">
-                      Link 3
+                      Quy định tài khoản gia sư
                     </a>
                   </li>
                   <li>
                     <a href="#!" className="text-white">
-                      Link 4
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="col-lg-2 col-md-6 mb-4 mb-md-0">
-                <h5 className="text-uppercase">Links</h5>
-
-                <ul className="list-unstyled mb-0">
-                  <li>
-                    <a href="#!" className="text-white">
-                      Link 1
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#!" className="text-white">
-                      Link 2
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#!" className="text-white">
-                      Link 3
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#!" className="text-white">
-                      Link 4
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="col-lg-2 col-md-6 mb-4 mb-md-0">
-                <h5 className="text-uppercase">Links</h5>
-
-                <ul className="list-unstyled mb-0">
-                  <li>
-                    <a href="#!" className="text-white">
-                      Link 1
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#!" className="text-white">
-                      Link 2
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#!" className="text-white">
-                      Link 3
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#!" className="text-white">
-                      Link 4
+                      Quy định về thanh toán
                     </a>
                   </li>
                 </ul>
@@ -146,7 +151,7 @@ export default function Footer() {
 
           <section className="">
             <p className="d-flex justify-content-center align-items-center">
-              <span className="me-3">Register for free</span>
+              <span className="me-3">Đăng ký ngay</span>
               <button
                 type="button"
                 className="btn btn-outline-light btn-rounded"
@@ -203,7 +208,7 @@ export default function Footer() {
               className="btn btn-outline-light btn-floating m-1"
               href="#!"
               role="button"
-              onClick={() => history.push('admin/login')}
+              onClick={() => history.push('/admin/login')}
             >
               Admin
             </a>

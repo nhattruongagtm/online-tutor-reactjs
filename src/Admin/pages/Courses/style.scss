@@ -1,0 +1,17 @@
+.dashboard__subject {
+  background-color: white;
+  height: 90%;
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td,
+  .ant-table tfoot > tr > th,
+  .ant-table tfoot > tr > td {
+    padding: 10px !important;
+  }
+
+  // .ant-spin-container {
+  //   width: 250px !important;
+  // }
+  // .ant-table-content {
+  //   width: 250px !important;
+  // }
+}

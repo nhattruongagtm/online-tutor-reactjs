@@ -9,6 +9,14 @@ export const postApi = {
     const url = '/post';
     return axiosClient.post(url, params);
   },
+  updatePost(id: number, params: Post): Promise<ResponseData<Post>> {
+    const url = '/post/' + id;
+    return axiosClient.put(url, params);
+  },
+  deletePost(id: number): Promise<ResponseData<Post>> {
+    const url = '/post/' + id;
+    return axiosClient.delete(url);
+  },
   getPostByUserId(
     id: number,
     params: Params

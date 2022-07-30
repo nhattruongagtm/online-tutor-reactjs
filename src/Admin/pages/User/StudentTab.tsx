@@ -4,87 +4,47 @@ import { UserAuth } from '../../../reducers/loginSlice';
 import { userApi } from '../../../api/userApi';
 import { Params } from '../../../api/tutorApi';
 import { MoreOutlined } from '@ant-design/icons';
+import useAddress from '../../../hooks/useAddress';
+import { useDispatch } from 'react-redux';
+import { displayUserDetail } from '../../../reducers/tutorSlice';
 interface StudentTabProps {
   params: Params;
 }
 
 export const StudentTab = ({ params }: StudentTabProps) => {
   const [studentList, setStudentList] = useState<UserAuth[]>([]);
-
+  const [district, city] = useAddress();
+  const dispatch = useDispatch();
   const columns = [
     {
       title: 'STT',
       dataIndex: 'stt',
       render: (_: string, record: UserAuth) => studentList.indexOf(record) + 1,
     },
+
     {
-      title: '',
-      dataIndex: '',
-      filters: [
-        {
-          text: 'Joe',
-          value: 'Joe',
-        },
-        {
-          text: 'Category 1',
-          value: 'Category 1',
-          children: [
-            {
-              text: 'Yellow',
-              value: 'Yellow',
-            },
-            {
-              text: 'Pink',
-              value: 'Pink',
-            },
-          ],
-        },
-        {
-          text: 'Category 2',
-          value: 'Category 2',
-          children: [
-            {
-              text: 'Green',
-              value: 'Green',
-            },
-            {
-              text: 'Black',
-              value: 'Black',
-            },
-          ],
-        },
-      ],
-      filterMode: 'tree',
-      filterSearch: true,
-      onFilter: (value: any, record: any) => record.name.includes(value),
-      width: '30%',
-    },
-    {
-      title: 'Name',
+      title: 'Họ tên',
       dataIndex: 'displayName',
-      sorter: (a: any, b: any) => a.age - b.age,
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      filters: [
-        {
-          text: 'London',
-          value: 'London',
-        },
-        {
-          text: 'New York',
-          value: 'New York',
-        },
-      ],
-      onFilter: (value: any, record: any) => record.address.startsWith(value),
-      filterSearch: true,
-      width: '40%',
+      title: 'Địa chỉ',
+      dataIndex: 'city',
+      render: (text: string, record: UserAuth) => (
+        <>{city.find((item) => item.code === record.city)?.name_with_type}</>
+      ),
+    },
+    {
+      title: 'Số điện thoại',
+      dataIndex: 'phone',
     },
     {
       title: '',
       dataIndex: 'detail',
-      render: (_: string, record: UserAuth) => <Button>Chi tiết</Button>,
+      render: (_: string, record: UserAuth) => (
+        <Button onClick={() => dispatch(displayUserDetail(record))}>
+          Chi tiết
+        </Button>
+      ),
     },
     {
       title: '',
@@ -119,12 +79,16 @@ export const StudentTab = ({ params }: StudentTabProps) => {
       limit: 10,
       search: '',
     };
-    userApi.getAllStudent(params).then((res) => {
-      const { data } = res;
-      const { list, currentPage, totalItems, totalPages } = data;
-
-      setStudentList(list);
-    });
+    userApi
+      .getAllStudent(params)
+      .then((res) => {
+        const { data } = res;
+        const { list, currentPage, totalItems, totalPages } = data;
+        setStudentList(list);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }, []);
 
   return (

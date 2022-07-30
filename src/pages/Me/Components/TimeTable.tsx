@@ -45,7 +45,7 @@ export const TimeTable = (props: TimeTableProps) => {
     };
     loadScheduleList();
   }, [user]);
-  console.log(schedules)
+  console.log({schedules})
   const localData: EventSettingsModel = {
     dataSource: schedules,
     fields: {

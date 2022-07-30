@@ -1,3 +1,4 @@
+import { StyledTags } from '@emotion/styled';
 import React from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
@@ -124,31 +125,34 @@ interface TutorItemProps {
 }
 interface RegisterArea {
   id: number;
-  cityID:number;
+  cityID: number;
   districtID: string;
 }
 export interface RegisterSubject {
   id: number;
-  gradeName:string;
+  gradeName: string;
   subjectName: string;
+  subjectId: number;
+  gradeId: number;
 }
 
 export interface TutorItem {
   id: number;
   avatar: string;
   name: string;
+  displayName: string;
   education: string;
   experience: string;
   subjects: RegisterSubject[];
   address: string;
-  createdDate: Date,
+  createdDate: Date;
   rate: number;
   description: string;
-  areas: RegisterArea[];     
+  areas: RegisterArea[];
 }
 export const TutorItem = ({ tutor }: TutorItemProps) => {
   const history = useHistory();
-  return (  
+  return (
     <div>
       <RecommendedItem>
         <Avatar>
@@ -162,11 +166,10 @@ export const TutorItem = ({ tutor }: TutorItemProps) => {
           <div className="subjects__list">
             {/* <p>{tutor.subject.toString()}</p> */}
             <p>
-            {tutor.subjects.map(item=>(
-              <span key={item.id}>{item.subjectName}</span>
-            ))}
+              {tutor.subjects.map((item) => (
+                <span key={item.id}>{item.subjectName}</span>
+              ))}
             </p>
-          
           </div>
         </div>
         <div className="address">
@@ -184,7 +187,7 @@ export const TutorItem = ({ tutor }: TutorItemProps) => {
               } else {
                 return <i className="fas fa-star star--border"></i>;
               }
-            })}  
+            })}
           </div>
         </div>
         <button className="tutor__detail">Xem chi tiết</button>

@@ -2,18 +2,16 @@ $main-color: rgb(240, 240, 240);
 
 .tutor__info {
   padding: 20px;
-  
-  &__main{
+
+  &__main {
     display: flex;
     justify-content: space-between;
     gap: 20px;
   }
 
-  
-
   &__general {
-      // margin-bottom: 20px;
-      min-width: 40%;
+    // margin-bottom: 20px;
+    min-width: 40%;
     & > div {
       padding: 20px;
     }
@@ -34,8 +32,8 @@ $main-color: rgb(240, 240, 240);
         justify-content: space-between;
         height: 120px;
         .tutor__general__name {
-            font-weight: bold;
-            font-size: 20px;
+          font-weight: bold;
+          font-size: 20px;
         }
         .tutor__general__identify {
           display: flex;
@@ -96,58 +94,88 @@ $main-color: rgb(240, 240, 240);
     }
   }
   &__detail {
-      // display: grid;
-      // grid-template-columns: 1fr 1fr 1fr;
-      // gap: 20px;
-      display: flex;
-      flex-grow: 1;
-      flex-direction: column;
+    // display: grid;
+    // grid-template-columns: 1fr 1fr 1fr;
+    // gap: 20px;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    gap: 20px;
+
+    .tutor__info__location {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 20px;
-      
-      .tutor__info__location{
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        height: 100%;
+      height: 100%;
+
+      &.flex {
+        display: flex;
+        flex-direction: column;
+
+        .tutor__info__detail__item {
+          width: 100% !important;
+        }
+      }
     }
 
     &__item {
-        background-color: $main-color;
-        border-radius: 10px;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+      background-color: $main-color;
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+
+      button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: rgb(47, 255, 168);
+      }
       .tutor__info__item__title {
-          font-weight: bold;
+        font-weight: bold;
       }
       .tutor__info__item__content {
-          font-size: 14px;
-          line-height: 1.4;
+        font-size: 14px;
+        line-height: 1.4;
         & > span {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 3px;
+          display: flex;
+          gap: 5px;
+          margin-bottom: 3px;
         }
+       
       }
     }
   }
   &__courses {
   }
   &__classes {
-    &__title{
+    &__title {
       font-size: 20px;
       font-weight: bold;
       text-align: center;
     }
-      margin-top: 20px;
-        padding: 20px;
-        border-radius: 10px;
-        background-color: $main-color;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: $main-color;
   }
 
-  .tutor__info__general,.tutor__info__detail__item,.tutor__info__classes{
+  .tutor__info__general,
+  .tutor__info__detail__item,
+  .tutor__info__classes {
     box-shadow: 0 0 100px 5px #d3d3ff;
-    background-color: white;
+    background-color: white !important;
+  }
+  .tutor__general__cv {
+    .avatar {
+      position: relative;
+      .edit__btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+    }
   }
 }

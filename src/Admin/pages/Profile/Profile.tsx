@@ -7,6 +7,12 @@ interface ProfileBriefProps {
 export default function Profile() {
   const [isChangePassword, setIsChangePassword] = useState<boolean>(false);
   const ProfileBrief = ({ onToogleChangePassword }: ProfileBriefProps) => {
+    const handleChangeAvatar = (e: React.ChangeEvent<HTMLInputElement>) =>{
+      if(e.target.files){
+        const file = e.target.files[0];
+      }
+      
+    }
     return (
       <>
         <div className="profile__admin__main__brief__avatar">
@@ -20,7 +26,7 @@ export default function Profile() {
           >
             <i className="fas fa-camera"></i>
           </label>
-          <input type="file" id="admin__change__avatar" hidden />
+          <input type="file" id="admin__change__avatar" hidden onChange={handleChangeAvatar} />
         </div>
         <div className="profile__admin__main__brief__name">
           <span>Huynh Nhat Truong</span>

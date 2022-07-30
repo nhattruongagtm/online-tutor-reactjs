@@ -43,12 +43,17 @@ export interface ClassItem {
   learningDate: Date;
   offer: number;
   schedule: LearningDate[];
+  fullName: string;
+  phone: number;
+  duration: number;
+  numberOfMembership: number;
   post: {
     learningDate: number;
-  }
-  clazz: {
-    id:number;
   };
+  clazz: {
+    id: number;
+  };
+  name: string;
 }
 export interface FilterWaiting {}
 export default function WaitingClassList() {
@@ -68,7 +73,7 @@ export default function WaitingClassList() {
     const params: Params = {
       page: 1,
       limit: 100,
-      search:''
+      search: '',
     };
     subjectApi
       .getAllSubject(params)
@@ -147,7 +152,7 @@ export default function WaitingClassList() {
 
     setFilters({
       ...filters,
-      [name]: (value === "" || isNaN(Number(value))) ? value : Number(value),
+      [name]: value === '' || isNaN(Number(value)) ? value : Number(value),
     });
   };
 

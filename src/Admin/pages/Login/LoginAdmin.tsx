@@ -3,7 +3,12 @@ import { Button, Checkbox, Input } from 'antd';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import { UserLogin } from '../../../reducers/loginSlice';
+import {
+  loadUserWhenLoginSuccess,
+  requestLoginSuccess,
+  UserAuth,
+  UserLogin,
+} from '../../../reducers/loginSlice';
 import './login.scss';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,10 +17,17 @@ import { useHistory } from 'react-router';
 import { ADMIN__HOME } from '../../routes/path';
 import md5 from 'md5';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { TOKEN } from '../../../constants/auth';
+import { decodeToken, isExpired } from 'react-jwt';
+import { ResponseData } from '../../../models/response';
+import { userApi } from '../../../api/userApi';
+import { LoginResp, LoginRespData } from '../../../models/user';
 type Props = {};
 
 const LoginAdmin = (props: Props) => {
   const navigate = useHistory();
+  const dispatch = useDispatch();
   const [input, setInput] = useState<UserLogin>({
     email: '',
     password: '',
@@ -89,16 +101,38 @@ const LoginAdmin = (props: Props) => {
       // console.log(input);
 
       authApi
-        .login({
-          ...input,
-          password: md5(input.password),
-          type: 2,
-        })
-        .then((res) => {
-          console.log(res.data);
-          if (res.data) {
-            navigate.push(ADMIN__HOME);
+        .login(input)
+        .then(async (res) => {
+          if (res.access_token) {
+            dispatch(requestLoginSuccess(res));
+            const token = localStorage.getItem(TOKEN)
+              ? (JSON.parse(localStorage.getItem(TOKEN) as string) as LoginResp)
+              : null;
+            if (token) {
+              const myDecodedToken = decodeToken(
+                token.access_token
+              ) as LoginRespData;
+              const isMyTokenExpired = isExpired(token.access_token);
+              if (!isMyTokenExpired) {
+                try {
+                  const resp = await userApi.getUserByEmail(myDecodedToken.sub);
+
+                  const { data } = resp;
+                  dispatch(
+                    loadUserWhenLoginSuccess({
+                      ...data,
+                      roles: myDecodedToken.roles,
+                    })
+                  );
+                } catch (error) {
+                  return null;
+                }
+              } else {
+                // refresh token
+              }
+            }
             toast.success('Đăng nhập thành công!');
+            navigate.push(ADMIN__HOME);
           } else {
             toast.error('Tên tài khoản hoặc mật khẩu không chính xác!');
           }

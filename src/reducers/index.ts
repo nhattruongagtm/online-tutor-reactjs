@@ -12,6 +12,9 @@ import loadingSlice from './loadingSlice';
 import rateSlice from './rateSlice';
 import waitingClass from './waitingClass';
 import tutorSlice from './tutorSlice';
+import blogSlice from './blogSlice';
+import subjectSlice from './subjectSlice';
+import courseSlice from './courseSlice';
 
 const rootReducer = combineReducers({
   router: connectRouter(history),
@@ -26,6 +29,9 @@ const rootReducer = combineReducers({
   rate: rateSlice,
   waitingClass: waitingClass,
   tutors: tutorSlice,
+  blog: blogSlice,
+  subject: subjectSlice,
+  course: courseSlice
 });
 
 export default rootReducer;

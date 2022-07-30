@@ -197,6 +197,7 @@ export default function SignUpForm({ type: signUpType }: SignUpFormProps) {
           <Button variant="contained" type="submit">
             {loading && (
               <CircularProgress
+                style={{ width: '30px', height: '30px' }}
                 className="loading"
                 sx={{
                   color: (theme) =>

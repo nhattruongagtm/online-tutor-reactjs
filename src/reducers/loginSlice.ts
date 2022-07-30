@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ACCESS_TOKEN } from '../constants/auth';
+import { ACCESS_TOKEN, TOKEN } from '../constants/auth';
+import { LoginResp } from '../models/user';
 export interface UserAuth {
   id: number;
   displayName: string;
@@ -11,6 +12,7 @@ export interface UserAuth {
   type?: number;
   avatar?: string;
   gender?: number;
+  roles?: string[];
 }
 export interface UserLogin {
   id?: number;
@@ -22,6 +24,10 @@ interface InitialStateLogin {
   user: UserAuth | null;
   loading: boolean;
   token: string;
+  roles: string[];
+}
+export interface Roles {
+  roles: string[];
 }
 export interface LoginSelector {
   loginUser: InitialStateLogin;
@@ -30,6 +36,7 @@ const initialState: InitialStateLogin = {
   user: null,
   loading: false,
   token: '',
+  roles: [],
 };
 
 const loginSlice = createSlice({
@@ -38,31 +45,30 @@ const loginSlice = createSlice({
   reducers: {
     requestLogin: (state, action: PayloadAction<UserLogin>) => {
       state.loading = true;
-      state.user = { ...state.user, ...(action.payload as UserAuth) };
     },
-    requestLoginSuccess: (state, action: PayloadAction<UserAuth>) => {
-      action.payload &&
-        localStorage.setItem(
-          ACCESS_TOKEN,
-          JSON.stringify({
-            ...action.payload,
-            avatar:
-              action.payload.avatar !== ''
-                ? action.payload.avatar
-                : 'https://firebasestorage.googleapis.com/v0/b/t-tiktok.appspot.com/o/images%2F8weV3azFCSHLILWZlm72%2Ficon%20-%20Copy.PNG?alt=media&token=f7a62203-3f80-4ab6-95d9-f67112d6eb4e',
-          })
-        );
+    requestLoginSuccess: (state, action: PayloadAction<LoginResp>) => {
+      action.payload.access_token &&
+        localStorage.setItem(TOKEN, JSON.stringify(action.payload));
       state.loading = false;
-      state.user = action.payload;
     },
     requestLoginFail: (state) => {
-      state.user = null;
       state.loading = false;
+    },
+    loadUserWhenLoginSuccess: (
+      state,
+      action: PayloadAction<UserAuth & Roles>
+    ) => {
+      state.user = action.payload;
+      state.roles = action.payload.roles;
     },
   },
 });
 
-export const { requestLogin, requestLoginFail, requestLoginSuccess } =
-  loginSlice.actions;
+export const {
+  requestLogin,
+  requestLoginFail,
+  requestLoginSuccess,
+  loadUserWhenLoginSuccess,
+} = loginSlice.actions;
 
-export default loginSlice.reducer;  
+export default loginSlice.reducer;

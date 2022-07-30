@@ -14,6 +14,9 @@ $primary: #0481f7;
 .dashboard__users {
   // background-color: white;
 
+  &.more {
+    width: 100% !important;
+  }
   &__header {
     display: flex;
     align-items: center;

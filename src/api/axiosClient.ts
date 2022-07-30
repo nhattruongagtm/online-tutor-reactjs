@@ -1,12 +1,16 @@
-import axios, { Axios, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { TOKEN } from '../constants/auth';
+import { LoginResp } from '../models/user';
+
+const token = localStorage.getItem(TOKEN)
+  ? (JSON.parse(localStorage.getItem(TOKEN) as string) as LoginResp)
+  : { access_token: '' };
 
 const axiosClient = axios.create({
   baseURL: 'http://localhost:8080/api',
   headers: {
     'Content-Type': 'application/json',
-    // 'Access-Control-Allow-Origin': '*',
-    // 'Access-Control-Allow-Headers': 'Content-Type',
-    // 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT',
+    Authorization: 'Bearer ' + token.access_token,
   },
 });
 
@@ -24,7 +28,7 @@ axiosClient.interceptors.request.use(
 
 // Add a response interceptor
 axiosClient.interceptors.response.use(
-  function (response) : AxiosResponse{
+  function (response): AxiosResponse {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
     return response.data;

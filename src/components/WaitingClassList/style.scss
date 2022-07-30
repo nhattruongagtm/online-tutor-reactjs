@@ -292,4 +292,24 @@ $primary: rgb(233, 255, 248);
       }
     }
   }
+  .detail__course {
+    padding: 20px;
+  }
+  .course__intro__btn {
+    flex-direction: column;
+    width: 150px !important;
+    button {
+      width: unset !important;
+      padding: 0 20px;
+    }
+  }
+  .detail__course__general {
+    display: flex !important;  
+    flex-direction: column;
+  }
+  .detail__course__main__detail {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  
 }

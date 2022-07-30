@@ -14,14 +14,15 @@ $blue: #0089be;
   display: flex;
   align-items: center;
   // background-color: beige;
-  // padding: 0px 80px;
+  padding: 0px 80px;
   position: fixed;
   border-bottom: 1px solid rgb(209, 209, 209);
   z-index: 10;
   // background-color: cyan;
 
   &__main {
-    width: 90%;
+    padding: 0 15px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -295,6 +296,7 @@ $blue: #0089be;
       }
       &__user {
         width: fit-content;
+        min-width: fit-content;
         &__name {
           display: none;
         }
@@ -305,4 +307,5 @@ $blue: #0089be;
   }
 }
 @media screen and (max-width: 767px) {
+
 }

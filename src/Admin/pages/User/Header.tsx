@@ -40,7 +40,7 @@ export const Header = ({ onGetParams }: HeaderProps) => {
       <div className="dashboard__users__header__filter">
         <i className="fas fa-filter"></i>
         <select name="sort" onChange={handleOnChange} defaultValue={'name'}>
-          <option value="createdDate">Ngày đăng ký</option>
+          {/* <option value="createdDate">Ngày đăng ký</option> */}
           <option value="tuition">Học phí</option>
         </select>
       </div>

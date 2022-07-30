@@ -12,17 +12,17 @@
     box-shadow: 0 0 50px 10px rgba(114, 114, 114, 0.11);
     padding: 30px;
 
-    .tutors__type{
+    .tutors__type {
       width: fit-content;
       margin-bottom: 30px;
       padding: 10px;
       border-radius: 5px;
       background-color: rgb(212, 229, 255);
 
-      span{
+      span {
         margin-right: 5px;
         font-size: 14px;
-        i{
+        i {
           margin-right: 5px;
           padding: 5px;
           background-color: white;
@@ -30,19 +30,15 @@
         }
       }
 
-      select{
+      select {
         border: 3px solid rgb(139, 180, 255);
         padding: 7px;
         border-radius: 5px;
 
-        &:focus{
+        &:focus {
           outline: none;
         }
       }
-
-
-      
-
     }
 
     .tutors__title {
@@ -75,8 +71,6 @@
         margin-right: 10px;
       }
     }
-
-  
 
     .tutors__input {
       display: flex;
@@ -115,54 +109,50 @@
         // width: 62.5%;
       }
 
-
       &__value {
         width: 60%;
         overflow: hidden;
         display: flex;
         border-radius: 5px;
         border: 1px solid rgb(199, 199, 199);
-        
-        input{
-            width: 90%;
-            border: 0;
-            border-radius: 0px;
+
+        input {
+          width: 90%;
+          border: 0;
+          border-radius: 0px;
         }
 
-        &__label{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1;
-            border-left: 1px solid rgb(199, 199, 199);
-            background-color: #ececec;
-            font-size: 13px;
-            
+        &__label {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-grow: 1;
+          border-left: 1px solid rgb(199, 199, 199);
+          background-color: #ececec;
+          font-size: 13px;
         }
       }
     }
-    .validate__error{
-      textarea, input{
+    .validate__error {
+      textarea,
+      input {
         border: 1.5px solid red;
         box-shadow: 0 0 1px 1px rgba(161, 0, 0, 0.473);
         background-color: #ffe7e7;
       }
-
     }
-    .tutors__additional{
-        overflow: hidden;
-        
-        // animation: animations 2s linear forwards;
-        
+    .tutors__additional {
+      overflow: hidden;
 
+      // animation: animations 2s linear forwards;
     }
     @keyframes animations {
-        from{
-            height: 0px;
-        }
-        to{ 
-            height: fit-content;
-        }
+      from {
+        height: 0px;
+      }
+      to {
+        height: fit-content;
+      }
     }
     .tutors__note {
       margin-top: -15px;
@@ -248,61 +238,76 @@
     border-top: 1px solid rgb(223, 223, 223);
   }
 }
-.redirect__login{
+.redirect__login {
   width: 100%;
   padding: 20px 10px;
 
-  .btn-login{
+  .btn-login {
     margin-left: 20px;
   }
-
 }
 
-
 @media screen and (max-width: 1024px) {
-  .tutor__list__container{
+  .tutor__list__container {
     width: calc(90% - 60px);
   }
-  .tutors__input__add{
-    width: unset!important;
+  .tutors__input__add {
+    width: unset !important;
   }
 }
 @media screen and (max-width: 768px) {
-  .tutors__btn{
-    margin-left: 64%!important;
+  .tutor__list {
+    padding: 30px 0 !important;
+
+    &__container {
+      padding: 20px !important;
+    }
   }
-  .tutors__note{
-    & > div{
+  .tutors__btn {
+    margin-left: 64% !important;
+  }
+  .tutors__note {
+    & > div {
       width: 100%;
       text-align: left;
     }
   }
-  .tutor__list__container{
-    width: calc(90% - 60px);
+  .tutor__list__container {
+    width: calc(90%) !important;
   }
-  .tutors__input{
+  .tutors__input {
     flex-direction: column;
 
-    &__label{
-      width: 100%!important;
+    &__label {
+      width: 100% !important;
       margin-bottom: 10px;
     }
-    &__items{
-      width: 100%!important;
+    &__items {
+      width: 100% !important;
     }
 
-    select,textarea,input{
-      width: calc(100% - 22px)!important;
+    select,
+    textarea,
+    input {
+      width: calc(100%) !important;
     }
-    select{
-      width: calc(100%)!important;
+    select {
+      width: calc(100%) !important;
     }
 
-    &__value{
-      width: calc(100% - 2px)!important;
+    &__value {
+      width: calc(100%) !important;
     }
   }
-  .tutors__checkbox{
-    margin-left: 0!important ;
+  .tutors__checkbox {
+    margin-left: 0 !important ;
   }
+  .tutor__list__container .tutors__notify {
+    padding: 8px;
+    width: 100%;
+    height: unset !important;
+  }
+  .tutor__list__container .tutors__note div:last-child {
+    width: 100%!important;
+}
 }

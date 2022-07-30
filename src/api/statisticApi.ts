@@ -1,4 +1,5 @@
 import { CircleData } from '../Admin/pages/Home/CircleChart';
+import { FluctuateProps } from '../Admin/pages/Home/Home';
 import { ResponseData } from '../models/response';
 import { IColumnData } from '../models/statistic';
 import axiosClient from './axiosClient';
@@ -30,4 +31,8 @@ export const statisticApi = {
     const url = `/revenue/subject/${month}-${year}`;
     return axiosClient.get(url);
   },
+  getFluctutateStatistic(month:number):Promise<ResponseData<FluctuateProps[]>>{
+    const url ='/statistic/'+month
+    return axiosClient.get(url)
+  }
 };

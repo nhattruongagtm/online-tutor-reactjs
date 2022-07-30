@@ -1,5 +1,6 @@
 import { resolve } from 'dns';
 import { ClassItem } from '../components/WaitingClassList/WaitingClassList';
+import { Course } from '../models/course';
 import { Offer } from '../models/offer';
 import { ResponseData } from '../models/response';
 import axiosClient from './axiosClient';
@@ -10,9 +11,9 @@ export const courseApi = {
     const url = '';
     return axiosClient.get(url).catch((e) => console.log(e));
   },
-  getClassList() {
-    const url = '';
-    return axiosClient.get(url).catch((e) => console.log(e));
+  getClassList():Promise<ResponseData<Resp<Course>>> {
+    const url = '/classes';
+    return axiosClient.get(url);
   },
   getCourseByID(id: number): Promise<ResponseData<ClassItem>> {
     const url = `/post/${id}`;

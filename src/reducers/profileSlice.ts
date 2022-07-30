@@ -21,7 +21,8 @@ const initialState: Profile = {
     introduction: '',
     phone: '',
     type: -1,
-    avatar: ''   
+    avatar: '',
+    roles: [],
   },
 };
 
@@ -45,7 +46,7 @@ const profileSlice = createSlice({
 });
 
 export const {
-  updateProfile,   
+  updateProfile,
   updateProfileFail,
   updateProfileSuccess,
   loadUserInfo,

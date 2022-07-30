@@ -40,17 +40,15 @@
       0% {
         // transform: rotateX(-10deg);
         margin-top: 5px;
-        
-    }
-    50% {
+      }
+      50% {
         // transform: rotateX(30deg);
         margin-top: -5px;
         box-shadow: 0 2px 20px 0px rgb(0, 224, 112);
-    }
-    100% {
+      }
+      100% {
         // transform: rotateX(-10deg);
         margin-top: 5px;
-       
       }
     }
 
@@ -69,17 +67,17 @@
       animation: signout 5.5s infinite;
       box-shadow: 0 2px 20px 0px rgb(123, 255, 178);
 
-    //   &::after {
-    //     content: '';
-    //     width: 20px;
-    //     height: 30px;
-    //     background-color: rgb(194, 194, 194);
-    //     position: absolute;
-    //     top: -20px;
-    //     left: 10px;
-    //     z-index: 1;
-    //     border-radius: 3px;
-    //   }
+      //   &::after {
+      //     content: '';
+      //     width: 20px;
+      //     height: 30px;
+      //     background-color: rgb(194, 194, 194);
+      //     position: absolute;
+      //     top: -20px;
+      //     left: 10px;
+      //     z-index: 1;
+      //     border-radius: 3px;
+      //   }
 
       &__btn {
         width: 100%;
@@ -120,8 +118,65 @@
     }
   }
 }
-.courses__main{
-  margin-left: unset!important;
-  margin-right: unset!important;
-  --bs-gutter-x: 0!important;
+.courses__main {
+  margin-left: unset !important;
+  margin-right: unset !important;
+  --bs-gutter-x: 0 !important;
+}
+
+.tutor__me__header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background-color: rgb(47, 144, 255);
+  justify-content: space-between;
+}
+
+@media screen and(max-width: 768px) {
+  .me {
+    grid-template-columns: none;
+    &__nav {
+      display: none;
+    }
+  }
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td,
+  .ant-table tfoot > tr > th,
+  .ant-table tfoot > tr > td {
+    padding: 5px !important;
+  }
+  .ant-table-wrapper {
+    overflow: scroll;
+    max-width: 768px;
+    width: 100%;
+  }
+
+  .profile__more__change__body .profile__change {
+    display: grid;
+    grid-gap: 10px;
+    gap: 10px;
+    grid-template-columns: 2fr 2fr 1.2fr;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .profile {
+    display: flex;
+    flex-direction: column;
+
+    &__base,
+    &__more {
+      width: unset;
+    }
+  }
+  .profile__base__body__avatar {
+    width: 100px !important;
+    height: 100px !important;
+  }
+  .profile__more__register__body {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
 }

@@ -12,12 +12,14 @@ p {
   margin-bottom: 0px !important;
 }
 .profile__user__admin {
-  height: calc(100% - 70px - 10px);
+  min-height: calc(100% - 98px);
+  max-height: calc(100% - 98px);
   width: 100%;
   background-color: rgba(255, 255, 255, 0.685);
   padding-left: -10px !important;
   border-radius: 8px;
   padding: 10px;
+  transition: 0.3s;
   background: linear-gradient(
     to bottom,
     rgb(0, 153, 255) 11%,
@@ -26,8 +28,6 @@ p {
   @extend flex-column;
   align-items: center;
   gap: 5px;
-
- 
 
   &__avatar {
     width: 100px;
@@ -66,69 +66,65 @@ p {
       }
     }
 
-    .profile__user__admin__vote{
-        margin-top: 10px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+    .profile__user__admin__vote {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
 
-        & > div{
-            span{
-                font-size: 14px;
-            }
-
+      & > div {
+        span {
+          font-size: 14px;
         }
-        .users__admin__vote__courses{
-            i{
-                color: black;
-            }
+      }
+      .users__admin__vote__courses {
+        i {
+          color: black;
         }
-        .users__admin__vote__rate{
-            i{
-                color: rgb(255, 196, 3);
-            }
-
+      }
+      .users__admin__vote__rate {
+        i {
+          color: rgb(255, 196, 3);
         }
+      }
     }
   }
-  &__permission{
-      width: 100%;
+  &__permission {
+    width: 100%;
     //   flex-grow: 1;
     height: 40px;
     //   background-color:rgb(0, 153, 255) ;
-      @extend flex;
-      align-items: flex-end;
-      justify-content: center;
-      gap: 20px;
+    @extend flex;
+    justify-content: center;
+    // gap: 20px;
 
-      button{
-          padding: 10px 10px;
-          border: 0;
-          outline: none;
-          border-radius: 5px;
-          background-color: rgb(231, 231, 231);
+    // button{
+    //     padding: 10px 10px;
+    //     border: 0;
+    //     outline: none;
+    //     border-radius: 5px;
+    //     background-color: rgb(231, 231, 231);
 
-          &:hover{
-              background-color: rgb(253, 212, 212);
-          }
-      }
+    //     &:hover{
+    //         background-color: rgb(253, 212, 212);
+    //     }
+    // }
   }
-  &__more{
+  &__more {
     display: flex;
     justify-content: center;
     margin-top: 10px;
-    button{
+    button {
       outline: none;
       border: 0;
       padding: 10px 15px;
       border-radius: 5px;
       cursor: pointer;
 
-      &:hover{
+      &:hover {
         background-color: rgb(255, 187, 0);
         color: white;
         box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.185);
       }
-      
     }
   }
 }

@@ -14,7 +14,12 @@ import useAddress from '../../hooks/useAddress';
 import useUser from '../../hooks/useUser';
 import { loading } from '../../reducers/loadingSlice';
 import { UserAuth } from '../../reducers/loginSlice';
-import { addTimeList, TimePost } from '../../reducers/postSlice';
+import {
+  addTimeList,
+  loadTimeList,
+  TimePost,
+  updateTimeList,
+} from '../../reducers/postSlice';
 import { City, District } from '../Auth/SignUp/InfoValidation';
 import '../FindTutorList/style.scss';
 import { TimeItem } from './TimeItem';
@@ -22,10 +27,11 @@ import { subjectApi } from '../../api/subjectApi';
 import { Select } from 'antd';
 import { Params } from '../../api/tutorApi';
 import { Subject } from '../../models/subject';
+import { RootState } from '../../store';
 
 const { Option } = Select;
 export interface LearningTime {
-  id: string;
+  ids?: number;
   day: number;
   time: number;
 }
@@ -53,7 +59,7 @@ export interface Post {
   schedule: TimePost[];
   city: string;
   district: string;
-  addressID: string;
+  address: string;
   type: number;
   status: number;
   duration: number;
@@ -69,27 +75,62 @@ export default function FindTutorList() {
   const navigate = useHistory();
   const dispatch = useDispatch();
   const [user] = useUser();
+  const postSelector = useSelector((state: RootState) => state.post);
+  const { edit } = postSelector;
+
   const validateSchema = yup.object().shape({
-    fullName: yup.string().required('Vui lòng nhập họ tên!'),
-    phone: yup.number().required('Vui lòng nhập số điện thoại!'),
-    title: yup.string().required('Vui lòng nhập tiêu đề!'),
-    content: yup.string().required('Vui lòng nhập mô tả'),
-    subjectID: yup.number().required('Vui lòng chọn môn học!').min(1),
-    duration: yup.number().required('Vui lòng chọn thời lượng của khóa học!'),
+    fullName: yup
+      .string()
+      .required('Vui lòng nhập họ tên!')
+      .default(edit ? edit.fullName : ''),
+    phone: yup
+      .number()
+      .required('Vui lòng nhập số điện thoại!')
+      .default(edit && Number(edit.phone)),
+    title: yup
+      .string()
+      .required('Vui lòng nhập tiêu đề!')
+      .default(edit ? edit.title : ''),
+    content: yup
+      .string()
+      .required('Vui lòng nhập mô tả')
+      .default(edit ? edit.content : ''),
+    subjectID: yup
+      .number()
+      .required('Vui lòng chọn môn học!')
+      .min(1)
+      .default(edit && Number(edit.subject)),
+    duration: yup
+      .number()
+      .required('Vui lòng chọn thời lượng của khóa học!')
+      .default(edit && Number(edit.duration)),
     numberOfMembership: yup
       .number()
       .required('Vui lòng nhập số lượng học viên!')
-      .max(50, 'Số lượng học viên tối đa là 50!'),
-    formality: yup.number().required('Vui lòng chọn hình thức dạy học!'),
-    learningDate: yup.string().required('Vui lòng chọn ngày học dự kiến!'),
-    tuition: yup.number().required('Vui lòng nhập học phí!'),
+      .max(50, 'Số lượng học viên tối đa là 50!')
+      .default(edit && Number(edit.numberOfMembership)),
+    formality: yup
+      .number()
+      .required('Vui lòng chọn hình thức dạy học!')
+      .default(edit && Number(edit.formality)),
+    learningDate: yup
+      .string()
+      .required('Vui lòng chọn ngày học dự kiến!')
+      .default(edit && new Date(edit.learningDate).toDateString()),
+    tuition: yup
+      .number()
+      .required('Vui lòng nhập học phí!')
+      .default(edit && Number(edit.tuition)),
     // time: yup.array().required('Vui lòng chọn lịch học!'),
     city: yup.string(),
     district: yup.string(),
     address: yup.string(),
   });
 
-  const formOptions = { resolver: yupResolver(validateSchema) };
+  const formOptions = {
+    defaultValues: validateSchema.cast({}),
+    resolver: yupResolver(validateSchema),
+  };
 
   // use React Hook Form
   const {
@@ -104,15 +145,11 @@ export default function FindTutorList() {
   const [chooseCity, setChooseCity] = useState('');
   const [getDistrictByID, setGetDistrictsByID] = useState<District[]>([]);
   const [classes, setClasses] = useState<string[]>();
-  const [isHomeFormality, setIsHomeFormality] = useState<boolean>(true);
+  const [isHomeFormality, setIsHomeFormality] = useState<boolean>(
+    edit && edit.formality === 1 ? false : true
+  );
 
   const addtionalTimes = useSelector((state: TimeList) => state.timeList);
-
-  const postSelector = useSelector((state: PostSelector) => state.post);
-
-  const [timeList, setTimeList] = useState<LearningTime[]>([
-    { day: 2, time: 7, id: uuidv4() },
-  ]);
 
   const [subjects, setSubjects] = useState<Subject[]>([]);
 
@@ -122,6 +159,14 @@ export default function FindTutorList() {
     );
     setGetDistrictsByID(getDistrict);
   }, [chooseCity]);
+
+  useEffect(() => {}, [edit]);
+
+  useEffect(() => {
+    if (edit) {
+      dispatch(loadTimeList(edit.schedule as TimePost[]));
+    }
+  }, []);
 
   useEffect(() => {
     const params: Params = {
@@ -146,39 +191,69 @@ export default function FindTutorList() {
     return city.find((item) => item.name_with_type === name)?.code;
   };
 
+  console.log(errors)
+
   const handleSubmitFindTutor = (data: Post) => {
     data.schedule = postSelector.timeList;
     console.log(data);
     dispatch(loading(true));
-    user &&
+   if(user){
+     if(edit){
       postApi
-        .createPost({
-          ...data,
-          status: 0,
-          account: { id: user.id },
-          type: user.type ? user.type : 0,
-          learningDate: new Date(data.learningDate).getTime(),
-        })
-        .then((res) => {
-          if (res.data) {
-            toast.success('Tạo bài đăng thành công!');
-          } else {
-            toast.error('Tạo bài đăng thất bại!');
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          toast.error('Đã xảy ra lỗi!');
-        })
-        .finally(() => {
-          dispatch(loading(false));
-        });
+      .updatePost(edit.id,{   
+        ...data,
+        status: 0,
+        account: { id: user.id },
+        type: user.type ? user.type : 0,
+        learningDate: new Date(data.learningDate).getTime(),
+      })
+      .then((res) => {
+        if (res.data) {
+          toast.success('Cập nhật bài đăng thành công!');
+        } else {
+          toast.error('Cập nhật bài đăng thất bại!');
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        toast.error('Đã xảy ra lỗi!');
+      })
+      .finally(() => {
+        dispatch(loading(false));
+      });
+     }
+     else{
+      postApi
+      .createPost({
+        ...data,
+        status: 0,
+        account: { id: user.id },
+        type: user.type ? user.type : 0,
+        learningDate: new Date(data.learningDate).getTime(),
+      })
+      .then((res) => {
+        if (res.data) {
+          toast.success('Tạo bài đăng thành công!');
+        } else {
+          toast.error('Tạo bài đăng thất bại!');
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        toast.error('Đã xảy ra lỗi!');
+      })
+      .finally(() => {
+        dispatch(loading(false));
+      });
+     }
+   }
+    
   };
 
   const handleAddTimeList = () => {
-    dispatch(addTimeList({ id: Date.now().toString(), day: 2, time: 7 }));
+    dispatch(addTimeList({ ids: Math.floor(Math.random()*1000), day: 2, time: 7 }));
   };
-
+  
   const handleClick = () => {
     if (errors.fullName) {
       toast.error(errors.fullName.message);
@@ -225,7 +300,9 @@ export default function FindTutorList() {
         className="tutor__list__container"
         onSubmit={handleSubmit(handleSubmitFindTutor)}
       >
-        <div className="tutors__title">Đăng bài viết</div>
+        <div className="tutors__title">
+          {edit ? 'Cập nhật bài viết' : 'Đăng bài viết'}
+        </div>
 
         {user ? (
           <>
@@ -247,6 +324,7 @@ export default function FindTutorList() {
                 Họ và tên: <span>*</span>
               </div>
               <input
+                defaultValue={edit?.fullName}
                 type="text"
                 placeholder="Nhập họ tên"
                 {...register('fullName', {
@@ -317,7 +395,10 @@ export default function FindTutorList() {
               <h4>Thông tin thêm</h4>
               <div className="tutors__input">
                 <div className="tutors__input__label">Môn học:</div>
-                <select {...register('subjectID')}>
+                <select
+                  {...register('subjectID')}
+                  defaultValue={edit && edit.subject}
+                >
                   <option value={0}>Chọn môn học</option>
                   {subjects &&
                     subjects.map((subject, index) => {
@@ -440,7 +521,7 @@ export default function FindTutorList() {
                     <input
                       type="text"
                       placeholder="Nhập địa chỉ, tên đường..."
-                      {...register('addressID')}
+                      {...register('address')}
                     />
                   </div>
                 </>
@@ -479,14 +560,17 @@ export default function FindTutorList() {
                     return (
                       <TimeItem
                         timeProps={time}
-                        key={`${time.id}${Math.random() * 1000}`}
+                        key={`${time.ids}${Math.random() * 1000}`}
                       />
                     );
                   })}
                 </div>
               </div>
-              <div className="tutors__input__add" style={{marginBottom: '20px'}}>
-                <button type="button" onClick={handleAddTimeList} >
+              <div
+                className="tutors__input__add"
+                style={{ marginBottom: '20px' }}
+              >
+                <button type="button" onClick={handleAddTimeList}>
                   Thêm
                 </button>
               </div>
@@ -506,7 +590,7 @@ export default function FindTutorList() {
                 className="tutors__btn"
                 onClick={handleClick}
               >
-                Đăng ký
+                {!edit ? 'Đăng ký' : 'Cập nhật'}
               </button>
             </div>
           </>

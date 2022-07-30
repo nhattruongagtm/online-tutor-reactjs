@@ -3,23 +3,43 @@ import ProfileRegister, { createData } from '../ProfileRegister';
 import './learningCourse.scss';
 import './postList.scss';
 
-import { Table, Tag, Space, Button, Modal } from 'antd';
+import { Table, Tag, Space, Button, Modal, Popover } from 'antd';
 import Filter from '../../../../components/Common/Filter';
 import { ClassItem } from '../../../../components/WaitingClassList/WaitingClassList';
 import useUser from '../../../../hooks/useUser';
 import { Params } from '../../../../api/tutorApi';
 import { postApi } from '../../../../api/postApi';
 import { useHistory } from 'react-router';
-import { COURSE_PATH } from '../../../../constants/path';
+import { COURSE_PATH, ME_PATH, ME_POST_EDIT } from '../../../../constants/path';
 import PostDetailItem from './PostDetailItem';
+import { useDispatch } from 'react-redux';
+import { editPost } from '../../../../reducers/postSlice';
+import { toast } from 'react-toastify';
 interface LearningCourseProps {}
 
 export const PostList = (props: LearningCourseProps) => {
   const [post, setPost] = useState<ClassItem[]>([]);
   const [user] = useUser();
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const posts = useRef<ClassItem[]>([]);
+
+  const handleUpdate = (post: ClassItem) => {
+    history.push(`${ME_PATH}${ME_POST_EDIT}`);
+    dispatch(editPost(post));
+  };
+  const handleDeletePost = async (id: number) => {
+    try {
+      const resp = await postApi.deletePost(id);
+      const { data } = resp;
+      if (data) {
+        toast.success('Xóa thành công!');
+      }
+    } catch (error) {
+      toast.error('Lỗi!');
+    }
+  };
 
   const columns = [
     {
@@ -69,13 +89,34 @@ export const PostList = (props: LearningCourseProps) => {
         </>
       ),
     },
+    {
+      title: '',
+      key: 'actions',
+      render: (_: any, record: ClassItem) => (
+        <Space direction="horizontal">
+          <Button onClick={() => handleUpdate(record)}>Chỉnh sửa</Button>
+          <Popover
+            title={'Bạn có muốn xóa không?'}
+            content={
+              <Space direction="horizontal">
+                <Button onClick={() => handleDeletePost(record.id)}>Có</Button>
+                <Button danger>Không</Button>
+              </Space>
+            }
+            trigger="click"
+          >
+            <Button danger> Xóa</Button>
+          </Popover>
+        </Space>
+      ),
+    },
   ];
 
   useEffect(() => {
     let isCancel = false;
     const params: Params = {
       page: 1,
-      limit: 5,
+      limit: 100,
       search: '',
     };
     user &&
@@ -107,12 +148,12 @@ export const PostList = (props: LearningCourseProps) => {
     } else {
       setPost(newPosts);
     }
-  };  
+  };
   return (
     <div className="learning__courses">
       <div className="learning__courses__list">
         <Filter onGetSearch={handleGetSearchValue} />
-        <Table columns={columns} dataSource={post} />
+        <Table columns={columns} dataSource={post} pagination={{defaultPageSize:5}}/>
       </div>
     </div>
   );

@@ -167,7 +167,7 @@ export default function InfoValidation() {
 
           {citys.map((city) => {
             return (
-              <option value={city.name_with_type} key={city.code}>
+              <option value={city.code} key={city.code}>
                 {city.name_with_type}
               </option>
             );
@@ -184,12 +184,12 @@ export default function InfoValidation() {
           id=""
           // onChange={(e) => setChooseDistrict(e.target.value)}
           {...register('district')}
-        >
+        >   
           <option value="">Chọn Quận/Huyện</option>
           {getDistrictsByID.length > 0 &&
             getDistrictsByID.map((district, index) => {
               return (
-                <option value={district.name_with_type} key={index}>
+                <option value={district.slug} key={index}>
                   {district.name_with_type}
                 </option>
               );

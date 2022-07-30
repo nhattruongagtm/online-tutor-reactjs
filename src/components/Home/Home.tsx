@@ -81,11 +81,13 @@ export default function Home() {
               soát
             </div>
           </div>
-          <div className="home__intro__smooth__img"></div>
+          <div className="home__intro__smooth__img">
+
+          </div>
         </div>
       </div>
       <RecommendedList />
-      <ContactForm />
+      {/* <ContactForm /> */}
       <div className="move-top" id="move-top">
         <i className="fas fa-arrow-up"></i>
       </div>

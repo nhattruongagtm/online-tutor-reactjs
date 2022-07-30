@@ -73,8 +73,9 @@ export default function TutorList() {
           list,
           totalItems,
           totalPages,
-        };  
-        console.log(list)
+          userDetail: null,   
+        };
+        console.log(list);
         dispatch(loadTutorList(pageData));
       } catch (error) {
       } finally {

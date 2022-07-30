@@ -1,5 +1,5 @@
 import { Typography } from '@material-ui/core';
-import Button from '@mui/material/Button';
+import { Button } from 'antd';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -84,7 +84,7 @@ export const ChangePassword = (props: ChangePasswordProps) => {
       setIsSending(true);
       user &&
         authApi
-          .changePassword(user.id, md5(inputStep2.newPassword))
+          .changePassword(user.id, inputStep2.newPassword)
           .then((res) => {
             if (res) {
               setStep(3);
@@ -95,6 +95,7 @@ export const ChangePassword = (props: ChangePasswordProps) => {
           })
           .catch((e) => {
             console.log(e);
+            toast.error('Đã xảy lỗi, vui lòng thử lại!');
             setIsSending(false);
           });
     }
@@ -103,7 +104,7 @@ export const ChangePassword = (props: ChangePasswordProps) => {
   return (
     <div className="profile__password">
       <div className="profile__base__footer">
-        <button onClick={handleOpen}>Đổi mật khẩu</button>
+        <Button onClick={handleOpen}>Đổi mật khẩu</Button>
       </div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Đổi mật khẩu</DialogTitle>
@@ -125,7 +126,6 @@ export const ChangePassword = (props: ChangePasswordProps) => {
           </Typography>
           {step === 0 && (
             <Button
-              variant="contained"
               size="large"
               onClick={handleSendCode}
               className="btn__send__code"
@@ -145,11 +145,7 @@ export const ChangePassword = (props: ChangePasswordProps) => {
                 />
                 <span onClick={handleSendAgain}>Gửi lại mã</span>
               </div>
-              <Button
-                variant="contained"
-                onClick={handleConformCode}
-                className="btn__send__code"
-              >
+              <Button onClick={handleConformCode} className="btn__send__code">
                 {isSending ? 'Đang xác nhận mã...' : 'Tiếp tục'}
               </Button>
             </>
@@ -180,7 +176,6 @@ export const ChangePassword = (props: ChangePasswordProps) => {
                 />
               </div>
               <Button
-                variant="contained"
                 className="btn__send__code"
                 onClick={handleChangePassword}
               >

@@ -1,16 +1,11 @@
-import React, { useState } from 'react';
-import register, { useForm } from 'react-hook-form';
-import Button from '@mui/material/Button';
-import { Typography } from '@mui/material';
 import { CircularProgress } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
-import { HOME_PATH, LOGIN_PATH } from '../../../constants/path';
-import { authApi } from '../../../api/authApi';
-import md5 from 'md5';
-import { ACCESS_TOKEN } from '../../../constants/auth';
+import { Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { LoginSelector } from '../../../reducers/loginSlice';
-import { UserLogin, requestLogin } from '../../../reducers/loginSlice';
+import { useHistory } from 'react-router-dom';
+import { LoginSelector, requestLogin, UserLogin } from '../../../reducers/loginSlice';
 interface FormInput {
   email: string;
   password: string;
@@ -72,7 +67,7 @@ export default function LoginForm({ type }: LoginFormProps) {
       <div className="login__main__form__info">
         <div className="login__main__form__info__label">Email</div>
         <input
-          type="text"  
+          type="text"
           placeholder="Email"
           {...register('email', {
             required: true,
@@ -91,7 +86,7 @@ export default function LoginForm({ type }: LoginFormProps) {
           {...register('password', {
             required: true,
             pattern: /^[a-z0-9]/i,
-            minLength: 8,
+            minLength: 8,   
           })}
           className={errors.password && 'login__error'}
         />

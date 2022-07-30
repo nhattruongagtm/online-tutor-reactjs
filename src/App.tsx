@@ -17,7 +17,7 @@ import News from './components/News/News';
 import Spin from './components/Common/Spin';
 import TutorList from './components/TutorList/TutorList';
 import WaitingClassList from './components/WaitingClassList/WaitingClassList';
-import { ACCESS_TOKEN } from './constants/auth';
+import { ACCESS_TOKEN, TOKEN } from './constants/auth';
 import {
   ADMIN_PATH,
   CART_PATH,
@@ -139,7 +139,7 @@ function App() {
 
           <Footer />
         </>
-      ) : !localStorage.getItem(ACCESS_TOKEN) ? (
+      ) : !localStorage.getItem(TOKEN) ? (
         <div className="user">
           <div className="user__image">
             {/* <div></div> */}

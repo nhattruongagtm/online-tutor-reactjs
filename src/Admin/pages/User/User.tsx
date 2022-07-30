@@ -11,6 +11,8 @@ import { Profile } from './Profile';
 import { Header } from './Header';
 import { DetailProfile } from './DetailProfile';
 import { Params as Filters } from '../../../api/tutorApi';
+import { RootState } from '../../../store';
+import { useSelector } from 'react-redux';
 interface UserProps {}
 
 interface TabRoute {
@@ -26,8 +28,9 @@ export const User = (props: UserProps) => {
   const { params, url, path } = routeMatch;
   const { slug } = params as Params;
   const [paramss, setParams] = useState<Filters>({
-    search: '',  
+    search: '',
   });
+  const user = useSelector((state: RootState) => state.tutors.userDetail);
 
   // console.log(slug)
   // console.log(url)
@@ -57,7 +60,7 @@ export const User = (props: UserProps) => {
         </Route>
         <Route exact path={url}>
           <>
-            <Col sm={8} className="dashboard__users">
+            <Col sm={8} className={`dashboard__users ${!user && 'more'}`}>
               <Header onGetParams={onGetParams} />
               <div className="dashboard__users__main">
                 <div className="dashboard__users__main__title">
@@ -74,7 +77,7 @@ export const User = (props: UserProps) => {
                   <div className="dashboard__users__main__list__item">
                     <Switch>
                       <Route path={ADMIN__USER__TUTOR}>
-                        <TutorTab params={paramss}/>
+                        <TutorTab params={paramss} />
                       </Route>
                       <Route path={ADMIN__USER__STUDENT}>
                         <StudentTab params={paramss} />
@@ -99,9 +102,11 @@ export const User = (props: UserProps) => {
                 </div> */}
               </div>
             </Col>
-            <Col className="dashboard__users__profile">
-              <Profile />
-            </Col>
+            {user && (
+              <Col className="dashboard__users__profile">
+                <Profile />
+              </Col>
+            )}
           </>
         </Route>
       </Switch>

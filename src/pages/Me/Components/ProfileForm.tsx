@@ -7,32 +7,33 @@ import * as yup from 'yup';
 import { userApi } from '../../../api/userApi';
 import { District } from '../../../components/Auth/SignUp/InfoValidation';
 import useAddress from '../../../hooks/useAddress';
-import useUser from '../../../hooks/useUser';
 import { UserAuth } from '../../../reducers/loginSlice';
 import { loadUserInfo, UserProfile } from '../../../reducers/profileSlice';
 import { RootState } from '../../../store';
+import { storageApi } from '../../../api/storageApi';
+import useUser from '../../../hooks/useUser';
 
 interface ProfileFormProps {
-  onCloseForm: () => void;
-  info: UserProfile;
+  onCloseForm?: () => void;
+  info: UserAuth;
 }
 interface ProfileForm {
   displayName: string;
   email: string;
   phone: string;
   district: string;
-  city: string;
+  city: number;
   gender: number;
 }
-export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
+export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
   const dispatch = useDispatch();
   const [district, city] = useAddress();
+  const [user] = useUser();
   const [chooseCity, setChooseCity] = useState<string>('');
   const [districts, setDistricts] = useState<District[]>([]);
-  const info = useSelector((state: RootState) => state.profile.userInfo);
-  const [avatar, setAvatar] = useState<string>(
-    'https://i.pinimg.com/originals/5f/12/21/5f12212ed4d94b0dafe0f18a8e55832b.jpg'
-  );
+  // const info = useSelector((state: RootState) => state.profile.userInfo);
+  const [avatar, setAvatar] = useState<string>(info.avatar || '');
+  const [img, setImg] = useState<Blob>();
   const validationSchema = yup.object().shape({
     displayName: yup.string().required().default(info.displayName),
     phone: yup
@@ -43,8 +44,9 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
       .min(10)
       .default(info.phone),
     email: yup.string().required().default(info.email),
-    district: yup.string().required(),
-    city: yup.string().required(),
+    district: yup.string(),
+    city: yup.number(),
+    gender: yup.number(),
   });
   const formOptions = {
     defaultValues: validationSchema.cast({}),
@@ -58,9 +60,9 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
     formState: { errors },
   } = useForm<ProfileForm>(formOptions);
 
-  useEffect(() => {
-    reset(info);
-  }, [info]);
+  // useEffect(() => {
+  //   reset(info);
+  // }, [info]);
 
   useEffect(() => {
     const a = district.filter((item) => item.parent_code === chooseCity);
@@ -71,11 +73,14 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
     info && setChooseCity(info.city as string);
   }, [info]);
 
-  const handleChangeAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeAvatar = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const file = e.target.files[0];
+      console.log(file);
       const blob = URL.createObjectURL(file);
+      const a = new Blob([file], { type: 'image/png' });
       setAvatar(blob);
+      setImg(a);
     }
   };
 
@@ -87,23 +92,33 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
     };
   }, [avatar]);
 
-  const handleChangeInfo = (data: UserAuth) => {
+  const handleChangeInfo = async (data: UserAuth) => {
     console.log(data);
 
-    userApi
-      .updateProfile(data.id, data)
-      .then((res) => {
-        if (res.data) {
-          toast.success('Cập nhật thông tin thành công!');
-          dispatch(loadUserInfo(res.data as UserProfile));
-          onCloseForm();
+    try {
+      if (user && img) {
+        const url = await storageApi.uploadFile(user.id, img, 'imgs');
+        if (url) {
+          console.log(url);
+          userApi
+            .updateProfile(user.id, { ...data, avatar: url })
+            .then((res) => {
+              if (res.data) {
+                toast.success('Cập nhật thông tin thành công!');
+                dispatch(loadUserInfo(res.data as UserProfile));
+                onCloseForm && onCloseForm();
+              } else {
+                toast.error('Cập nhật thông tin thành công!');
+              }
+            })  
+            .catch((e) => {
+              toast.error('Đã xảy ra lỗi! Vui lòng thử lại!');
+            });
         } else {
-          toast.error('Cập nhật thông tin thành công!');
+          console.log('no');
         }
-      })
-      .catch((e) => {
-        toast.error('Đã xảy ra lỗi! Vui lòng thử lại!');
-      });
+      }
+    } catch (error) {}
   };
   console.log(errors);
 
@@ -117,7 +132,18 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
       </div>
       <div className="profile__base__body">
         <div className="profile__base__body__avatar">
-          <img src={avatar} alt="" />
+          {user && (
+            <img
+              src={
+                avatar
+                  ? avatar
+                  : `https://avatars.dicebear.com/api/avataaars/${user.id}
+            }.jpg`
+              }
+              alt=""
+            />
+          )}
+
           <label htmlFor="change__avatar">
             <i className="fas fa-pen"></i>
           </label>
@@ -142,6 +168,7 @@ export const ProfileForm = ({ onCloseForm }: ProfileFormProps) => {
             type="email"
             placeholder="Nhập email..."
             {...register('email')}
+            disabled
           />
         </div>
         <div className="profile__base__body__name">
