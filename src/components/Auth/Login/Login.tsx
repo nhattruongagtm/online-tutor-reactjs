@@ -13,7 +13,6 @@ import socialAuth from '../../../auth/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 export default function Login() {
-  
   // 1 là gia sư, 0 là học viên, mặc định -1
   const [type, setType] = useState<-1 | 1 | 0>(-1);
   const history = useHistory();
@@ -23,6 +22,7 @@ export default function Login() {
     provider: FacebookAuthProvider | GoogleAuthProvider
   ) => {
     const res = await socialAuth(provider);
+      
     res && history.push(HOME_PATH);
   };
 

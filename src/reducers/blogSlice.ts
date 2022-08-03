@@ -1,7 +1,7 @@
 import { Params, Resp } from '../api/tutorApi';
 import { Blog } from '../models/blog';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-interface Filter {
+export interface Filter {
   filters: Params;
 }
 interface FilterFlag {

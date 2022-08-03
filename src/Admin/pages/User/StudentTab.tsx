@@ -25,12 +25,14 @@ export const StudentTab = ({ params }: StudentTabProps) => {
     {
       title: 'Họ tên',
       dataIndex: 'displayName',
-    },
+    },   
     {
       title: 'Địa chỉ',
       dataIndex: 'city',
       render: (text: string, record: UserAuth) => (
-        <>{city.find((item) => item.code === record.city)?.name_with_type}</>
+        <>
+          {city.find((item) => item.code === record.city + '')?.name_with_type}
+        </>
       ),
     },
     {

@@ -47,14 +47,15 @@ export const Profile = (props: ProfileProps) => {
           <span>{user?.phone}</span>
         </p>
         <p>
-          <i className="fas fa-map-marker-alt"></i>
+          {/* <i className="fas fa-map-marker-alt"></i> */}
           <span>
             {' '}
             {
               district.find((item) => item.slug === user?.district)
                 ?.name_with_type
             }
-            , {city.find((item) => item.code === user?.city)?.name_with_type}
+            ,{' '}
+            {city.find((item) => item.code === user?.city + '')?.name_with_type}
           </span>
         </p>
 
@@ -85,7 +86,7 @@ export const Profile = (props: ProfileProps) => {
         {user && (
           <Lock
             id={user.id}
-            isBlocked={user.roles ? user.roles.includes('ROLE_BLOCKED'): false}
+            isBlocked={user.roles ? user.roles.includes('ROLE_BLOCKED') : false}
           />
         )}{' '}
       </div>

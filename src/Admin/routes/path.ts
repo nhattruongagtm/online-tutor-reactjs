@@ -4,6 +4,7 @@ export const ADMIN__USER__STUDENT = "/admin/users/students";
 export const ADMIN__SETTINGS = "/admin/settings";
 export const ADMIN__PROFILE = "/admin/profile";
 export const ADMIN__BLOG = "/admin/blog";
+export const ADMIN__POST = "/admin/post";
 export const ADMIN__BLOG__CREATE = "/admin/blog/create";
 export const ADMIN__NOTIFICATION = "/admin/notification";
 export const ADMIN__HOME = "/admin/dashboard";

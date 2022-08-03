@@ -8,6 +8,7 @@ import {
   PROFILE_PATH,
   SCHEDULE_PATH,
 } from '../../constants/path';
+import useUser from '../../hooks/useUser';
 import { loadUserInfo, UserProfile } from '../../reducers/profileSlice';
 import { RootState } from '../../store';
 import CourseInfo from './Components/CourseInfo';
@@ -20,7 +21,8 @@ import TutorProfile from './TutorProfile';
 export default function Me() {
   const dispatch = useDispatch();
   const roles = useSelector((state: RootState) => state.loginUser.roles);
-  const user = useSelector((state: RootState) => state.loginUser.user);
+  const [user] = useUser();
+
   useEffect(() => {
     user &&
       userApi

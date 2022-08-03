@@ -5,7 +5,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import md5 from 'md5';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { authApi } from '../../../api/authApi';
@@ -82,6 +81,7 @@ export const ChangePassword = (props: ChangePasswordProps) => {
       toast.error('Mật khẩu không khớp!');
     } else {
       setIsSending(true);
+      console.log(inputStep2.newPassword);
       user &&
         authApi
           .changePassword(user.id, inputStep2.newPassword)

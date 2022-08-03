@@ -5,8 +5,7 @@ import {
   select,
   takeEvery,
   takeLatest,
-} from '@redux-saga/core/effects';
-import md5 from 'md5';
+} from '@redux-saga/core/effects';   
 import { toast } from 'react-toastify';
 
 import { authApi, ForgotData } from '../api/authApi';
@@ -45,7 +44,7 @@ function* changePassword({ payload: newPassword }: PayloadAction<string>) {
       const resp: boolean = yield call(
         authApi.changePassword,
         id,
-        md5(newPassword)
+        newPassword
       );
 
       if (resp) {

@@ -1,9 +1,10 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Modal, Button, Input } from 'antd';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { courseApi } from '../../api/CourseApi';
 import { UserAuth } from '../../reducers/loginSlice';
-
+import * as yup from 'yup';
 const { TextArea } = Input;
 type Props = {
   user: UserAuth | undefined;
@@ -13,6 +14,7 @@ type Props = {
 const OfferForm = ({ user, courseId }: Props) => {
   const [visible, setVisible] = useState(false);
   const [text, setText] = useState('');
+  const [error, setError] = useState('');
 
   const showModal = () => {
     setVisible(true);
@@ -23,22 +25,27 @@ const OfferForm = ({ user, courseId }: Props) => {
   };
 
   const handleOffer = () => {
-    user &&   
-      courseApi
-        .offerPost(user.id, courseId, text)
-        .then((res) => {
-          if (res.data.id) {
-            toast.success('Đăng ký nhận lớp thành công!');
-          } else {
-            toast.warning('Bạn đã đăng ký nhận khóa học này rồi!');
-          }
-          hideModal();
-        })
-        .catch((e) => {
-          console.log(e);
-          toast.error('Đã xảy ra lỗi! Vui lòng thử lại!');
-          hideModal();
-        });
+    if (text.trim() !== '') {
+      setError('');
+      user &&
+        courseApi
+          .offerPost(user.id, courseId, text)
+          .then((res) => {
+            if (res.data.id) {
+              toast.success('Đăng ký nhận lớp thành công!');
+            } else {
+              toast.warning('Bạn đã đăng ký nhận khóa học này rồi!');
+            }
+            hideModal();
+          })
+          .catch((e) => {
+            console.log(e);
+            toast.error('Đã xảy ra lỗi! Vui lòng thử lại!');
+            hideModal();
+          });
+    } else {
+      setError('Vui lòng nhập nội dung!');
+    }
   };
 
   return (
@@ -59,7 +66,7 @@ const OfferForm = ({ user, courseId }: Props) => {
         okText="Đăng ký"
         className="register__popup"
       >
-        <div className="register__modal">
+        <form className="register__modal">
           <p>Bạn sẽ đăng ký nhận lớp này chứ? </p>
           <span>
             Sau khi đề nghị, học viên sẽ chọn gia sư nào phù hợp và hệ thống sẽ
@@ -71,7 +78,10 @@ const OfferForm = ({ user, courseId }: Props) => {
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
-        </div>
+          <span style={{ display: 'block', fontSize: '13px', color: 'red' }}>
+            {error}
+          </span>
+        </form>
       </Modal>
     </>
   );

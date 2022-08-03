@@ -45,7 +45,7 @@ export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
       .default(info.phone),
     email: yup.string().required().default(info.email),
     district: yup.string(),
-    city: yup.number(),
+    city: yup.number().default(info.city),
     gender: yup.number(),
   });
   const formOptions = {
@@ -70,7 +70,7 @@ export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
   }, [district, chooseCity]);
 
   useEffect(() => {
-    info && setChooseCity(info.city as string);
+    info && setChooseCity(info.city + '');
   }, [info]);
 
   const handleChangeAvatar = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,27 +96,29 @@ export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
     console.log(data);
 
     try {
-      if (user && img) {
-        const url = await storageApi.uploadFile(user.id, img, 'imgs');
-        if (url) {
-          console.log(url);
-          userApi
-            .updateProfile(user.id, { ...data, avatar: url })
-            .then((res) => {
-              if (res.data) {
-                toast.success('Cập nhật thông tin thành công!');
-                dispatch(loadUserInfo(res.data as UserProfile));
-                onCloseForm && onCloseForm();
-              } else {
-                toast.error('Cập nhật thông tin thành công!');
-              }
-            })  
-            .catch((e) => {
-              toast.error('Đã xảy ra lỗi! Vui lòng thử lại!');
-            });
-        } else {
-          console.log('no');
+      if (user) {   
+        let url = info.avatar;
+        if (img) {
+          url = await storageApi.uploadFile(user.id, img, 'imgs');
         }
+        console.log(url);
+        userApi
+          .updateProfile(user.id, {
+            ...data,
+            avatar: url,
+          })
+          .then((res) => {
+            if (res.data) {
+              toast.success('Cập nhật thông tin thành công!');
+              dispatch(loadUserInfo(res.data as UserProfile));
+              onCloseForm && onCloseForm();
+            } else {
+              toast.error('Cập nhật thông tin thành công!');
+            }
+          })
+          .catch((e) => {
+            toast.error('Đã xảy ra lỗi! Vui lòng thử lại!');
+          });
       }
     } catch (error) {}
   };
@@ -192,7 +194,7 @@ export const ProfileForm = ({ onCloseForm, info }: ProfileFormProps) => {
                 <option
                   key={item.slug}
                   value={item.code}
-                  selected={item.code === info.city ? true : false}
+                  selected={item.code === info.city + '' ? true : false}
                 >
                   {item.name_with_type}
                 </option>

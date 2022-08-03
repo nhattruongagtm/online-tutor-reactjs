@@ -1,30 +1,30 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import { Route, Switch, useLocation } from 'react-router';
-import { Courses } from './Courses/Courses';
+import { Route, Switch } from 'react-router';
+import useUser from '../../hooks/useUser';
 import {
   ADMIN__BLOG,
   ADMIN__BLOG__CREATE,
   ADMIN__COURSE,
   ADMIN__HOME,
+  ADMIN__POST,
   ADMIN__PROFILE,
   ADMIN__SETTINGS,
   ADMIN__SUBJECT,
-  ADMIN__USER,
-  ADMIN__USER__TUTOR,
+  ADMIN__USER
 } from '../routes/path';
+import Blog from './Blog/Blog';
+import NewBlog from './Blog/NewBlog';
+import { Courses } from './Courses/Courses';
 import './dashboard.scss';
 import { Home } from './Home/Home';
 import Navigation from './Navigation';
+import Posts from './Post/Posts';
 import Profile from './Profile/Profile';
 import { Settings } from './Settings/Settings';
-import { User } from './User/User';
-import useUser from '../../hooks/useUser';
-import Blog from './Blog/Blog';
-import NewBlog from './Blog/NewBlog';
-import { SUBJECT_PATH } from '../../constants/path';
 import Subject from './Subject/Subject';
+import { User } from './User/User';
 export interface DashBoardProps {}
 
 export default function DashBoard(props: DashBoardProps) {
@@ -78,6 +78,9 @@ export default function DashBoard(props: DashBoardProps) {
                 </Route>
                 <Route path={ADMIN__SETTINGS}>
                   <Settings />
+                </Route>
+                <Route path={ADMIN__POST}>
+                  <Posts />
                 </Route>
                 <Route path={ADMIN__COURSE}>
                   <Courses />

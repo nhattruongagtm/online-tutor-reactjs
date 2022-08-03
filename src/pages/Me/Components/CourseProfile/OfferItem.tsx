@@ -1,13 +1,37 @@
 import { CheckOutlined, StopOutlined } from '@ant-design/icons';
 import React from 'react';
 import { Card, Popover, Button, Avatar } from 'antd';
+import { postApi } from '../../../../api/postApi';
+import useUser from '../../../../hooks/useUser';
+import { toast } from 'react-toastify';
 const { Meta } = Card;
-
 type Props = {
   info: any;
+  pID: number;
+  onDelete?: (uid: number, pid: number) => void;
 };
 
-const OfferItem = ({ info }: Props) => {
+const OfferItem = ({ info, pID, onDelete }: Props) => {
+  const [user] = useUser();
+
+  const handleCancelOffer = async () => {
+    if (user) {
+      try {
+        const resp = await postApi.cancelOffer(info.parner.id, pID);
+        if (resp.data) {
+          onDelete && onDelete(info.parner.id, pID);
+          toast.success('Từ chối đề nghị thành cống!');
+        } else {
+          toast.error('Từ chối đề nghị thất bại!');
+        }
+      } catch (error) {
+        toast.error('Đã xảy ra lỗi!');
+      }
+    }
+  };
+  const handleAgreeOffer = () =>{
+    toast.success("Đề nghị thành công!");
+  }
   return (
     <Card
       style={{
@@ -20,7 +44,8 @@ const OfferItem = ({ info }: Props) => {
           content={
             <>
               <p className="title__offer__tooltip">Từ chối đề nghị này?</p>
-              <Button danger>Hủy</Button> <Button>Đồng ý</Button>
+              <Button danger>Hủy</Button>{' '}
+              <Button onClick={handleCancelOffer}>Đồng ý</Button>
             </>
           }
         >
@@ -33,7 +58,7 @@ const OfferItem = ({ info }: Props) => {
           content={
             <>
               <p className="title__offer__tooltip">Chấp nhận đề nghị này?</p>
-              <Button danger>Hủy</Button> <Button type='primary'>Đồng ý</Button>
+              <Button danger>Hủy</Button> <Button type="primary" onClick={handleAgreeOffer}>Đồng ý</Button>
             </>
           }
         >
@@ -47,7 +72,9 @@ const OfferItem = ({ info }: Props) => {
         avatar={
           <Avatar
             src={
-              info.avatar ? info.avatar : 'https://joeschmoe.io/api/v1/random'
+              info.parner
+                ? info.parner.avatar
+                : 'https://joeschmoe.io/api/v1/random'
             }
           />
         }

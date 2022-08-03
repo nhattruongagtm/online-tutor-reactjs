@@ -5,13 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { courseApi } from '../../api/CourseApi';
 import { subjectApi } from '../../api/subjectApi';
-import { Params } from '../../api/tutorApi';
+import { Params, Resp } from '../../api/tutorApi';
 import { Grade } from '../../models/grade';
 import { Subject } from '../../models/subject';
 import {
-  IWaitingClass,
-  loadWaitingList,
-  updatePage,
+  loadWaitingList,updatePage
 } from '../../reducers/waitingClass';
 import { RootState } from '../../store';
 import Loading from '../Common/Loading';
@@ -28,7 +26,7 @@ export interface ClassItem {
   title: string;
   content: string;
   createdBy: string;
-  createdDate: string;
+  createdDate: number;
   views: number;
   photo: string;
   topic: string;
@@ -60,12 +58,12 @@ export default function WaitingClassList() {
   const history = useHistory();
   const dispatch = useDispatch();
   const store = useSelector((state: RootState) => state.waitingClass);
-  const { limit, list, page, totalItems, totalPages } = store;
+  const { list, currentPage, totalItems, totalPages } = store;
   const [isToogleFilter, setIsToogleFilter] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [filters, setFilters] = useState<Params>({
-    page,
-    limit,
+    page:currentPage,
+    limit:4,
   });
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [grades, setGrades] = useState<Grade[]>([]);
@@ -73,12 +71,11 @@ export default function WaitingClassList() {
     const params: Params = {
       page: 1,
       limit: 100,
-      search: '',
     };
     subjectApi
       .getAllSubject(params)
       .then((res) => {
-        const { data } = res;
+        const { data } = res;  
         data && setSubjects(data.list);
       })
       .catch((e) => {
@@ -106,15 +103,14 @@ export default function WaitingClassList() {
       .then((res) => {
         const { data } = res;
         const { currentPage, list, totalItems, totalPages } = data;
-        const pageData: IWaitingClass = {
-          page,
+        const pageData: Resp<ClassItem> = {
+          currentPage,
           list,
           totalItems,
           totalPages,
-          limit,
         };
 
-        console.log(pageData.page, list);
+        console.log(pageData.currentPage, list);
         dispatch(loadWaitingList(pageData));
         setIsLoading(false);
       })
@@ -131,7 +127,7 @@ export default function WaitingClassList() {
     return () => {
       isCancel = true;
     };
-  }, [page, filters]);
+  }, [currentPage, filters]);
   const handlePageClick = (data: SelectedItem) => {
     const currentPage = data.selected + 1;
     dispatch(updatePage(currentPage));
@@ -140,7 +136,7 @@ export default function WaitingClassList() {
   const ScrollToTop = () => {
     useEffect(() => {
       window.scrollTo(0, 0);
-    }, [page]);
+    }, [currentPage]);
     return null;
   };
 
@@ -183,9 +179,9 @@ export default function WaitingClassList() {
             value={filters.search}
             name="search"
           />
-          <select name="location" id="" className="class__features__item">
+          {/* <select name="location" id="" className="class__features__item">
             <option value="">Chọn địa điểm</option>
-          </select>
+          </select> */}
           <select
             name="subjectID"
             id=""
@@ -199,7 +195,7 @@ export default function WaitingClassList() {
               </option>
             ))}
           </select>
-          <select
+          {/* <select
             name="class"
             id=""
             className="class__features__item"
@@ -211,8 +207,8 @@ export default function WaitingClassList() {
                 {item.name}
               </option>
             ))}
-          </select>
-          <select
+          </select> */}
+          {/* <select
             name="formality"
             id=""
             className="class__features__item"
@@ -222,7 +218,7 @@ export default function WaitingClassList() {
             <option value="0">Online</option>
             <option value="1">Tại trung tâm</option>
             <option value="2">Tại nhà</option>
-          </select>
+          </select> */}
           <select
             name="sort"
             id=""

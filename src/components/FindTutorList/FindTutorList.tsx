@@ -198,31 +198,31 @@ export default function FindTutorList() {
     console.log(data);
     dispatch(loading(true));
    if(user){
-     if(edit){
-      postApi
-      .updatePost(edit.id,{   
-        ...data,
-        status: 0,
-        account: { id: user.id },
-        type: user.type ? user.type : 0,
-        learningDate: new Date(data.learningDate).getTime(),
-      })
-      .then((res) => {
-        if (res.data) {
-          toast.success('Cập nhật bài đăng thành công!');
-        } else {
-          toast.error('Cập nhật bài đăng thất bại!');
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-        toast.error('Đã xảy ra lỗi!');
-      })
-      .finally(() => {
-        dispatch(loading(false));
-      });
-     }
-     else{
+    //  if(edit){
+    //   postApi
+    //   .updatePost(edit.id,{   
+    //     ...data,
+    //     status: 0,
+    //     account: { id: user.id },
+    //     type: user.type ? user.type : 0,
+    //     learningDate: new Date(data.learningDate).getTime(),
+    //   })
+    //   .then((res) => {
+    //     if (res.data) {
+    //       toast.success('Cập nhật bài đăng thành công!');
+    //     } else {
+    //       toast.error('Cập nhật bài đăng thất bại!');
+    //     }
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //     toast.error('Đã xảy ra lỗi!');
+    //   })
+    //   .finally(() => {
+    //     dispatch(loading(false));
+    //   });
+    //  }
+    //  else{
       postApi
       .createPost({
         ...data,
@@ -240,12 +240,12 @@ export default function FindTutorList() {
       })
       .catch((e) => {
         console.log(e);
-        toast.error('Đã xảy ra lỗi!');
+        toast.error('Đã xảy ra lỗi!');  
       })
       .finally(() => {
         dispatch(loading(false));
-      });
-     }
+      });  
+    //  }
    }
     
   };

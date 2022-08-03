@@ -8,7 +8,7 @@ export interface UserAuth {
   email: string;
   password?: string;
   district?: string;
-  city?: string;
+  city?: number;
   type?: number;
   avatar?: string;
   gender?: number;

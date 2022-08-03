@@ -1,12 +1,10 @@
 import Dialog from '@mui/material/Dialog';
 import { Input } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { userApi } from '../../../api/userApi';
 import useAddress from '../../../hooks/useAddress';
 import useUser from '../../../hooks/useUser';
 import { UserAuth } from '../../../reducers/loginSlice';
-import { loadUserInfo, UserProfile } from '../../../reducers/profileSlice';
 import { RootState } from '../../../store';
 import AdditionalInfo from './AdditionalInfo';
 import { ProfileForm } from './ProfileForm';
@@ -19,7 +17,7 @@ export default function ProfileInfo2() {
   const [open, setOpen] = React.useState(false);
   const [user] = useUser();
   const [introduce, setIntroduce] = useState<boolean>(false);
-  const userInfo = useSelector((state: RootState) => state.loginUser.user);
+  const userInfo = useSelector((state: RootState) => state.profile.userInfo);
   const [districts, cities] = useAddress();
 
   const handleClickOpen = () => {
@@ -35,10 +33,6 @@ export default function ProfileInfo2() {
     handleClickOpen();
   };
 
-  const additionalInfo =
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit.Fugiat inventore doloremque repellendus impedit autem laudantium omnis eius. Dolorum illo obcaecati architecto aliquid similique aliquam, nam iste ad omnis facilis itaque!';
-  const additionalInfo2 =
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit.Fugiat inventore doloremque repellendus impedit autem laudantium omnis eius. Dolorum illo obcaecati architecto aliquid similique aliquam, nam iste ad omnis facilis itaque!';
   return (
     <div className="profile">
       <div className="profile__base">
@@ -47,12 +41,12 @@ export default function ProfileInfo2() {
         </div>
         <div className="profile__base__body">
           <div className="profile__base__body__avatar">
-            {user && (
+            {userInfo && (  
               <img
-                src={
-                  user?.avatar
-                    ? user.avatar
-                    : `https://avatars.dicebear.com/api/avataaars/${user.id}
+                src={  
+                  userInfo?.avatar
+                    ? userInfo.avatar
+                    : `https://avatars.dicebear.com/api/avataaars/${userInfo.id}
             }.jpg`
                 }
                 alt=""
@@ -91,10 +85,10 @@ export default function ProfileInfo2() {
             <select disabled={!isEdit}>
               <option value="la">
                 {
-                  cities.find((item) => item.code === userInfo?.city)
-                    ?.name_with_type
+                  cities.find((item) => item.code === userInfo?.city+"")
+                    ?.name_with_type     
                 }
-              </option>
+              </option>   
             </select>
           </div>
           <div className="profile__base__body__name">

@@ -4,6 +4,8 @@ import firebase from '../config/firebase';
 import { ACCESS_TOKEN } from '../constants/auth';
 import { UserAuth } from '../reducers/loginSlice';
 import { authApi } from '../api/authApi';
+import { decodeToken, isExpired } from 'react-jwt';
+import { LoginRespData } from '../models/user';
 
 const socialAuth = async (
   provider: FacebookAuthProvider | GoogleAuthProvider
@@ -22,6 +24,18 @@ const socialAuth = async (
     console.log('result', user);
 
     const token = await user.getIdToken();
+
+  
+
+    if (token) {
+      const myDecodedToken = decodeToken(token) as LoginRespData;
+      const isMyTokenExpired = isExpired(token);
+      if (!isMyTokenExpired) {  
+        console.log(myDecodedToken)
+      } else {
+        // refresh token
+      }
+    }
 
     if (user) {
       const u = await authApi.getIDFromApi(user.uid);

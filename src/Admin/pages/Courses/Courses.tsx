@@ -38,7 +38,7 @@ export const Courses = (props: CoursesProps) => {
               onPageChange={handlePageClick}
               pageRangeDisplayed={3}
               marginPagesDisplayed={2}
-              pageCount={totalPages}
+              pageCount={1}
               previousLabel="<<"
               pageClassName="page-item"
               pageLinkClassName="page-link"

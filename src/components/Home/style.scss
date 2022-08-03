@@ -106,12 +106,12 @@
 .contact__form {
   opacity: 0;
   transition: 1s;
-  transform: rotateZ(50deg);
+  margin-top: 100px;
 }
 .recommend--display,
 .contact__form--display {
   opacity: 1;
-  transform: rotateZ(0deg);
+  margin-top: 0px;
 }
 .contact__form {
   opacity: 0;

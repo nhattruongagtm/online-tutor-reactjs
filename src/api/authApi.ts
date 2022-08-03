@@ -1,6 +1,3 @@
-import { AxiosResponse } from 'axios';
-import md5 from 'md5';
-import Login from '../components/Auth/Login/Login';
 import { LoginResp } from '../models/user';
 import { UserAuth } from '../reducers/loginSlice';
 import { ISignUpInfo } from '../reducers/signUpSlice';
@@ -31,8 +28,7 @@ export interface ForgotData {
 }
 export const authApi = {
   checkMail(email: string): Promise<boolean> {
-    const url = '/check-mail';
-
+    const url = '/mail';
     return axiosClient.post(url, { email: email });
   },
 

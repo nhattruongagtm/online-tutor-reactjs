@@ -11,7 +11,7 @@ type Props = {
 
 const PostDetailItem = ({ record }: Props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [parners, setParners] = useState([]);
+  const [parners, setParners] = useState<any[]>([]);
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -29,9 +29,10 @@ const PostDetailItem = ({ record }: Props) => {
       .getOffers(record.id)
       .then((res) => {
         const { data } = res;
+        console.log('data', data);
         const list = data.map((item: any) => {
           return {
-            parner: item.tutor.account,
+            parner: item.account,
             content: item.content,
           };
         });
@@ -41,6 +42,12 @@ const PostDetailItem = ({ record }: Props) => {
         console.log(e);
       });
   }, []);
+
+  const handleDeleteItem = (uid: number, pid: number) => {
+    setParners(
+      parners.filter((item) => item.parner.id !== uid && record.id === pid)
+    );
+  };
 
   return (
     <>
@@ -56,8 +63,15 @@ const PostDetailItem = ({ record }: Props) => {
       >
         <div className="offer__list">
           {parners.map((item) => (
-            <OfferItem info={item} />
+            <OfferItem
+              info={item}
+              pID={record.id}
+              key={item.parner}
+              onDelete={handleDeleteItem}
+            />
           ))}
+
+          {parners.length === 0 && <span>Không có đề nghị nào.</span>}
         </div>
       </Modal>
     </>

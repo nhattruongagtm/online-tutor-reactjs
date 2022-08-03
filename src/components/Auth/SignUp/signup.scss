@@ -76,6 +76,12 @@
       &__form {
         // background-color: cyan;
 
+        .error__input {
+          font-size: 13px;
+          color: red;
+          display: block;
+        }
+
         .signup__form__item {
           width: 100%;
           display: flex;
@@ -89,6 +95,14 @@
 
             span {
               color: rgb(255, 68, 68);
+            }
+          }
+
+          .input__item__form {
+            width: 60%;
+
+            input {
+              width: 100%;
             }
           }
 
@@ -158,8 +172,8 @@
             transition: opacity 0.2s;
             background-color: rgb(0, 54, 201);
 
-            span:first-child{
-              width: 20px!important;
+            span:first-child {
+              width: 20px !important;
               height: 20px !important;
               margin-right: 5px;
             }
@@ -167,7 +181,8 @@
           button:hover {
             opacity: 0.9;
           }
-          .loading,.loading-signup {
+          .loading,
+          .loading-signup {
             width: 20px !important;
             height: 20px !important;
             margin-right: 5px;

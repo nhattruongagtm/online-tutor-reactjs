@@ -13,11 +13,11 @@ const initialState: Profile = {
   userInfo: {
     id: -1,
     displayName: '',
-    city: '',
+    city: -1,
     district: '',
     email: '',
     gender: -1,
-    addition: '',
+    addition: '',   
     introduction: '',
     phone: '',
     type: -1,

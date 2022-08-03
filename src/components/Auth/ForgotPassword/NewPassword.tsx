@@ -91,7 +91,7 @@ export default function NewPassword({ onGetUserID }: NewPasswordProps) {
         <span>{errors.password?.message}</span>
       </div>
       <div className="signup__form__validate password__validation">
-        {checkValidation.map((item, index) => {
+        {/* {checkValidation.map((item, index) => {
           return (
             <div
               className={
@@ -105,7 +105,7 @@ export default function NewPassword({ onGetUserID }: NewPasswordProps) {
               <span>{item.title}</span>
             </div>
           );
-        })}
+        })} */}
       </div>
       <div className="signup__form__item">
         <div className="signup__form__item__label ">Xác nhận mật khẩu: </div>

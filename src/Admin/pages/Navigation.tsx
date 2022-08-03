@@ -15,6 +15,7 @@ import {
   ADMIN__USER__STUDENT,
   ADMIN__USER__TUTOR,
   ADMIN__SUBJECT,
+  ADMIN__POST,
 } from '../routes/path';
 interface Route {
   icon: string;
@@ -39,8 +40,13 @@ export default function Navigation() {
       path: `${ADMIN__COURSE}`,
     },
     {
+      icon: 'fa-solid fa-file-lines',
+      title: 'Bài đăng',
+      path: `${ADMIN__POST}`,
+    },
+    {
       icon: 'fa-brands fa-blogger',
-      title: 'Bài viết',
+      title: 'Blog',
       path: `${ADMIN__BLOG}`,
     },
   ];

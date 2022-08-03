@@ -28,6 +28,10 @@ export const postApi = {
     const url = '/offers/' + id;
     return axiosClient.get(url);
   },
+  cancelOffer: (ownID: number,postID: number)=>{
+    const url = `/offer/cancel/${ownID}/${postID}`
+    return axiosClient.put(url)
+  },  
   getNewPost(): Promise<ResponseData<ClassItem[]>> {
     const url = '/posts/new';
     return axiosClient.get(url);

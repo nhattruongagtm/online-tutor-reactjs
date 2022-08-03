@@ -104,7 +104,7 @@ export const Checkout = (props: Props) => {
   const handleCheckout = async (value: boolean) => {
     // handleClickOpen();
     // setPaymentStatus(value);
-    if (course) {
+    if (course && user) {
       const data: Register = {
         post: {
           id: course.id,
@@ -116,7 +116,7 @@ export const Checkout = (props: Props) => {
         status: 0,
       };
       try {
-        const classroom = await classroomApi.createClass(data);
+        const classroom = await classroomApi.createClass(user?.id,data);
         console.log(classroom);
         if (classroom.data) {
           // handleClickOpen();

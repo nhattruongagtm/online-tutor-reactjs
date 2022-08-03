@@ -1,10 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, CircularProgress } from '@mui/material';
 import md5 from 'md5';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
+import { authApi } from '../../../api/authApi';
 import { InitialStateSignUp } from '../../../reducers/signup';
 import { requestSignUp } from '../../../reducers/signUpSlice';
 interface Validation {
@@ -26,13 +27,14 @@ export interface SignUpSelector {
 export default function SignUpForm({ type: signUpType }: SignUpFormProps) {
   // loading
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const [isExistMail, setIsExistMail] = useState(false);
   // use React Hook Form
   const ValidationShema = yup.object().shape({
     email: yup
       .string()
-      .required('Vui lòng nhập email')
+      .required('Vui lòng nhập email!')
       .email('Vui lòng nhập đúng email!'),
+
     password: yup
       .string()
       .required('Vui lòng nhập mật khẩu!')
@@ -46,6 +48,7 @@ export default function SignUpForm({ type: signUpType }: SignUpFormProps) {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<FormInput>(formOptions);
   const dispatch = useDispatch();
@@ -75,51 +78,48 @@ export default function SignUpForm({ type: signUpType }: SignUpFormProps) {
   // const inputs = useSelector((state: IInitialState) => state.signUpInfo);
 
   const handleSubmitSignup = async (data: FormInput) => {
-    dispatch(
-      requestSignUp({
-        displayName: '',
-        password: md5(data.password),
-        phone: '',
-        district: '',
-        city: '',
-        email: data.email,
-        gender: 0,
-        type: signUpType,
-      })
-    );
-
-    //   setIsLoading(true);
-
-    //   authApi
-    //     .checkMail(data.email)
-    //     .then((res) => {
-    //       console.log(res);
-    //       if (res === true) {
-    //         setIsLoading(false);
-    //         alert('Email tồn tại! Vui lòng nhập email khác!');
-    //       } else {
-    //         // call api send mail after that forward to step 2
-    //         authApi.sendMailToSignUp(data.email).then((res) => {
-    //           if (res) {
-    //             setIsLoading(false);
-    //             // dispatch(
-    //             //   fillStep1({
-    //             //     email: data.email,
-    //             //     password: md5(data.password),
-    //             //     type: Number(type),
-    //             //   })
-    //             //   );
-    //             //   dispatch(fillStep2({ code: res }));
-    //             //   dispatch(updateStatus(1));
-    //           }
-    //         });
-    //       }
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //       setIsLoading(true);
-    //     });
+    if (!isExistMail) {
+      dispatch(
+        requestSignUp({
+          displayName: '',
+          password: md5(data.password),
+          phone: '',
+          district: '',
+          city: '',
+          email: data.email,
+          gender: 0,
+          type: signUpType,
+        })
+      );
+    }
   };
+
+  const emailValue = watch('email');
+  useEffect(() => {
+    let isCancel = false;
+    const checkEmail = async () => {
+      try {
+        const res = await authApi.checkMail(emailValue || '');
+        if (res) {
+          console.log('email is exist!');
+          if (!isCancel) {
+            setIsExistMail(true);
+          }
+        } else {
+          if (!isCancel) {
+            setIsExistMail(false);
+          }
+        }
+      } catch (error) {}
+    };
+    checkEmail();
+
+    return () => {
+      isCancel = true;
+    };
+  }, [emailValue]);
+
+  console.log(errors);
 
   const [checkValidation, setCheckValidation] = useState(validationList);
   return (
@@ -130,7 +130,7 @@ export default function SignUpForm({ type: signUpType }: SignUpFormProps) {
       >
         <div
           className={
-            errors.email
+            errors.email || isExistMail
               ? 'signup__form__item validate__error'
               : 'signup__form__item'
           }
@@ -138,7 +138,24 @@ export default function SignUpForm({ type: signUpType }: SignUpFormProps) {
           <div className="signup__form__item__label">
             Email<span>*</span>
           </div>
-          <input type="text" placeholder="Email" {...register('email')} />
+          <div className="input__item__form">
+            <input
+              type="text"
+              placeholder="Email"
+              {...register('email', {
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: 'Vui lòng nhập đúng email!',
+                },
+              })}
+            />
+            <span className="error__input">
+              {isExistMail && 'Email đã tồn tại!'}
+            </span>
+            <span className="error__input">
+              {errors.email && errors.email.message}
+            </span>
+          </div>
         </div>
         <div
           className={
@@ -150,13 +167,16 @@ export default function SignUpForm({ type: signUpType }: SignUpFormProps) {
           <div className="signup__form__item__label">
             Mật khẩu<span>*</span>
           </div>
-          <input
-            type="password"
-            placeholder="Nhập mật khẩu"
-            {...register('password')}
-          />
+          <div className="input__item__form">
+            <input
+              type="password"
+              placeholder="Nhập mật khẩu"
+              {...register('password')}
+            />
+            <span className="error__input">{errors.password && errors.password.message}</span>
+          </div>
         </div>
-        <div className="signup__form__validate">
+        {/* <div className="signup__form__validate">
           {checkValidation.map((item, index) => {
             return (
               <div
@@ -172,7 +192,7 @@ export default function SignUpForm({ type: signUpType }: SignUpFormProps) {
               </div>
             );
           })}
-        </div>
+        </div> */}
         <div
           className={
             errors.repassword
@@ -183,11 +203,14 @@ export default function SignUpForm({ type: signUpType }: SignUpFormProps) {
           <div className="signup__form__item__label">
             Nhập lại mật khẩu<span>*</span>
           </div>
-          <input
-            type="password"
-            placeholder="Xác nhận mật khẩu"
-            {...register('repassword')}
-          />
+          <div className="input__item__form">
+            <input
+              type="password"
+              placeholder="Xác nhận mật khẩu"
+              {...register('repassword')}
+            />
+            <span className="error__input">{errors.repassword && errors.repassword.message}</span>
+          </div>
         </div>
         <div className="signup__form__nav">
           <div className="signup__form__nav__back">
